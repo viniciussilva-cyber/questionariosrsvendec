@@ -889,8 +889,8 @@
         document.getElementById('btn-copy-link')?.addEventListener('click', window.copyToClipboard);
         document.getElementById('form-create-vaga')?.addEventListener('submit', handleCreateVaga);
         document.getElementById('candidate-form')?.addEventListener('submit', handleCandidateSubmit);
-        document.getElementById('filter-vaga')?.addEventListener('change', renderDashboard);
-        document.getElementById('filter-data')?.addEventListener('input', renderDashboard);
+        document.getElementById('candidate-form')?.addEventListener('submit', handleCandidateSubmit);
+        document.getElementById('candidate-active-view')?.addEventListener('submit', handleCandidateSubmit);
 
         window.addEventListener('click', () => document.querySelectorAll('.card-dropdown').forEach(d => d.classList.add('hidden')));
         window.addEventListener('hashchange', () => { hashChecked = false; checkUrlHashOnLoad(); });
