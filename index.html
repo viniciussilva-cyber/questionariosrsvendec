@@ -392,6 +392,7 @@
         let timeElapsedInSeconds = 0;
         let cheatAlertsCounter = 0;
         let questionFieldCounter = 0;
+        let isSubmitting = false; // Trava antiduplicação de clique
 
         const allowedEmails = ['vinicius.silva@vende-c.com', 'eduarda.sodre@vende-c.com', 'lucas.izan@vende-c.com', 'vagas@vende-c.com', 'carlos@vende-c.com'];
         const masterPassword = 'rh2026!';
@@ -468,7 +469,10 @@
                 }
             } else {
                 document.getElementById('db-loading-screen').classList.add('hidden');
-                if (!loggedInUser) showLoginForm();
+                // Bloqueio Total: se o candidato tentar remover a hash da URL para ver o site, é jogado para o login
+                if (!loggedInUser) {
+                    showLoginForm();
+                }
             }
         }
 
@@ -503,6 +507,8 @@
                 loggedInUser = email;
                 document.getElementById('screen-login').classList.add('hidden');
                 document.getElementById('main-system-layout').classList.remove('hidden');
+                document.getElementById('system-sidebar').classList.remove('hidden');
+                document.getElementById('rh-system-header').classList.remove('hidden');
                 document.getElementById('user-display-email').innerText = email;
                 navigate('painel');
             } else {
@@ -513,6 +519,12 @@
         function navigate(screenId) {
             if (currentActiveScreen === 'candidate' && screenId !== 'candidate') {
                 exitCandidateSimulationQuietly();
+            }
+
+            // Candidato não tem permissão para usar o menu ou alternar telas
+            if (isRealCandidate && screenId !== 'candidate') {
+                showCandidateBlocked();
+                return;
             }
 
             document.getElementById('screen-painel').classList.add('hidden');
@@ -591,13 +603,8 @@
 
             if (isRealCandidate) {
                 document.body.classList.add('secure-mode');
-                // Sistema Silencioso: Monitora tanto PC quanto celular sem travar a interface do usuário
                 window.addEventListener('blur', recordIncidentSilently);
-                document.addEventListener('visibilitychange', () => {
-                    if (document.visibilityState === 'hidden') {
-                        recordIncidentSilently();
-                    }
-                });
+                document.addEventListener('visibilitychange', handleVisibilityChange);
             }
 
             timeElapsedInSeconds = 0; cheatAlertsCounter = 0;
@@ -605,8 +612,15 @@
             invisibleTimerInterval = setInterval(() => { timeElapsedInSeconds++; }, 1000);
         }
 
+        function handleVisibilityChange() {
+            if (document.visibilityState === 'hidden') {
+                recordIncidentSilently();
+            }
+        }
+
         function recordIncidentSilently() {
-            if (currentActiveScreen !== 'candidate') return;
+            // Se o candidato já submeteu, ignora métricas fantasmas geradas pelo fechamento da aba
+            if (currentActiveScreen !== 'candidate' || isSubmitting) return;
             cheatAlertsCounter++;
         }
 
@@ -614,6 +628,7 @@
             if (invisibleTimerInterval) { clearInterval(invisibleTimerInterval); invisibleTimerInterval = null; }
             document.body.classList.remove('secure-mode');
             window.removeEventListener('blur', recordIncidentSilently);
+            document.removeEventListener('visibilitychange', handleVisibilityChange);
             document.getElementById('system-sidebar').classList.remove('hidden');
             document.getElementById('exit-simulation-btn').classList.add('hidden');
         }
@@ -621,6 +636,10 @@
         async function handleCandidateSubmit(e) {
             e.preventDefault();
             
+            // Bloqueio Antiduplicação definitivo
+            if (isSubmitting) return;
+            isSubmitting = true;
+
             const nome = document.getElementById('cand-name').value.trim();
             const email = document.getElementById('cand-email').value.trim().toLowerCase();
             const currentVagaId = currentSelectedVagaForCandidate.id;
@@ -629,6 +648,7 @@
             if (jaRespondido) {
                 localStorage.setItem(`submetido-exame-${currentVagaId}`, "true");
                 showCandidateBlocked();
+                isSubmitting = false;
                 return;
             }
 
@@ -655,6 +675,7 @@
 
             document.getElementById('candidate-active-view').classList.add('hidden');
             document.getElementById('candidate-success-view').classList.remove('hidden');
+            isSubmitting = false;
         }
 
         function renderVagas() {
@@ -887,10 +908,13 @@
         document.getElementById('btn-logout')?.addEventListener('click', window.handleLogout);
         document.getElementById('exit-simulation-btn')?.addEventListener('click', exitCandidateSimulationQuietly);
         document.getElementById('btn-copy-link')?.addEventListener('click', window.copyToClipboard);
+        
+        // Mapeamento unificado do formulário do candidato para interceptação strita do clique
+        document.getElementById('candidate-form')?.addEventListener('submit', handleCandidateSubmit);
+        
         document.getElementById('form-create-vaga')?.addEventListener('submit', handleCreateVaga);
-        document.getElementById('candidate-form')?.addEventListener('submit', handleCandidateSubmit);
-        document.getElementById('candidate-form')?.addEventListener('submit', handleCandidateSubmit);
-        document.getElementById('candidate-active-view')?.addEventListener('submit', handleCandidateSubmit);
+        document.getElementById('filter-vaga')?.addEventListener('change', renderDashboard);
+        document.getElementById('filter-data')?.addEventListener('input', renderDashboard);
 
         window.addEventListener('click', () => document.querySelectorAll('.card-dropdown').forEach(d => d.classList.add('hidden')));
         window.addEventListener('hashchange', () => { hashChecked = false; checkUrlHashOnLoad(); });
