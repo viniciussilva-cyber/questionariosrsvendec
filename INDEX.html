@@ -13,10 +13,8 @@
                         brand: {
                             darkBg: '#121214',
                             cardBg: '#1A1A1E',
-                            cardHover: '#222228',
                             pink: '#FF007F',
                             pinkHover: '#E6006F',
-                            pinkGlow: 'rgba(255, 0, 127, 0.4)',
                             textSecondary: '#8F8F9B',
                             border: '#2C2C35'
                         }
@@ -36,48 +34,26 @@
             user-select: none !important;
             -webkit-user-select: none !important;
             -moz-user-select: none !important;
-            -ms-user-select: none !important;
         }
-        
-        @media print {
-            body {
-                display: none !important;
-            }
-        }
-
-        ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #121214;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #2C2C35;
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #FF007F;
-        }
+        @media print { body { display: none !important; } }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #121214; }
+        ::-webkit-scrollbar-thumb { background: #2C2C35; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #FF007F; }
     </style>
 </head>
 <body class="h-full font-sans text-slate-100 antialiased bg-brand-darkBg flex flex-col overflow-hidden">
 
     <div id="db-loading-screen" class="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-brand-darkBg space-y-4">
         <div class="w-16 h-16 animate-spin rounded-full border-4 border-brand-pink/20 border-t-brand-pink"></div>
-        <p class="text-sm text-brand-textSecondary font-semibold">A sincronizar com o Servidor Seguro VENDE-C...</p>
+        <p class="text-sm text-brand-textSecondary font-semibold">Conectando ao Servidor VENDE-C...</p>
     </div>
 
     <div id="screen-login" class="fixed inset-0 z-50 flex items-center justify-center bg-brand-darkBg px-4 hidden">
-        <div class="max-w-md w-full bg-brand-cardBg rounded-3xl p-8 border border-brand-border/60 shadow-[0_8px_32px_rgba(0,0,0,0.5)]">
+        <div class="max-w-md w-full bg-brand-cardBg rounded-3xl p-8 border border-brand-border/60 shadow-2xl">
             <div class="flex flex-col items-center mb-8">
-                <span class="text-white font-black text-4xl tracking-wider select-none">VENDE-<span class="text-brand-pink">C</span></span>
+                <span class="text-white font-black text-4xl tracking-wider">VENDE-<span class="text-brand-pink">C</span></span>
                 <p class="text-[10px] text-brand-pink font-semibold uppercase tracking-widest mt-1">Recrutamento & Seleção</p>
-            </div>
-
-            <div class="text-center mb-6">
-                <h1 class="text-xl font-bold text-white tracking-tight">Bem-vindo ao RH</h1>
-                <p class="text-xs text-brand-textSecondary mt-1">Aceda utilizando as credenciais autorizadas de R&S.</p>
             </div>
 
             <div id="login-error-alert" class="hidden mb-4 p-3.5 bg-red-500/10 border border-red-500/20 rounded-xl text-xs text-red-400 flex items-center space-x-2">
@@ -88,20 +64,18 @@
             <form id="form-login" class="space-y-4">
                 <div>
                     <label class="block text-[9px] font-bold text-brand-textSecondary tracking-widest uppercase mb-1.5">E-Mail Corporativo</label>
-                    <input type="email" id="login-email" required value="vagas@vende-c.com" class="w-full px-4 py-3 bg-brand-darkBg border border-brand-border rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/50 focus:border-brand-pink transition-all placeholder-brand-textSecondary/30" placeholder="nome.sobrenome@vende-c.com">
+                    <input type="email" id="login-email" required value="vagas@vende-c.com" class="w-full px-4 py-3 bg-brand-darkBg border border-brand-border rounded-xl text-white text-sm focus:outline-none focus:ring-1 focus:ring-brand-pink">
                 </div>
-
                 <div>
-                    <label class="block text-[9px] font-bold text-brand-textSecondary tracking-widest uppercase mb-1.5">Palavra-passe Corporativa</label>
+                    <label class="block text-[9px] font-bold text-brand-textSecondary tracking-widest uppercase mb-1.5">Palavra-passe</label>
                     <div class="relative">
-                        <input type="password" id="login-password" required value="rh2026!" class="w-full pl-4 pr-11 py-3 bg-brand-darkBg border border-brand-border rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/50 focus:border-brand-pink transition-all">
-                        <button type="button" id="btn-toggle-password" class="absolute right-3.5 top-3.5 text-brand-textSecondary hover:text-slate-200 transition-colors">
+                        <input type="password" id="login-password" required value="rh2026!" class="w-full pl-4 pr-11 py-3 bg-brand-darkBg border border-brand-border rounded-xl text-white text-sm focus:outline-none focus:ring-1 focus:ring-brand-pink">
+                        <button type="button" id="btn-toggle-password" class="absolute right-3.5 top-3.5 text-brand-textSecondary hover:text-slate-200">
                             <i id="password-toggle-icon" class="fa-solid fa-eye-slash text-xs"></i>
                         </button>
                     </div>
                 </div>
-
-                <button type="submit" class="w-full bg-brand-pink hover:bg-brand-pinkHover text-white py-3.5 rounded-xl font-bold text-sm tracking-wide transition-all shadow-lg shadow-brand-pink/25 hover:shadow-brand-pink/40 hover:-translate-y-0.5 transform active:translate-y-0">
+                <button type="submit" class="w-full bg-brand-pink hover:bg-brand-pinkHover text-white py-3.5 rounded-xl font-bold text-sm transition-all shadow-lg shadow-brand-pink/25">
                     Aceder ao Painel
                 </button>
             </form>
@@ -110,32 +84,25 @@
 
     <div id="main-system-layout" class="hidden h-full flex flex-row overflow-hidden">
 
-        <aside id="system-sidebar" class="w-64 bg-brand-cardBg border-r border-brand-border/60 flex flex-col justify-between shrink-0 transition-all duration-300">
+        <aside id="system-sidebar" class="w-64 bg-brand-cardBg border-r border-brand-border/60 flex flex-col justify-between shrink-0">
             <div>
                 <div class="h-20 flex items-center px-6 border-b border-brand-border/40">
-                    <span class="text-white font-black text-2xl tracking-wider select-none">VENDE-<span class="text-brand-pink">C</span></span>
+                    <span class="text-white font-black text-2xl tracking-wider">VENDE-<span class="text-brand-pink">C</span></span>
                 </div>
-
                 <nav class="p-4 space-y-1">
-                    <button id="menu-painel" class="w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-150 text-white bg-brand-pink shadow-md shadow-brand-pink/10">
+                    <button id="menu-painel" class="w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-semibold text-white bg-brand-pink shadow-md">
                         <i class="fa-solid fa-folder-open w-5 text-center"></i>
-                        <span>Painel de Questionários</span>
+                        <span>Questionários</span>
                     </button>
-                    <button id="menu-results" class="w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-150 text-brand-textSecondary hover:text-white hover:bg-white/5">
+                    <button id="menu-results" class="w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-semibold text-brand-textSecondary hover:text-white hover:bg-white/5">
                         <i class="fa-solid fa-chart-pie w-5 text-center"></i>
-                        <span>Painel de Respostas</span>
+                        <span>Respostas</span>
                     </button>
                 </nav>
             </div>
-
             <div class="p-4 border-t border-brand-border/40 bg-brand-darkBg/30">
-                <div class="flex items-center space-x-3">
-                    <div id="avatar-rh" class="w-9 h-9 rounded-full bg-brand-pink/20 border border-brand-pink flex items-center justify-center text-xs font-bold text-white uppercase">RH</div>
-                    <div class="overflow-hidden">
-                        <p class="text-xs font-bold text-white truncate">Administrador RH</p>
-                        <p id="user-display-email" class="text-[10px] text-brand-textSecondary truncate font-medium">vagas@vende-c.com</p>
-                    </div>
-                </div>
+                <p class="text-xs font-bold text-white truncate">Administrador RH</p>
+                <p id="user-display-email" class="text-[10px] text-brand-textSecondary truncate">vagas@vende-c.com</p>
             </div>
         </aside>
 
@@ -143,19 +110,14 @@
             <header id="rh-system-header" class="h-20 border-b border-brand-border/60 bg-brand-cardBg/20 flex items-center justify-between px-8 shrink-0">
                 <div>
                     <span id="header-context-title" class="text-xs uppercase tracking-widest font-extrabold text-brand-pink">Questionários</span>
-                    <h2 id="header-context-subtitle" class="text-lg font-bold text-white">Questionários de R&S</h2>
+                    <h2 id="header-context-subtitle" class="text-lg font-bold text-white">Painel de Controle R&S</h2>
                 </div>
                 <div class="flex items-center space-x-4">
                     <button id="exit-simulation-btn" class="hidden px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-xl text-xs font-extrabold flex items-center space-x-1.5 transition-all">
                         <i class="fa-solid fa-right-to-bracket rotate-180"></i>
                         <span>Sair da Simulação</span>
                     </button>
-
-                    <div id="conn-status-badge" class="flex items-center space-x-2 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1.5 rounded-full text-xs text-emerald-400 font-semibold">
-                        <span class="h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                        <span id="conn-status-text">Nuvem Google Ativa</span>
-                    </div>
-                    <button id="btn-logout" class="text-brand-textSecondary hover:text-brand-pink text-xs font-bold flex items-center space-x-1.5 transition-colors">
+                    <button id="btn-logout" class="text-brand-textSecondary hover:text-brand-pink text-xs font-bold flex items-center space-x-1.5">
                         <i class="fa-solid fa-right-from-bracket"></i>
                         <span>Sair</span>
                     </button>
@@ -165,94 +127,64 @@
             <div class="flex-1 overflow-y-auto p-8 bg-[#121214]">
 
                 <div id="screen-painel" class="space-y-8">
-                    <div class="bg-gradient-to-r from-brand-cardBg to-brand-darkBg p-8 rounded-3xl border border-brand-border/60 relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-6">
-                        <div class="space-y-2 z-10 text-center md:text-left">
-                            <h1 class="text-4xl font-extrabold text-white tracking-tight">Questionários de <span class="text-brand-pink">R&S</span></h1>
-                            <p class="text-sm text-brand-textSecondary max-w-xl">Crie avaliações com divisão de temas e gerencie candidatos de forma blindada.</p>
+                    <div class="bg-gradient-to-r from-brand-cardBg to-brand-darkBg p-8 rounded-3xl border border-brand-border/60 flex flex-col md:flex-row items-center justify-between gap-6">
+                        <div>
+                            <h1 class="text-3xl font-extrabold text-white">Questionários de <span class="text-brand-pink">R&S</span></h1>
+                            <p class="text-sm text-brand-textSecondary mt-1">Gerencie provas operacionais de recrutamento blindado.</p>
                         </div>
-                        <div class="flex flex-wrap gap-3 z-10">
-                            <button id="btn-create-questionnaire" class="inline-flex items-center justify-center space-x-2 bg-brand-pink hover:bg-brand-pinkHover text-white px-6 py-3.5 rounded-xl font-bold text-sm tracking-wide shadow-lg shadow-brand-pink/20 transition-all transform hover:-translate-y-0.5">
-                                <i class="fa-solid fa-plus"></i>
-                                <span>Criar Novo Questionário</span>
-                            </button>
-                        </div>
+                        <button id="btn-create-questionnaire" class="bg-brand-pink hover:bg-brand-pinkHover text-white px-6 py-3.5 rounded-xl font-bold text-sm shadow-lg">
+                            + Criar Novo Questionário
+                        </button>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <div class="bg-brand-cardBg p-6 rounded-2xl border border-brand-border/60 flex items-center space-x-4">
-                            <div class="p-3 bg-brand-pink/10 text-brand-pink rounded-xl"><i class="fa-solid fa-folder-open text-2xl"></i></div>
-                            <div>
-                                <p class="text-[10px] text-brand-textSecondary uppercase tracking-wider font-extrabold">Total de Questionários</p>
-                                <h3 id="stat-total-q" class="text-2xl font-black text-white">0</h3>
-                            </div>
+                        <div class="bg-brand-cardBg p-6 rounded-2xl border border-brand-border/60">
+                            <p class="text-[10px] text-brand-textSecondary uppercase font-extrabold">Total Criados</p>
+                            <h3 id="stat-total-q" class="text-2xl font-black text-white">0</h3>
                         </div>
-                        <div class="bg-brand-cardBg p-6 rounded-2xl border border-brand-border/60 flex items-center space-x-4">
-                            <div class="p-3 bg-emerald-500/10 text-emerald-400 rounded-xl"><i class="fa-solid fa-circle-check text-2xl"></i></div>
-                            <div>
-                                <p class="text-[10px] text-brand-textSecondary uppercase tracking-wider font-extrabold">Fluxos Ativos</p>
-                                <h3 id="stat-ativos-q" class="text-2xl font-black text-white">0</h3>
-                            </div>
+                        <div class="bg-brand-cardBg p-6 rounded-2xl border border-brand-border/60">
+                            <p class="text-[10px] text-brand-textSecondary uppercase font-extrabold">Fluxos Ativos</p>
+                            <h3 id="stat-ativos-q" class="text-2xl font-black text-emerald-400">0</h3>
                         </div>
-                        <div class="bg-brand-cardBg p-6 rounded-2xl border border-brand-border/60 flex items-center space-x-4">
-                            <div class="p-3 bg-red-500/10 text-red-400 rounded-xl"><i class="fa-solid fa-circle-xmark text-2xl"></i></div>
-                            <div>
-                                <p class="text-[10px] text-brand-textSecondary uppercase tracking-wider font-extrabold">Fluxos Fechados</p>
-                                <h3 id="stat-fechados-q" class="text-2xl font-black text-white">0</h3>
-                            </div>
+                        <div class="bg-brand-cardBg p-6 rounded-2xl border border-brand-border/60">
+                            <p class="text-[10px] text-brand-textSecondary uppercase font-extrabold">Fluxos Fechados</p>
+                            <h3 id="stat-fechados-q" class="text-2xl font-black text-red-400">0</h3>
                         </div>
                     </div>
 
-                    <div class="space-y-4">
-                        <h2 class="text-lg font-bold text-white flex items-center space-x-2">
-                            <i class="fa-solid fa-clipboard-list text-brand-pink"></i>
-                            <span>Lista de Fluxos Disponíveis</span>
-                        </h2>
-                        <div id="vagas-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 font-sans"></div>
-                    </div>
+                    <div id="vagas-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
                 </div>
 
                 <div id="screen-results" class="hidden space-y-8">
-                    <div>
-                        <h1 class="text-3xl font-extrabold text-white tracking-tight">Painel de Respostas</h1>
-                        <p class="text-sm text-brand-textSecondary mt-1">Análise de métricas, tempos médios ocultos de execução e integridade dos candidatos.</p>
-                    </div>
-
                     <div class="bg-brand-cardBg p-5 rounded-2xl border border-brand-border/60 grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-[10px] text-brand-textSecondary uppercase font-bold mb-2">Filtrar por Vaga/Cargo</label>
-                            <select id="filter-vaga" class="w-full px-4 py-2.5 bg-brand-darkBg border border-brand-border rounded-xl text-white text-xs focus:ring-1 focus:ring-brand-pink">
+                            <label class="block text-[10px] text-brand-textSecondary uppercase font-bold mb-2">Filtrar por Cargo</label>
+                            <select id="filter-vaga" class="w-full px-4 py-2.5 bg-brand-darkBg border border-brand-border rounded-xl text-white text-xs text-slate-300">
                                 <option value="todos">Todos os Cargos</option>
                             </select>
                         </div>
                         <div>
-                            <label class="block text-[10px] text-brand-textSecondary uppercase font-bold mb-2">Filtrar por Data de Submissão</label>
-                            <input type="date" id="filter-data" class="w-full px-4 py-2.5 bg-brand-darkBg border border-brand-border rounded-xl text-white text-xs focus:ring-1 focus:ring-brand-pink text-slate-300">
+                            <label class="block text-[10px] text-brand-textSecondary uppercase font-bold mb-2">Filtrar por Data</label>
+                            <input type="date" id="filter-data" class="w-full px-4 py-2.5 bg-brand-darkBg border border-brand-border rounded-xl text-white text-xs text-slate-300">
                         </div>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <div class="bg-brand-cardBg p-6 rounded-2xl border border-brand-border/60">
-                            <p class="text-[10px] text-brand-textSecondary uppercase tracking-wider font-extrabold mb-1">Total de Respostas Coletadas</p>
+                            <p class="text-[10px] text-brand-textSecondary uppercase font-extrabold mb-1">Respostas Coletadas</p>
                             <h3 id="dash-total-answers" class="text-3xl font-black text-white">0</h3>
                         </div>
                         <div class="bg-brand-cardBg p-6 rounded-2xl border border-brand-border/60">
-                            <p class="text-[10px] text-brand-textSecondary uppercase tracking-wider font-extrabold mb-1">Tempo Médio Oculto</p>
+                            <p class="text-[10px] text-brand-textSecondary uppercase font-extrabold mb-1">Tempo Médio Oculto</p>
                             <h3 id="dash-avg-time" class="text-3xl font-black text-brand-pink">0s</h3>
                         </div>
                         <div class="bg-brand-cardBg p-6 rounded-2xl border border-brand-border/60">
-                            <p class="text-[10px] text-brand-textSecondary uppercase tracking-wider font-extrabold mb-1">Taxa de Integridade Global</p>
+                            <p class="text-[10px] text-brand-textSecondary uppercase font-extrabold mb-1">Taxa de Integridade Global</p>
                             <h3 id="dash-integrity-rate" class="text-3xl font-black text-emerald-400">100%</h3>
                         </div>
                     </div>
 
-                    <div class="bg-brand-cardBg rounded-3xl border border-brand-border/60 shadow-xl overflow-hidden">
-                        <div class="p-6 border-b border-brand-border/40 flex items-center justify-between bg-brand-darkBg/10">
-                            <h3 class="font-bold text-white text-base flex items-center space-x-2">
-                                <i class="fa-solid fa-list-check text-brand-pink"></i>
-                                <span>Fluxo Consolidado de Respostas</span>
-                            </h3>
-                        </div>
-
+                    <div class="bg-brand-cardBg rounded-3xl border border-brand-border/60 overflow-hidden">
                         <div class="overflow-x-auto">
                             <table class="w-full text-left border-collapse">
                                 <thead>
@@ -272,65 +204,49 @@
                 </div>
 
                 <div id="screen-candidate" class="hidden max-w-3xl mx-auto space-y-6">
-                    
                     <div id="candidate-closed-view" class="bg-brand-cardBg border border-red-500/30 rounded-3xl p-12 text-center space-y-6 hidden">
-                        <div class="w-20 h-20 bg-red-500/10 text-red-500 rounded-full flex items-center justify-center text-3xl mx-auto border border-red-500/20"><i class="fa-solid fa-lock"></i></div>
-                        <div>
-                            <h2 class="text-2xl font-extrabold text-white">Este Questionário de Seleção Está Fechado</h2>
-                            <p class="text-brand-textSecondary mt-2 text-sm max-w-md mx-auto">O recrutador responsável suspendeu temporariamente as submissões para este cargo.</p>
-                        </div>
+                        <div class="w-20 h-20 bg-red-500/10 text-red-500 rounded-full flex items-center justify-center text-3xl mx-auto"><i class="fa-solid fa-lock"></i></div>
+                        <h2 class="text-2xl font-extrabold text-white">Este Questionário Está Fechado pelo RH</h2>
                     </div>
 
-                    <div id="candidate-success-view" class="bg-brand-cardBg border border-brand-border/80 rounded-3xl p-10 sm:p-14 text-center space-y-8 shadow-[0_10px_40px_rgba(0,0,0,0.4)] max-w-2xl mx-auto my-12 hidden">
-                        <div class="w-24 h-24 bg-gradient-to-tr from-brand-pink to-[#FF4da6] text-white rounded-full flex items-center justify-center text-4xl mx-auto shadow-[0_0_30px_rgba(255,0,127,0.4)] animate-pulse">
-                            <i class="fa-solid fa-check-double scale-110"></i>
+                    <div id="candidate-success-view" class="bg-brand-cardBg border border-brand-border/80 rounded-3xl p-14 text-center space-y-8 hidden">
+                        <div class="w-24 h-24 bg-brand-pink text-white rounded-full flex items-center justify-center text-4xl mx-auto shadow-lg animate-pulse">
+                            <i class="fa-solid fa-check-double"></i>
                         </div>
-                        <div class="space-y-3">
-                            <h2 class="text-3xl font-extrabold text-white tracking-tight">Avaliação Concluída!</h2>
-                            <p class="text-base text-slate-200 font-medium max-w-lg mx-auto leading-relaxed">
-                                Suas respostas foram gravadas com sucesso. Por favor, aguarde o retorno do time de RH do <span class="text-brand-pink font-bold">VENDE-C</span>.
-                            </p>
-                        </div>
+                        <h2 class="text-3xl font-extrabold text-white">Avaliação Concluída com Sucesso!</h2>
                     </div>
 
                     <div id="candidate-active-view" class="space-y-6">
                         <div class="bg-amber-500/10 border border-amber-500/20 rounded-2xl p-5 flex items-start space-x-4">
-                            <div class="p-2.5 bg-amber-500/20 text-amber-400 rounded-xl"><i class="fa-solid fa-shield-heart text-xl animate-pulse"></i></div>
+                            <div class="p-2.5 bg-amber-500/20 text-amber-400 rounded-xl"><i class="fa-solid fa-shield-heart text-xl"></i></div>
                             <div>
-                                <h3 class="font-bold text-amber-300 text-sm">Protocolo de Integridade VENDE-C Ativado</h3>
-                                <p class="text-xs text-brand-textSecondary mt-1">O seu progresso e desvios de foco da janela de teste estão a ser analisados invisivelmente para conformidade.</p>
+                                <h3 class="font-bold text-amber-300 text-sm">Protocolo Anti-Fraude Ativo</h3>
+                                <p class="text-xs text-brand-textSecondary mt-1">Evite sair da aba ou perder o foco da janela do exame.</p>
                             </div>
                         </div>
 
-                        <div class="bg-brand-cardBg rounded-3xl border border-brand-border/60 shadow-2xl overflow-hidden secure-mode">
-                            <div class="bg-[#1D1D24] p-6 text-white relative border-b border-brand-border/40">
-                                <div class="absolute right-6 top-6 flex items-center space-x-2 bg-brand-darkBg px-3 py-1.5 rounded-full border border-brand-border">
-                                    <span class="h-2 w-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                                    <span class="text-[10px] font-bold text-slate-300">Tempo Computado</span>
-                                </div>
-                                <span class="text-[10px] uppercase tracking-widest font-extrabold text-brand-pink">AVALIAÇÃO DE INGRESSO</span>
-                                <h2 id="candidate-job-title" class="text-xl font-bold mt-1">Carregando Questionário...</h2>
+                        <div class="bg-brand-cardBg rounded-3xl border border-brand-border/60 overflow-hidden secure-mode">
+                            <div class="bg-[#1D1D24] p-6 border-b border-brand-border/40">
+                                <span class="text-[10px] font-extrabold text-brand-pink tracking-widest uppercase">AVALIAÇÃO OFICIAL</span>
+                                <h2 id="candidate-job-title" class="text-xl font-bold text-white mt-1">Carregando...</h2>
                             </div>
 
-                            <form id="candidate-form" class="p-6 sm:p-8 space-y-6">
+                            <form id="candidate-form" class="p-8 space-y-6">
                                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     <div>
-                                        <label class="block text-xs font-bold text-brand-textSecondary uppercase tracking-wider mb-2">Nome Completo <span class="text-brand-pink">*</span></label>
-                                        <input type="text" id="cand-name" required placeholder="Insira o seu nome" class="w-full px-4 py-3 bg-brand-darkBg border border-brand-border rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink">
+                                        <label class="block text-xs font-bold text-brand-textSecondary uppercase tracking-wider mb-2">Nome Completo</label>
+                                        <input type="text" id="cand-name" required class="w-full px-4 py-3 bg-brand-darkBg border border-brand-border rounded-xl text-white text-sm focus:outline-none">
                                     </div>
                                     <div>
-                                        <label class="block text-xs font-bold text-brand-textSecondary uppercase tracking-wider mb-2">E-mail de Contacto <span class="text-brand-pink">*</span></label>
-                                        <input type="email" id="cand-email" required placeholder="exemplo@gmail.com" class="w-full px-4 py-3 bg-brand-darkBg border border-brand-border rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink">
+                                        <label class="block text-xs font-bold text-brand-textSecondary uppercase tracking-wider mb-2">E-mail de Contato</label>
+                                        <input type="email" id="cand-email" required class="w-full px-4 py-3 bg-brand-darkBg border border-brand-border rounded-xl text-white text-sm focus:outline-none">
                                     </div>
                                 </div>
                                 <div class="border-t border-brand-border/40 my-6"></div>
                                 <div id="dynamic-questions-container" class="space-y-6"></div>
-                                <div class="pt-4">
-                                    <button type="submit" class="w-full bg-brand-pink hover:bg-brand-pinkHover text-white py-4 rounded-xl font-bold shadow-lg transition-all flex items-center justify-center space-x-2">
-                                        <i class="fa-solid fa-paper-plane"></i>
-                                        <span>Submeter Avaliação Oficial</span>
-                                    </button>
-                                </div>
+                                <button type="submit" class="w-full bg-brand-pink hover:bg-brand-pinkHover text-white py-4 rounded-xl font-bold shadow-lg transition-all">
+                                    Submeter Respostas Oficiais
+                                </button>
                             </form>
                         </div>
                     </div>
@@ -344,28 +260,28 @@
         <div class="bg-brand-cardBg rounded-3xl max-w-2xl w-full border border-brand-border shadow-2xl overflow-hidden">
             <div class="p-6 bg-brand-darkBg text-white flex items-center justify-between border-b border-brand-border/60">
                 <h3 class="font-bold text-lg">Novo Questionário</h3>
-                <button onclick="closeModal('add-vaga-modal')" class="text-brand-textSecondary hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+                <button type="button" onclick="closeModal('add-vaga-modal')" class="text-brand-textSecondary hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
             <form id="form-create-vaga" class="p-6 space-y-6 max-h-[70vh] overflow-y-auto">
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-xs font-bold text-brand-textSecondary uppercase tracking-wider mb-2">Cargo <span class="text-brand-pink">*</span></label>
+                        <label class="block text-xs font-bold text-brand-textSecondary uppercase mb-2">Cargo *</label>
                         <input type="text" id="vaga-titulo" required class="w-full px-4 py-3 bg-brand-darkBg border border-brand-border rounded-xl text-white text-sm focus:outline-none">
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-brand-textSecondary uppercase tracking-wider mb-2">Departamento <span class="text-brand-pink">*</span></label>
+                        <label class="block text-xs font-bold text-brand-textSecondary uppercase mb-2">Departamento *</label>
                         <input type="text" id="vaga-departamento" required class="w-full px-4 py-3 bg-brand-darkBg border border-brand-border rounded-xl text-white text-sm focus:outline-none">
                     </div>
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-xs font-bold text-brand-textSecondary uppercase tracking-wider mb-2">Senioridade *</label>
+                        <label class="block text-xs font-bold text-brand-textSecondary uppercase mb-2">Senioridade *</label>
                         <select id="vaga-nivel" class="w-full px-4 py-3 bg-brand-darkBg border border-brand-border rounded-xl text-white text-sm">
                             <option value="Júnior">Júnior</option><option value="Pleno">Pleno</option><option value="Sênior">Sênior</option>
                         </select>
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-brand-textSecondary uppercase tracking-wider mb-2">Regime *</label>
+                        <label class="block text-xs font-bold text-brand-textSecondary uppercase mb-2">Regime *</label>
                         <select id="vaga-localidade" class="w-full px-4 py-3 bg-brand-darkBg border border-brand-border rounded-xl text-white text-sm">
                             <option value="Remoto">Remoto</option><option value="Presencial">Presencial</option><option value="Híbrido">Híbrido</option>
                         </select>
@@ -373,18 +289,18 @@
                 </div>
                 <div class="space-y-4 border-t border-brand-border/40 pt-6">
                     <div class="flex items-center justify-between">
-                        <h4 class="font-bold text-sm text-brand-pink uppercase tracking-widest">Estrutura do Exame</h4>
+                        <h4 class="font-bold text-sm text-brand-pink uppercase tracking-widest">Estrutura de Perguntas</h4>
                         <div class="flex space-x-2">
                             <button type="button" onclick="window.addQuestionField('create-questions-container', 'secao')" class="px-3 py-1.5 bg-brand-pink/10 text-brand-pink rounded-lg text-xs font-bold">+ Seção</button>
-                            <button type="button" onclick="window.addQuestionField('create-questions-container', 'texto')" class="px-3 py-1.5 bg-brand-pink/10 text-brand-pink rounded-lg text-xs font-bold">+ Pergunta Aberta</button>
-                            <button type="button" onclick="window.addQuestionField('create-questions-container', 'multipla')" class="px-3 py-1.5 bg-brand-pink/10 text-brand-pink rounded-lg text-xs font-bold">+ Múltipla Escolha</button>
+                            <button type="button" onclick="window.addQuestionField('create-questions-container', 'texto')" class="px-3 py-1.5 bg-brand-pink/10 text-brand-pink rounded-lg text-xs font-bold">+ Texto</button>
+                            <button type="button" onclick="window.addQuestionField('create-questions-container', 'multipla')" class="px-3 py-1.5 bg-brand-pink/10 text-brand-pink rounded-lg text-xs font-bold">+ Múltipla</button>
                         </div>
                     </div>
                     <div id="create-questions-container" class="space-y-4"></div>
                 </div>
                 <div class="pt-4 border-t border-brand-border/40 flex justify-end space-x-3">
                     <button type="button" onclick="closeModal('add-vaga-modal')" class="text-xs text-brand-textSecondary">Cancelar</button>
-                    <button type="submit" class="px-6 py-2.5 bg-brand-pink text-white rounded-xl font-bold text-xs">Criar</button>
+                    <button type="submit" class="px-6 py-2.5 bg-brand-pink text-white rounded-xl font-bold text-xs">Salvar na Nuvem</button>
                 </div>
             </form>
         </div>
@@ -393,41 +309,29 @@
     <div id="share-modal" class="fixed inset-0 bg-brand-darkBg/85 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
         <div class="bg-brand-cardBg rounded-3xl max-w-lg w-full border border-brand-border shadow-2xl overflow-hidden">
             <div class="p-6 bg-brand-darkBg text-white flex items-center justify-between border-b border-brand-border/60">
-                <h3 class="font-bold text-lg">Compartilhar Link da Prova</h3>
-                <button onclick="closeModal('share-modal')" class="text-brand-textSecondary hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+                <h3 class="font-bold text-lg">Compartilhar Prova</h3>
+                <button type="button" onclick="closeModal('share-modal')" class="text-brand-textSecondary hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
-            <div class="p-6 space-y-6">
-                <div class="flex items-center space-x-3 bg-brand-darkBg/40 p-3 rounded-xl border border-brand-border/40">
-                    <i class="fa-solid fa-file-invoice text-brand-pink text-lg"></i>
-                    <div>
-                        <p class="text-[9px] text-brand-textSecondary uppercase font-bold">Questionário Selecionado</p>
-                        <p id="share-vaga-title" class="text-sm font-bold text-white">-</p>
-                    </div>
+            <div class="p-6 space-y-4">
+                <p id="share-vaga-title" class="text-sm font-bold text-white">-</p>
+                <div class="flex space-x-2">
+                    <input type="text" id="share-link-input" readonly class="flex-1 px-4 py-3 bg-brand-darkBg border border-brand-border rounded-xl text-xs text-brand-pink font-semibold focus:outline-none">
+                    <button id="btn-copy-link" class="bg-brand-pink text-white px-5 rounded-xl font-bold text-xs shrink-0">Copiar</button>
                 </div>
-                <div>
-                    <label class="block text-xs uppercase font-bold text-brand-textSecondary mb-2">URL de Acesso Direto do Candidato</label>
-                    <div class="flex space-x-2">
-                        <input type="text" id="share-link-input" readonly class="flex-1 px-4 py-3 bg-brand-darkBg border border-brand-border rounded-xl text-xs text-brand-pink font-semibold focus:outline-none">
-                        <button id="btn-copy-link" class="bg-brand-pink text-white px-5 rounded-xl font-bold text-xs shrink-0"><i class="fa-regular fa-copy mr-1"></i>Copiar</button>
-                    </div>
-                </div>
-            </div>
-            <div class="px-6 py-4 bg-brand-darkBg border-t border-brand-border/60 flex justify-end">
-                <button onclick="closeModal('share-modal')" class="px-5 py-2.5 bg-brand-pink text-white rounded-xl font-bold text-xs">Concluído</button>
             </div>
         </div>
     </div>
 
     <div id="vaga-submissions-modal" class="fixed inset-0 bg-brand-darkBg/85 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
         <div class="bg-brand-cardBg rounded-3xl max-w-4xl w-full border border-brand-border shadow-2xl overflow-hidden">
-            <div class="p-6 bg-brand-darkBg text-white flex items-center justify-between border-b border-brand-border/60">
+            <div class="p-6 bg-brand-darkBg flex items-center justify-between border-b border-brand-border/60">
                 <h3 class="font-bold text-lg text-white">Candidatos Inscritos</h3>
-                <button onclick="closeModal('vaga-submissions-modal')" class="text-brand-textSecondary hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+                <button type="button" onclick="closeModal('vaga-submissions-modal')" class="text-brand-textSecondary hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
             <div class="p-6 overflow-x-auto max-h-[60vh]">
-                <table class="w-full text-left border-collapse">
+                <table class="w-full text-left">
                     <thead>
-                        <tr class="bg-brand-darkBg/30 border-b border-brand-border/40 text-brand-textSecondary text-[10px] font-bold uppercase tracking-widest">
+                        <tr class="text-brand-textSecondary text-[10px] font-bold uppercase tracking-widest border-b border-brand-border/40">
                             <th class="px-6 py-4">Candidato</th>
                             <th class="px-6 py-4">Tempo de Execução</th>
                             <th class="px-6 py-4">Focalizações Perdidas</th>
@@ -438,39 +342,22 @@
                     <tbody id="vaga-results-table-body" class="divide-y divide-brand-border/30 text-sm text-slate-300"></tbody>
                 </table>
             </div>
-            <div class="px-6 py-4 bg-brand-darkBg border-t border-brand-border/60 flex justify-end">
-                <button onclick="closeModal('vaga-submissions-modal')" class="px-6 py-2.5 bg-brand-pink text-white rounded-xl font-bold text-xs">Fechar Painel</button>
-            </div>
         </div>
     </div>
 
     <div id="candidate-details-modal" class="fixed inset-0 bg-brand-darkBg/85 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
         <div class="bg-brand-cardBg rounded-3xl max-w-2xl w-full border border-brand-border shadow-2xl overflow-hidden">
-            <div class="p-6 bg-brand-darkBg text-white flex items-center justify-between border-b border-brand-border/60">
-                <h3 class="font-bold text-lg">Respostas da Avaliação</h3>
-                <button onclick="closeModal('candidate-details-modal')" class="text-brand-textSecondary hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            <div class="p-6 bg-brand-darkBg flex items-center justify-between border-b border-brand-border/60">
+                <h3 class="font-bold text-lg text-white">Gabarito de Respostas</h3>
+                <button type="button" onclick="closeModal('candidate-details-modal')" class="text-brand-textSecondary hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
             <div class="p-6 space-y-6 max-h-[65vh] overflow-y-auto">
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-brand-darkBg/50 p-4 rounded-2xl border border-brand-border/40">
-                    <div><p class="text-[9px] text-brand-textSecondary font-extrabold uppercase">Candidato</p><p id="detail-cand-name" class="font-bold text-white">-</p></div>
-                    <div><p class="text-[9px] text-brand-textSecondary font-extrabold uppercase text-right">Tempo Computado</p><p id="detail-cand-time" class="font-mono font-bold text-brand-pink text-right">-</p></div>
+                <div class="bg-brand-darkBg/50 p-4 rounded-2xl flex justify-between">
+                    <div><p class="text-[9px] text-brand-textSecondary uppercase font-extrabold">Candidato</p><p id="detail-cand-name" class="font-bold text-white">-</p></div>
+                    <div><p class="text-[9px] text-brand-textSecondary uppercase font-extrabold text-right">Tempo</p><p id="detail-cand-time" class="font-bold text-brand-pink text-right">-</p></div>
                 </div>
                 <div id="detail-questions-answers" class="space-y-4"></div>
             </div>
-            <div class="px-6 py-4 bg-brand-darkBg border-t border-brand-border/60 flex justify-end">
-                <button onclick="closeModal('candidate-details-modal')" class="px-6 py-2.5 bg-brand-pink text-white rounded-xl font-bold text-xs">Fechar Gabarito</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="cheat-detection-alert" class="fixed inset-0 bg-[#0c0407]/90 backdrop-blur-md z-[60] flex items-center justify-center p-4 hidden">
-        <div class="bg-brand-cardBg rounded-3xl max-w-md w-full border-2 border-brand-pink p-6 text-center space-y-4 shadow-[0_0_50px_rgba(255,0,127,0.25)]">
-            <div class="w-16 h-16 bg-brand-pink/10 text-brand-pink rounded-full flex items-center justify-center mx-auto text-3xl"><i class="fa-solid fa-triangle-exclamation"></i></div>
-            <div>
-                <h3 class="font-extrabold text-brand-pink text-xl uppercase">Bloqueio Ativo / Foco Suspenso</h3>
-                <p class="text-sm text-slate-300 mt-2">Não é permitida a saída da página de exame durante o teste.</p>
-            </div>
-            <button id="btn-dismiss-cheat" class="w-full bg-brand-pink text-white font-bold py-3.5 rounded-xl">Retornar ao Teste</button>
         </div>
     </div>
 
@@ -479,15 +366,8 @@
     <script>
         window.vagasData = [];
         window.candidatosData = [];
-
-        window.openModal = function(id) {
-            const el = document.getElementById(id);
-            if (el) el.classList.remove('hidden');
-        };
-        window.closeModal = function(id) {
-            const el = document.getElementById(id);
-            if (el) el.classList.add('hidden');
-        };
+        window.openModal = id => document.getElementById(id)?.classList.remove('hidden');
+        window.closeModal = id => document.getElementById(id)?.classList.add('hidden');
     </script>
 
     <script type="module">
@@ -496,14 +376,14 @@
             getFirestore, collection, addDoc, doc, deleteDoc, updateDoc, onSnapshot, query, orderBy 
         } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
+        // Configuração do Banco de Dados Firebase do VENDE-C
         const firebaseConfig = {
             apiKey: "AIzaSyCHzy5QbGcgixl_frseXrdenVwOXkXzgq8",
             authDomain: "vende-c-rs.firebaseapp.com",
             projectId: "vende-c-rs",
             storageBucket: "vende-c-rs.firebasestorage.app",
             messagingSenderId: "933241533951",
-            appId: "1:933241533951:web:da7fcd33e8c6b32fd0e3ca",
-            measurementId: "G-L46RTDL2F8"
+            appId: "1:933241533951:web:da7fcd33e8c6b32fd0e3ca"
         };
 
         const app = initializeApp(firebaseConfig);
@@ -533,7 +413,7 @@
                     window.vagasData.push(data);
                 });
                 updateStatsCounters();
-                populateVagasFilterOptions();
+                populateFilters();
                 if (currentActiveScreen === 'painel') renderVagas();
                 checkUrlHashOnLoad();
             });
@@ -557,17 +437,14 @@
             document.getElementById('stat-fechados-q').innerText = window.vagasData.filter(v => !v.ativo).length;
         }
 
-        function populateVagasFilterOptions() {
+        function populateFilters() {
             const select = document.getElementById('filter-vaga');
             if(!select) return;
-            const currentSelected = select.value;
+            const saved = select.value;
             select.innerHTML = '<option value="todos">Todos os Cargos</option>';
-            
             const titulos = [...new Set(window.vagasData.map(v => v.titulo))];
-            titulos.forEach(t => {
-                select.innerHTML += `<option value="${t}">${t}</option>`;
-            });
-            select.value = currentSelected;
+            titulos.forEach(t => select.innerHTML += `<option value="${t}">${t}</option>`);
+            select.value = saved;
         }
 
         let hashChecked = false;
@@ -582,13 +459,11 @@
                 if (vaga) {
                     isRealCandidate = true;
                     currentSelectedVagaForCandidate = vaga;
-                    
                     document.getElementById('screen-login').classList.add('hidden');
                     document.getElementById('system-sidebar').classList.add('hidden');
                     document.getElementById('rh-system-header').classList.add('hidden');
                     document.getElementById('main-system-layout').classList.remove('hidden');
                     document.getElementById('db-loading-screen').classList.add('hidden');
-                    
                     navigate('candidate');
                 } else {
                     window.location.hash = "";
@@ -605,25 +480,21 @@
             document.getElementById('screen-login').classList.remove('hidden');
         }
 
-        function handleLoginSubmit(event) {
-            event.preventDefault();
-            const emailInput = document.getElementById('login-email').value.trim().toLowerCase();
-            const passwordInput = document.getElementById('login-password').value;
-            const errorAlert = document.getElementById('login-error-alert');
+        function handleLoginSubmit(e) {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value.trim().toLowerCase();
+            const pass = document.getElementById('login-password').value;
+            const alertBox = document.getElementById('login-error-alert');
 
-            if (allowedEmails.includes(emailInput) && passwordInput === masterPassword) {
-                errorAlert.classList.add('hidden');
-                loggedInUser = emailInput;
-                
+            if (allowedEmails.includes(email) && pass === masterPassword) {
+                alertBox.classList.add('hidden');
+                loggedInUser = email;
                 document.getElementById('screen-login').classList.add('hidden');
                 document.getElementById('main-system-layout').classList.remove('hidden');
-                document.getElementById('system-sidebar').classList.remove('hidden');
-                document.getElementById('rh-system-header').classList.remove('hidden');
-                
-                document.getElementById('user-display-email').innerText = emailInput;
+                document.getElementById('user-display-email').innerText = email;
                 navigate('painel');
             } else {
-                errorAlert.classList.remove('hidden');
+                alertBox.classList.remove('hidden');
             }
         }
 
@@ -641,24 +512,14 @@
             const menuResults = document.getElementById('menu-results');
 
             if (screenId === 'painel') {
-                menuPainel.className = "w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-150 text-white bg-brand-pink shadow-md shadow-brand-pink/10";
-                menuResults.className = "w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-150 text-brand-textSecondary hover:text-white hover:bg-white/5";
-            } else if (screenId === 'results') {
-                menuResults.className = "w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-150 text-white bg-brand-pink shadow-md shadow-brand-pink/10";
-                menuPainel.className = "w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-150 text-brand-textSecondary hover:text-white hover:bg-white/5";
-            }
-
-            const contextTitle = document.getElementById('header-context-title');
-            const contextSubtitle = document.getElementById('header-context-subtitle');
-
-            if (screenId === 'painel') {
-                contextTitle.innerText = "Questionários"; contextSubtitle.innerText = "Questionários de R&S";
+                menuPainel.className = "w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-semibold text-white bg-brand-pink shadow-md";
+                menuResults.className = "w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-semibold text-brand-textSecondary hover:text-white hover:bg-white/5";
                 renderVagas();
             } else if (screenId === 'results') {
-                contextTitle.innerText = "Respostas"; contextSubtitle.innerText = "Painel de Respostas Consolidadas";
+                menuResults.className = "w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-semibold text-white bg-brand-pink shadow-md";
+                menuPainel.className = "w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-semibold text-brand-textSecondary hover:text-white hover:bg-white/5";
                 renderDashboard();
             } else if (screenId === 'candidate') {
-                contextTitle.innerText = "Exame"; contextSubtitle.innerText = "Ambiente de Teste Monitorado";
                 setupCandidateExam();
             }
             currentActiveScreen = screenId;
@@ -687,49 +548,33 @@
             container.innerHTML = "";
 
             currentSelectedVagaForCandidate.questoes.forEach((q, idx) => {
-                const questionBlock = document.createElement('div');
-                questionBlock.className = "space-y-3 bg-[#1D1D24] p-5 rounded-2xl border border-brand-border/40";
-
-                let imageHtml = q.imagem ? `<div class="my-3"><img src="${q.imagem}" class="max-h-64 rounded-xl border border-brand-border/60 object-contain" alt="Imagem de apoio"></div>` : '';
+                const block = document.createElement('div');
+                block.className = "space-y-3 bg-[#1D1D24] p-5 rounded-2xl border border-brand-border/40";
 
                 if (q.tipo === "secao") {
-                    questionBlock.className = "pt-6 pb-2 border-b border-brand-border/40 mt-8";
-                    questionBlock.innerHTML = `<h4 class="text-sm font-extrabold text-brand-pink uppercase tracking-widest">${q.pergunta}</h4>`;
+                    block.className = "pt-6 pb-2 border-b border-brand-border/40 mt-6";
+                    block.innerHTML = `<h4 class="text-sm font-extrabold text-brand-pink uppercase tracking-widest">${q.pergunta}</h4>`;
                 } else if (q.tipo === "texto") {
-                    questionBlock.innerHTML = `
+                    block.innerHTML = `
                         <label class="block text-sm font-bold text-white leading-relaxed">${q.pergunta} *</label>
-                        ${q.dica ? `<p class="text-xs text-brand-textSecondary">Dica: ${q.dica}</p>` : ''}
-                        ${imageHtml}
-                        <textarea id="cand-ans-${idx}" data-questao="${q.pergunta}" required rows="4" class="w-full px-4 py-3 bg-brand-darkBg border border-brand-border rounded-xl text-white text-sm resize-none focus:outline-none focus:ring-2 focus:ring-brand-pink text-slate-200" placeholder="Escreva a sua resposta aqui..."></textarea>`;
+                        <textarea id="cand-ans-${idx}" required rows="3" class="w-full px-4 py-3 bg-brand-darkBg border border-brand-border rounded-xl text-white text-sm resize-none focus:outline-none focus:ring-1 focus:ring-brand-pink"></textarea>`;
                 } else if (q.tipo === "multipla") {
-                    let opcoesHtml = '';
-                    q.opcoes.forEach((opcao, oIdx) => {
-                        opcoesHtml += `
-                            <label class="flex items-center space-x-3 bg-brand-darkBg/60 p-3 rounded-xl border border-brand-border/40 hover:border-brand-pink/40 transition-all cursor-pointer">
-                                <input type="radio" name="cand-ans-${idx}" value="${opcao}" required class="w-4 h-4 accent-brand-pink">
-                                <span class="text-xs text-slate-200">${opcao}</span>
-                            </label>
-                        `;
+                    let opts = '';
+                    q.opcoes.forEach(opt => {
+                        opts += `
+                            <label class="flex items-center space-x-3 bg-brand-darkBg/60 p-3 rounded-xl border border-brand-border/40 cursor-pointer">
+                                <input type="radio" name="cand-ans-${idx}" value="${opt}" required class="w-4 h-4 accent-brand-pink">
+                                <span class="text-xs text-slate-200">${opt}</span>
+                            </label>`;
                     });
-                    questionBlock.innerHTML = `
-                        <label class="block text-sm font-bold text-white leading-relaxed">${q.pergunta} *</label>
-                        ${q.dica ? `<p class="text-xs text-brand-textSecondary">Dica: ${q.dica}</p>` : ''}
-                        ${imageHtml}
-                        <div class="grid grid-cols-1 gap-2 mt-2" data-radio-group="cand-ans-${idx}" data-questao="${q.pergunta}">
-                            ${opcoesHtml}
-                        </div>`;
+                    block.innerHTML = `<label class="block text-sm font-bold text-white mb-2">${q.pergunta} *</label><div class="grid grid-cols-1 gap-2">${opts}</div>`;
                 }
-                container.appendChild(questionBlock);
+                container.appendChild(block);
             });
 
             if (isRealCandidate) {
                 document.body.classList.add('secure-mode');
                 window.addEventListener('blur', triggerCheatModal);
-                window.addEventListener('contextmenu', e => e.preventDefault());
-                window.addEventListener('keydown', e => {
-                    if ((e.ctrlKey || e.metaKey) && (e.key === 'c' || e.key === 'v' || e.key === 'p' || e.key === 'u' || e.key === 's')) e.preventDefault();
-                    if (e.key === 'F12') e.preventDefault();
-                });
             }
 
             timeElapsedInSeconds = 0; cheatAlertsCounter = 0;
@@ -743,12 +588,6 @@
             document.getElementById('cheat-detection-alert').classList.remove('hidden');
         }
 
-        function exitCandidateSimulation() {
-            exitCandidateSimulationQuietly();
-            isRealCandidate = false;
-            navigate('painel');
-        }
-
         function exitCandidateSimulationQuietly() {
             if (invisibleTimerInterval) { clearInterval(invisibleTimerInterval); invisibleTimerInterval = null; }
             document.body.classList.remove('secure-mode');
@@ -759,11 +598,7 @@
 
         async function handleCandidateSubmit(e) {
             e.preventDefault();
-            const isActualCandidateUser = isRealCandidate;
-
-            if (invisibleTimerInterval) { clearInterval(invisibleTimerInterval); invisibleTimerInterval = null; }
-            document.body.classList.remove('secure-mode');
-            window.removeEventListener('blur', triggerCheatModal);
+            exitCandidateSimulationQuietly();
 
             const nome = document.getElementById('cand-name').value;
             const email = document.getElementById('cand-email').value;
@@ -774,159 +609,90 @@
                     const el = document.getElementById(`cand-ans-${idx}`);
                     respostasMapeadas.push({ questao: q.pergunta, resposta: el ? el.value : "" });
                 } else if (q.tipo === "multipla") {
-                    const selectedRadio = document.querySelector(`input[name="cand-ans-${idx}"]:checked`);
-                    respostasMapeadas.push({ questao: q.pergunta, resposta: selectedRadio ? selectedRadio.value : "Não respondida" });
+                    const r = document.querySelector(`input[name="cand-ans-${idx}"]:checked`);
+                    respostasMapeadas.push({ questao: q.pergunta, resposta: r ? r.value : "Não respondida" });
                 }
             });
 
-            const dataSubmissao = new Date().toISOString().split('T')[0];
-
-            const novoCandidato = {
+            await addDoc(candidatosRef, {
                 id: Date.now(), nome, email, vaga: currentSelectedVagaForCandidate.titulo, tempoTotal: timeElapsedInSeconds,
                 incidentes: cheatAlertsCounter, status: cheatAlertsCounter > 2 ? "Risco Crítico" : "Aprovado", respostas: respostasMapeadas,
-                data: dataSubmissao
-            };
-
-            await addDoc(candidatosRef, novoCandidato);
+                data: new Date().toISOString().split('T')[0]
+            });
 
             document.getElementById('candidate-active-view').classList.add('hidden');
             document.getElementById('candidate-success-view').classList.remove('hidden');
-
-            if (isActualCandidateUser) {
-                document.getElementById('system-sidebar').classList.add('hidden');
-                document.getElementById('rh-system-header').classList.add('hidden');
-            } else {
-                document.getElementById('exit-simulation-btn').classList.remove('hidden');
-            }
         }
 
         function renderVagas() {
             const grid = document.getElementById('vagas-grid');
             if(!grid) return; grid.innerHTML = "";
 
-            if (window.vagasData.length === 0) {
-                grid.innerHTML = `<div class="col-span-full text-center py-12 text-brand-textSecondary text-sm">Nenhum questionário online cadastrado.</div>`;
-                return;
-            }
-
             window.vagasData.forEach(vaga => {
-                const countSubs = window.candidatosData.filter(c => c.vaga === vaga.titulo).length;
+                const subsCount = window.candidatosData.filter(c => c.vaga === vaga.titulo).length;
                 const card = document.createElement('div');
-                card.className = "bg-brand-cardBg p-6 rounded-2xl border border-brand-border/60 flex flex-col justify-between space-y-4 group relative";
+                card.className = "bg-brand-cardBg p-6 rounded-2xl border border-brand-border/60 flex flex-col justify-between space-y-4 relative";
                 card.innerHTML = `
                     <div>
                         <div class="flex items-center justify-between">
                             <span class="text-[9px] font-bold uppercase text-brand-pink bg-brand-pink/5 px-2 py-1 rounded-lg border border-brand-pink/10">${vaga.depto}</span>
-                            <div class="relative inline-block text-left">
-                                <button onclick="window.toggleCardDropdown(event, ${vaga.id})" class="p-1.5 text-brand-textSecondary hover:text-white"><i class="fa-solid fa-ellipsis-vertical text-sm"></i></button>
-                                <div id="dropdown-${vaga.id}" class="card-dropdown hidden absolute right-0 mt-2 w-52 rounded-xl bg-[#1D1D24] border border-brand-border shadow-2xl z-20 overflow-hidden text-left">
-                                    <button onclick="window.openVagaSubmissions('${vaga.titulo}')" class="w-full px-4 py-2.5 text-xs text-slate-300 hover:bg-brand-pink/15 flex items-center space-x-2"><i class="fa-solid fa-users text-brand-pink"></i><span>Ver Candidatos</span></button>
-                                    <button onclick="window.openShareModal(${vaga.id})" class="w-full px-4 py-2.5 text-xs font-bold text-white hover:bg-brand-pink/25 flex items-center space-x-2 border-t border-brand-border/40"><i class="fa-solid fa-share-nodes text-brand-pink"></i><span>Obter Link</span></button>
-                                    <button onclick="window.toggleVagaAtiva('${vaga.firestoreId}', ${vaga.ativo})" class="w-full px-4 py-2.5 text-xs font-semibold text-slate-300 hover:bg-brand-pink/15 flex items-center space-x-2"><i class="fa-solid ${vaga.ativo ? 'fa-lock text-amber-500' : 'fa-lock-open text-emerald-400'}"></i><span>${vaga.ativo ? 'Fechar Fluxo' : 'Reabrir Fluxo'}</span></button>
-                                    <button onclick="window.deleteVaga('${vaga.firestoreId}')" class="w-full px-4 py-2.5 text-xs text-red-400 hover:bg-red-500/10 flex items-center space-x-2 border-t border-brand-border/40"><i class="fa-solid fa-trash-can"></i><span>Excluir</span></button>
+                            <div class="relative">
+                                <button onclick="window.toggleCardDropdown(event, ${vaga.id})" class="text-brand-textSecondary hover:text-white p-1"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+                                <div id="dropdown-${vaga.id}" class="card-dropdown hidden absolute right-0 mt-2 w-48 rounded-xl bg-[#1D1D24] border border-brand-border shadow-2xl z-20 overflow-hidden text-xs">
+                                    <button onclick="window.openVagaSubmissions('${vaga.titulo}')" class="w-full px-4 py-2 hover:bg-brand-pink/10 text-left flex items-center space-x-2 text-slate-300"><i class="fa-solid fa-users text-brand-pink"></i><span>Candidatos</span></button>
+                                    <button onclick="window.openShareModal(${vaga.id})" class="w-full px-4 py-2 hover:bg-brand-pink/10 text-left flex items-center space-x-2 text-white font-bold border-t border-brand-border/40"><i class="fa-solid fa-share-nodes text-brand-pink"></i><span>Obter Link</span></button>
+                                    <button onclick="window.toggleVagaAtiva('${vaga.firestoreId}', ${vaga.ativo})" class="w-full px-4 py-2 hover:bg-brand-pink/10 text-left flex items-center space-x-2 text-slate-300"><i class="fa-solid fa-lock"></i><span>${vaga.ativo ? 'Fechar Fluxo' : 'Abrir Fluxo'}</span></button>
+                                    <button onclick="window.deleteVaga('${vaga.firestoreId}')" class="w-full px-4 py-2 hover:bg-red-500/10 text-left flex items-center space-x-2 text-red-400 border-t border-brand-border/40"><i class="fa-solid fa-trash-can"></i><span>Deletar</span></button>
                                 </div>
                             </div>
                         </div>
-                        <h3 class="text-white font-extrabold text-base mt-4 h-12 leading-tight">${vaga.titulo}</h3>
-                        <div class="flex justify-between items-center mt-3 text-[11px] text-brand-textSecondary">
-                            <span><i class="fa-solid fa-graduation-cap mr-1 text-brand-pink/80"></i>${vaga.nivel}</span>
-                            <span class="bg-brand-pink/10 text-brand-pink px-2.5 py-0.5 rounded-full font-bold text-[10px]">${countSubs} Inscritos</span>
+                        <h3 class="text-white font-extrabold text-base mt-2">${vaga.titulo}</h3>
+                        <div class="flex justify-between items-center mt-4 text-xs text-brand-textSecondary">
+                            <span>${vaga.nivel}</span>
+                            <span class="bg-brand-pink/10 text-brand-pink px-2 py-0.5 rounded-full font-bold">${subsCount} Inscritos</span>
                         </div>
                     </div>`;
                 grid.appendChild(card);
             });
         }
 
-        function openShareModal(vagaId) {
+        window.openShareModal = function(vagaId) {
             const vaga = window.vagasData.find(v => v.id === vagaId);
             if (!vaga) return;
-            
-            let finalDomain = window.location.origin;
-
-            if (finalDomain.includes("-projects.vercel.app")) {
-                const parts = finalDomain.split('.');
-                if (parts[0].includes('-')) {
-                    const cleanProjectName = parts[0].split('-').slice(0, -1).join('-');
-                    finalDomain = `${cleanProjectName}.vercel.app`;
-                    if (!finalDomain.startsWith('http')) {
-                        finalDomain = 'https://' + finalDomain;
-                    }
-                }
-            }
-
-            const link = finalDomain + window.location.pathname + '#exame-' + vaga.id;
+            const link = window.location.origin + window.location.pathname + '#exame-' + vaga.id;
             document.getElementById('share-vaga-title').innerText = vaga.titulo;
             document.getElementById('share-link-input').value = link;
             openModal('share-modal');
-        }
+        };
 
-        function addQuestionField(containerId, initialType = 'texto') {
+        window.addQuestionField = function(containerId, type = 'texto') {
             const container = document.getElementById(containerId);
-            const index = questionFieldCounter++;
-            const questionBlock = document.createElement('div');
-            questionBlock.className = "question-item p-4 bg-brand-darkBg/60 border border-brand-border rounded-2xl relative space-y-3 transition-all";
-            questionBlock.id = `q-block-${index}`;
+            const idx = questionFieldCounter++;
+            const block = document.createElement('div');
+            block.className = "question-item p-4 bg-brand-darkBg/60 border border-brand-border rounded-2xl relative space-y-2";
+            block.id = `q-block-${idx}`;
 
-            if (initialType === 'secao') {
-                questionBlock.innerHTML = `
+            if (type === 'secao') {
+                block.innerHTML = `
                     <button type="button" onclick="this.parentElement.remove()" class="absolute top-4 right-4 text-brand-textSecondary hover:text-red-400"><i class="fa-solid fa-trash-can"></i></button>
                     <input type="hidden" class="q-type-select" value="secao">
-                    <label class="block text-[10px] text-brand-pink font-bold uppercase tracking-wider">Título da Seção</label>
-                    <input type="text" required class="q-pergunta-input w-full px-3 py-2 bg-brand-darkBg border border-brand-border rounded-xl text-white text-xs font-bold focus:border-brand-pink outline-none">`;
-            } else if (initialType === 'texto') {
-                questionBlock.innerHTML = `
+                    <label class="block text-[10px] text-brand-pink font-bold uppercase">Título da Seção</label>
+                    <input type="text" required class="q-pergunta-input w-full px-3 py-2 bg-brand-darkBg border border-brand-border rounded-xl text-white text-xs">`;
+            } else if (type === 'texto') {
+                block.innerHTML = `
                     <button type="button" onclick="this.parentElement.remove()" class="absolute top-4 right-4 text-brand-textSecondary hover:text-red-400"><i class="fa-solid fa-trash-can"></i></button>
                     <input type="hidden" class="q-type-select" value="texto">
-                    <label class="block text-[10px] text-brand-textSecondary font-bold uppercase tracking-wider">Enunciado (Pergunta Aberta)</label>
-                    <input type="text" required class="q-pergunta-input w-full px-3 py-2 bg-brand-darkBg border border-brand-border rounded-xl text-white text-xs focus:border-brand-pink outline-none mb-2">
-                    
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        <div>
-                            <label class="block text-[10px] text-brand-textSecondary font-bold uppercase tracking-wider">Dica de Apoio (Opcional)</label>
-                            <input type="text" class="q-dica-input w-full px-3 py-2 bg-brand-darkBg border border-brand-border rounded-xl text-white text-xs focus:border-brand-pink outline-none">
-                        </div>
-                        <div>
-                            <label class="block text-[10px] text-brand-textSecondary font-bold uppercase tracking-wider">Anexar Imagem Ilustrativa (Opcional)</label>
-                            <input type="file" accept="image/*" onchange="window.convertImageToBase64(this, '${index}')" class="w-full text-xs text-brand-textSecondary file:mr-2 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-brand-pink/10 file:text-brand-pink hover:file:bg-brand-pink/20 file:cursor-pointer mt-1">
-                            <input type="hidden" id="q-base64-${index}" class="q-image-base64">
-                        </div>
-                    </div>`;
-            } else if (initialType === 'multipla') {
-                questionBlock.innerHTML = `
+                    <label class="block text-[10px] text-brand-textSecondary font-bold uppercase">Pergunta Aberta</label>
+                    <input type="text" required class="q-pergunta-input w-full px-3 py-2 bg-brand-darkBg border border-brand-border rounded-xl text-white text-xs">`;
+            } else if (type === 'multipla') {
+                block.innerHTML = `
                     <button type="button" onclick="this.parentElement.remove()" class="absolute top-4 right-4 text-brand-textSecondary hover:text-red-400"><i class="fa-solid fa-trash-can"></i></button>
                     <input type="hidden" class="q-type-select" value="multipla">
-                    <label class="block text-[10px] text-brand-textSecondary font-bold uppercase tracking-wider">Enunciado (Múltipla Escolha)</label>
-                    <input type="text" required class="q-pergunta-input w-full px-3 py-2 bg-brand-darkBg border border-brand-border rounded-xl text-white text-xs focus:border-brand-pink outline-none mb-2">
-                    
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-2">
-                        <div>
-                            <label class="block text-[10px] text-brand-textSecondary font-bold uppercase tracking-wider">Dica de Apoio (Opcional)</label>
-                            <input type="text" class="q-dica-input w-full px-3 py-2 bg-brand-darkBg border border-brand-border rounded-xl text-white text-xs focus:border-brand-pink outline-none">
-                        </div>
-                        <div>
-                            <label class="block text-[10px] text-brand-textSecondary font-bold uppercase tracking-wider">Anexar Imagem Ilustrativa (Opcional)</label>
-                            <input type="file" accept="image/*" onchange="window.convertImageToBase64(this, '${index}')" class="w-full text-xs text-brand-textSecondary file:mr-2 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-brand-pink/10 file:text-brand-pink hover:file:bg-brand-pink/20 file:cursor-pointer mt-1">
-                            <input type="hidden" id="q-base64-${index}" class="q-image-base64">
-                        </div>
-                    </div>
-
-                    <div class="space-y-1">
-                        <label class="block text-[10px] text-brand-pink font-bold uppercase tracking-wider">Alternativas de Resposta (Uma por linha)</label>
-                        <textarea required class="q-opcoes-input w-full px-3 py-2 bg-brand-darkBg border border-brand-border rounded-xl text-white text-xs focus:border-brand-pink outline-none resize-none" rows="3" placeholder="Opção A&#10;Opção B&#10;Opção C"></textarea>
-                    </div>`;
+                    <label class="block text-[10px] text-brand-textSecondary font-bold uppercase">Pergunta de Escolha Múltipla</label>
+                    <input type="text" required class="q-pergunta-input w-full px-3 py-2 bg-brand-darkBg border border-brand-border rounded-xl text-white text-xs mb-2">
+                    <textarea required class="q-opcoes-input w-full px-3 py-2 bg-brand-darkBg border border-brand-border rounded-xl text-white text-xs resize-none" rows="2" placeholder="Opção A&#10;Opção B"></textarea>`;
             }
-            container.appendChild(questionBlock);
-        }
-
-        window.convertImageToBase64 = function(input, index) {
-            const file = input.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    document.getElementById(`q-base64-${index}`).value = e.target.result;
-                };
-                reader.readAsDataURL(file);
-            }
+            container.appendChild(block);
         };
 
         async function handleCreateVaga(e) {
@@ -934,7 +700,7 @@
             const titulo = document.getElementById('vaga-titulo').value;
             const depto = document.getElementById('vaga-departamento').value;
             const nivel = document.getElementById('vaga-nivel').value;
-            const localidade = document.getElementById('vaga-localidade').value;
+            const regime = document.getElementById('vaga-localidade').value;
 
             const items = document.querySelectorAll('#create-questions-container .question-item');
             let questoes = [];
@@ -943,33 +709,17 @@
                 const tipo = item.querySelector('.q-type-select').value;
                 const pergunta = item.querySelector('.q-pergunta-input').value;
                 
-                if (tipo === 'secao') {
+                if (tipo === 'secao' || tipo === 'texto') {
                     questoes.push({ tipo, pergunta });
-                } else if (tipo === 'texto') {
-                    const imgInput = item.querySelector('.q-image-base64');
-                    questoes.push({ 
-                        tipo, 
-                        pergunta, 
-                        dica: item.querySelector('.q-dica-input').value,
-                        imagem: imgInput ? imgInput.value : ""
-                    });
                 } else if (tipo === 'multipla') {
-                    const imgInput = item.querySelector('.q-image-base64');
-                    const opcoesRaw = item.querySelector('.q-opcoes-input').value;
-                    const opcoes = opcoesRaw.split('\n').map(o => o.trim()).filter(o => o.length > 0);
-                    questoes.push({ 
-                        tipo, 
-                        pergunta, 
-                        dica: item.querySelector('.q-dica-input').value,
-                        imagem: imgInput ? imgInput.value : "",
-                        opcoes
-                    });
+                    const raw = item.querySelector('.q-opcoes-input').value;
+                    const opcoes = raw.split('\n').map(o => o.trim()).filter(o => o.length > 0);
+                    questoes.push({ tipo, pergunta, opcoes });
                 }
             });
 
-            const novaVaga = { id: Date.now(), titulo, depto, regime: localidade, nivel, ativo: true, questoes };
-            await addDoc(vagasRef, novaVaga);
-            closeModal('add-vaga-modal'); 
+            await addDoc(vagasRef, { id: Date.now(), titulo, depto, regime, nivel, ativo: true, questoes });
+            closeModal('add-vaga-modal');
             e.target.reset();
         }
 
@@ -980,108 +730,56 @@
             const vagaFiltro = document.getElementById('filter-vaga').value;
             const dataFiltro = document.getElementById('filter-data').value;
 
-            let listaFiltrada = window.candidatosData.filter(cand => {
-                const matchVaga = (vagaFiltro === "todos" || cand.vaga === vagaFiltro);
-                const matchData = (!dataFiltro || cand.data === dataFiltro);
-                return matchVaga && matchData;
+            let filtrados = window.candidatosData.filter(cand => {
+                return (vagaFiltro === "todos" || cand.vaga === vagaFiltro) && (!dataFiltro || cand.data === dataFiltro);
             });
 
-            document.getElementById('dash-total-answers').innerText = listaFiltrada.length;
+            document.getElementById('dash-total-answers').innerText = filtrados.length;
 
-            if(listaFiltrada.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-xs text-brand-textSecondary">Nenhuma submissão ativa localizada com os filtros selecionados.</td></tr>`;
+            if(filtrados.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-xs text-brand-textSecondary">Nenhuma submissão localizada.</td></tr>`;
                 return;
             }
 
             let totalS = 0, totalCriticos = 0;
-            listaFiltrada.forEach(c => {
+            filtrados.forEach(c => {
                 totalS += c.tempoTotal;
                 if (c.incidentes > 2) totalCriticos++;
             });
-            const avgTime = Math.round(totalS / listaFiltrada.length);
-            const integrityRate = Math.round(((listaFiltrada.length - totalCriticos) / listaFiltrada.length) * 100);
 
-            document.getElementById('dash-avg-time').innerText = avgTime + "s";
-            document.getElementById('dash-integrity-rate').innerText = integrityRate + "%";
+            document.getElementById('dash-avg-time').innerText = Math.round(totalS / filtrados.length) + "s";
+            document.getElementById('dash-integrity-rate').innerText = Math.round(((filtrados.length - totalCriticos) / filtrados.length) * 100) + "%";
 
-            listaFiltrada.forEach(cand => {
+            filtrados.forEach(cand => {
                 const tr = document.createElement('tr');
-                tr.className = "border-b border-brand-border/30 text-xs";
-                let statusClass = cand.status === "Risco Crítico" ? "text-red-400 bg-red-500/10 border border-red-500/20" : "text-emerald-400 bg-emerald-500/10 border border-emerald-500/20";
-
+                tr.className = "border-b border-brand-border/30 text-xs text-slate-300";
                 tr.innerHTML = `
-                    <td class="px-6 py-4 font-bold text-white">${cand.nome} <p class="text-[10px] font-normal text-brand-textSecondary">${cand.email || ''}</p></td>
-                    <td class="px-6 py-4 text-slate-300">${cand.vaga} <p class="text-[9px] font-normal text-brand-pink">${cand.data || 'Sem Data'}</p></td>
+                    <td class="px-6 py-4 font-bold text-white">${cand.nome}<p class="text-[10px] font-normal text-brand-textSecondary">${cand.email}</p></td>
+                    <td class="px-6 py-4">${cand.vaga}</td>
                     <td class="px-6 py-4 font-mono">${cand.tempoTotal}s</td>
-                    <td class="px-6 py-4 text-amber-400 font-semibold">${cand.incidentes} saídas</td>
-                    <td class="px-6 py-4"><span class="px-2.5 py-1 rounded-full text-[10px] font-bold ${statusClass}">${cand.status}</span></td>
-                    <td class="px-6 py-4 text-center flex items-center justify-center space-x-2 mt-2">
-                        <button onclick="window.viewCandidateRespostas('${cand.firestoreId}')" class="bg-brand-pink/10 hover:bg-brand-pink/20 text-brand-pink px-3 py-1.5 rounded-lg font-bold transition-all">Auditoria</button>
-                        <button onclick="window.deleteCandidato('${cand.firestoreId}')" class="p-1.5 text-brand-textSecondary hover:text-red-400 transition-colors" title="Excluir Histórico"><i class="fa-solid fa-trash-can"></i></button>
+                    <td class="px-6 py-4 text-amber-400">${cand.incidentes} saídas</td>
+                    <td class="px-6 py-4"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${cand.status === 'Risco Crítico' ? 'bg-red-500/10 text-red-400' : 'bg-emerald-500/10 text-emerald-400'}">${cand.status}</span></td>
+                    <td class="px-6 py-4 text-center space-x-2">
+                        <button onclick="window.viewCandidateRespostas('${cand.firestoreId}')" class="bg-brand-pink/10 text-brand-pink px-2 py-1 rounded-lg font-bold">Auditoria</button>
+                        <button onclick="window.deleteCandidato('${cand.firestoreId}')" class="text-brand-textSecondary hover:text-red-400"><i class="fa-solid fa-trash-can"></i></button>
                     </td>`;
                 tbody.appendChild(tr);
             });
         }
 
-        window.handleLoginSubmit = handleLoginSubmit;
-        window.handleLogout = () => { loggedInUser = null; window.location.hash = ""; location.reload(); };
-        
-        window.togglePasswordVisibility = function() {
-            const passwordInput = document.getElementById('login-password');
-            const toggleIcon = document.getElementById('password-toggle-icon');
-            
-            if (!passwordInput || !toggleIcon) return;
-            
-            if (passwordInput.type === 'password') {
-                passwordInput.type = 'text';
-                toggleIcon.classList.remove('fa-eye-slash');
-                toggleIcon.classList.add('fa-eye');
-            } else {
-                passwordInput.type = 'password';
-                toggleIcon.classList.remove('fa-eye');
-                toggleIcon.classList.add('fa-eye-slash');
-            }
-        };
-
-        window.navigate = navigate;
-        window.addQuestionField = addQuestionField;
-        window.handleCreateVaga = handleCreateVaga;
-        window.exitCandidateSimulation = exitCandidateSimulation;
-        window.handleCandidateSubmit = handleCandidateSubmit;
-        window.openShareModal = openShareModal;
-        
-        window.toggleCardDropdown = function(event, id) {
-            event.stopPropagation();
-            document.querySelectorAll('.card-dropdown').forEach(d => { if(d.id !== `dropdown-${id}`) d.classList.add('hidden'); });
-            document.getElementById(`dropdown-${id}`).classList.toggle('hidden');
-        };
-
-        window.openCreateModal = function() {
-            document.getElementById('create-questions-container').innerHTML = "";
-            addQuestionField('create-questions-container', 'secao');
-            
-            setTimeout(() => {
-                const secInput = document.querySelector('#create-questions-container .q-pergunta-input');
-                if(secInput) secInput.value = 'Perguntas Gerais de R&S';
-            }, 50);
-
-            addQuestionField('create-questions-container', 'texto');
-            openModal('add-vaga-modal');
-        };
-
         window.openVagaSubmissions = function(vagaTitulo) {
             const body = document.getElementById('vaga-results-table-body');
             body.innerHTML = "";
-            const filtered = window.candidatosData.filter(c => c.vaga === vagaTitulo);
+            const filtrados = window.candidatosData.filter(c => c.vaga === vagaTitulo);
             
-            if(filtered.length === 0) {
-                body.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-xs text-brand-textSecondary">Nenhum candidato inscrito neste fluxo até agora.</td></tr>`;
+            if(filtrados.length === 0) {
+                body.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-xs text-brand-textSecondary">Ninguém respondeu a este fluxo.</td></tr>`;
             }
 
-            filtered.forEach(c => {
+            filtrados.forEach(c => {
                 const tr = document.createElement('tr');
                 tr.className = "border-b border-brand-border/20 text-xs";
-                tr.innerHTML = `<td class="px-6 py-4">${c.nome}</td><td class="px-6 py-4 font-mono">${c.tempoTotal}s</td><td class="px-6 py-4 text-amber-400">${c.incidentes}</td><td class="px-6 py-4 font-bold">${c.status}</td><td class="px-6 py-4"><button onclick="window.viewCandidateRespostas('${c.firestoreId}')" class="text-brand-pink font-bold hover:underline">Auditoria</button></td>`;
+                tr.innerHTML = `<td class="px-6 py-4">${c.nome}</td><td class="px-6 py-4">${c.tempoTotal}s</td><td class="px-6 py-4 text-amber-400">${c.incidentes}</td><td class="px-6 py-4 font-bold">${c.status}</td><td class="px-6 py-4 text-center"><button onclick="window.viewCandidateRespostas('${c.firestoreId}')" class="text-brand-pink font-bold">Ver</button></td>`;
                 body.appendChild(tr);
             });
             openModal('vaga-submissions-modal');
@@ -1096,7 +794,7 @@
             const container = document.getElementById('detail-questions-answers');
             container.innerHTML = "";
             cand.respostas.forEach(r => {
-                container.innerHTML += `<div class="p-3.5 bg-brand-darkBg rounded-xl border border-brand-border/40"><p class="text-[10px] text-brand-pink font-bold uppercase tracking-wider mb-1">${r.questao}</p><p class="text-xs text-slate-200 bg-brand-cardBg/30 p-2 rounded-lg italic">"${r.resposta}"</p></div>`;
+                container.innerHTML += `<div class="p-3.5 bg-brand-darkBg rounded-xl border border-brand-border/40"><p class="text-[10px] text-brand-pink font-bold uppercase mb-1">${r.questao}</p><p class="text-xs text-slate-200 bg-brand-cardBg/30 p-2 rounded-lg italic">"${r.resposta}"</p></div>`;
             });
             openModal('candidate-details-modal');
         };
@@ -1104,44 +802,49 @@
         window.copyToClipboard = async function() {
             const input = document.getElementById('share-link-input');
             if (!input) return;
-            
             try {
                 await navigator.clipboard.writeText(input.value);
-                
-                const toastContainer = document.getElementById('toast-container');
-                if (toastContainer) {
+                const container = document.getElementById('toast-container');
+                if (container) {
                     const toast = document.createElement('div');
-                    toast.className = "bg-emerald-500 text-white px-4 py-3 rounded-xl text-xs font-bold shadow-lg pointer-events-auto transition-all duration-300 transform translate-y-0 opacity-100";
-                    toast.innerHTML = `<i class="fa-solid fa-circle-check mr-2"></i> Link copiado com sucesso!`;
-                    toastContainer.appendChild(toast);
-                    setTimeout(() => {
-                        toast.classList.add('opacity-0', 'translate-y-2');
-                        setTimeout(() => toast.remove(), 3000);
-                    }, 2500);
+                    toast.className = "bg-emerald-500 text-white px-4 py-2 rounded-xl text-xs font-bold shadow-lg pointer-events-auto transition-all transform opacity-100";
+                    toast.innerText = "Link copiado para a área de transferência!";
+                    container.appendChild(toast);
+                    setTimeout(() => { toast.remove(); }, 2500);
                 }
-            } catch (err) {
-                console.error('Falha ao copiar o link: ', err);
+            } catch (err) { console.error(err); }
+        };
+
+        window.togglePasswordVisibility = function() {
+            const input = document.getElementById('login-password');
+            const icon = document.getElementById('password-toggle-icon');
+            if(input.type === 'password') {
+                input.type = 'text'; icon.className = "fa-solid fa-eye text-xs";
+            } else {
+                input.type = 'password'; icon.className = "fa-solid fa-eye-slash text-xs";
             }
         };
 
-        window.deleteVaga = async function(firestoreId) {
-            if(confirm("Tem a certeza de que deseja apagar este questionário permanentemente da nuvem?")) {
-                await deleteDoc(doc(db, "vagas", firestoreId));
-            }
+        window.toggleCardDropdown = (e, id) => {
+            e.stopPropagation();
+            document.querySelectorAll('.card-dropdown').forEach(d => { if(d.id !== `dropdown-${id}`) d.classList.add('hidden'); });
+            document.getElementById(`dropdown-${id}`)?.classList.toggle('hidden');
         };
 
-        window.deleteCandidato = async function(firestoreId) {
-            if(confirm("Deseja remover este registro de resposta permanentemente do sistema de auditoria?")) {
-                await deleteDoc(doc(db, "candidatos", firestoreId));
-            }
+        window.openCreateModal = () => {
+            document.getElementById('create-questions-container').innerHTML = "";
+            window.addQuestionField('create-questions-container', 'secao');
+            setTimeout(() => {
+                const s = document.querySelector('#create-questions-container .q-pergunta-input');
+                if(s) s.value = 'Perguntas Gerais de R&S';
+            }, 50);
+            window.addQuestionField('create-questions-container', 'texto');
+            openModal('add-vaga-modal');
         };
 
-        window.toggleVagaAtiva = async function(firestoreId, estadoAtual) {
-            await updateDoc(doc(db, "vagas", firestoreId), {
-                ativo: !estadoAtual
-            });
-        };
-
+        window.deleteVaga = async id => { if(confirm("Remover esta prova permanentemente?")) await deleteDoc(doc(db, "vagas", id)); };
+        window.deleteCandidato = async id => { if(confirm("Remover este registro?")) await deleteDoc(doc(db, "candidatos", id)); };
+        window.toggleVagaAtiva = async (id, state) => await updateDoc(doc(db, "vagas", id), { ativo: !state });
         window.dismissCheatAlert = () => document.getElementById('cheat-detection-alert').classList.add('hidden');
 
         document.getElementById('form-login')?.addEventListener('submit', handleLoginSubmit);
@@ -1150,16 +853,15 @@
         document.getElementById('menu-results')?.addEventListener('click', () => navigate('results'));
         document.getElementById('btn-create-questionnaire')?.addEventListener('click', window.openCreateModal);
         document.getElementById('btn-logout')?.addEventListener('click', window.handleLogout);
-        document.getElementById('exit-simulation-btn')?.addEventListener('click', exitCandidateSimulation);
+        document.getElementById('exit-simulation-btn')?.addEventListener('click', exitCandidateSimulationQuietly);
         document.getElementById('btn-dismiss-cheat')?.addEventListener('click', window.dismissCheatAlert);
         document.getElementById('btn-copy-link')?.addEventListener('click', window.copyToClipboard);
         document.getElementById('form-create-vaga')?.addEventListener('submit', handleCreateVaga);
         document.getElementById('candidate-form')?.addEventListener('submit', handleCandidateSubmit);
-
         document.getElementById('filter-vaga')?.addEventListener('change', renderDashboard);
         document.getElementById('filter-data')?.addEventListener('input', renderDashboard);
 
-        window.addEventListener('click', () => { document.querySelectorAll('.card-dropdown').forEach(d => d.classList.add('hidden')); });
+        window.addEventListener('click', () => document.querySelectorAll('.card-dropdown').forEach(d => d.classList.add('hidden')));
         window.addEventListener('hashchange', () => { hashChecked = false; checkUrlHashOnLoad(); });
 
         startRealtimeSync();
