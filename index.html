@@ -209,26 +209,15 @@
                         <h2 class="text-2xl font-extrabold text-white">Este Questionário Está Fechado pelo RH</h2>
                     </div>
 
-                   <div id="candidate-success-view" class="bg-brand-cardBg border border-brand-border/80 rounded-3xl p-14 text-center space-y-8 hidden">
-    <div class="w-24 h-24 bg-brand-pink text-white rounded-full flex items-center justify-center text-4xl mx-auto shadow-lg animate-pulse">
-        <i class="fa-solid fa-check-double"></i>
-    </div>
-    <h2 class="text-3xl font-extrabold text-white">Resposta recebida com sucesso!</h2>
-    <p class="text-sm text-brand-textSecondary max-w-md mx-auto">Recebemos o seu formulário, aguarde o RH entrar em contato com você.</p>
-</div>
-                        <h2 class="text-3xl font-extrabold text-white">Avaliação Concluída com Sucesso!</h2>
-                        <p class="text-sm text-brand-textSecondary max-w-md mx-auto">O seu acesso foi finalizado e a sua folha de respostas foi criptografada. O RH entrará em contacto caso avance no processo.</p>
+                    <div id="candidate-success-view" class="bg-brand-cardBg border border-brand-border/80 rounded-3xl p-14 text-center space-y-8 hidden">
+                        <div class="w-24 h-24 bg-brand-pink text-white rounded-full flex items-center justify-center text-4xl mx-auto shadow-lg animate-pulse">
+                            <i class="fa-solid fa-check-double"></i>
+                        </div>
+                        <h2 class="text-3xl font-extrabold text-white">Resposta recebida com sucesso!</h2>
+                        <p class="text-sm text-brand-textSecondary max-w-md mx-auto">Recebemos o seu formulário, aguarde o RH entrar em contato com você.</p>
                     </div>
 
                     <div id="candidate-active-view" class="space-y-6">
-                        <div class="bg-amber-500/10 border border-amber-500/20 rounded-2xl p-5 flex items-start space-x-4">
-                            <div class="p-2.5 bg-amber-500/20 text-amber-400 rounded-xl"><i class="fa-solid fa-shield-heart text-xl"></i></div>
-                            <div>
-                                <h3 class="font-bold text-amber-300 text-sm">Protocolo Anti-Fraude Ativo</h3>
-                                <p class="text-xs text-brand-textSecondary mt-1">Evite sair da aba ou perder o foco da janela do exame.</p>
-                            </div>
-                        </div>
-
                         <div class="bg-brand-cardBg rounded-3xl border border-brand-border/60 overflow-hidden secure-mode">
                             <div class="bg-[#1D1D24] p-6 border-b border-brand-border/40">
                                 <span class="text-[10px] font-extrabold text-brand-pink tracking-widest uppercase">AVALIAÇÃO OFICIAL</span>
@@ -458,7 +447,6 @@
                 hashChecked = true;
                 const vagaId = parseInt(hash.replace('#exame-', ''));
                 
-                // Bloqueio 1: Verifica o localStorage do dispositivo atual
                 if (localStorage.getItem(`submetido-exame-${vagaId}`)) {
                     showCandidateBlocked();
                     return;
@@ -556,7 +544,6 @@
 
             if (!currentSelectedVagaForCandidate) { navigate('painel'); return; }
 
-            // Bloqueio duplo em tempo real baseado no e-mail do formulário (executado dinamicamente no submit)
             if (localStorage.getItem(`submetido-exame-${currentSelectedVagaForCandidate.id}`)) {
                 showCandidateBlocked();
                 return;
@@ -604,7 +591,13 @@
 
             if (isRealCandidate) {
                 document.body.classList.add('secure-mode');
-                window.addEventListener('blur', triggerCheatModal);
+                // Sistema Silencioso: Monitora tanto PC quanto celular sem travar a interface do usuário
+                window.addEventListener('blur', recordIncidentSilently);
+                document.addEventListener('visibilitychange', () => {
+                    if (document.visibilityState === 'hidden') {
+                        recordIncidentSilently();
+                    }
+                });
             }
 
             timeElapsedInSeconds = 0; cheatAlertsCounter = 0;
@@ -612,7 +605,7 @@
             invisibleTimerInterval = setInterval(() => { timeElapsedInSeconds++; }, 1000);
         }
 
-        function triggerCheatModal() {
+        function recordIncidentSilently() {
             if (currentActiveScreen !== 'candidate') return;
             cheatAlertsCounter++;
         }
@@ -620,7 +613,7 @@
         function exitCandidateSimulationQuietly() {
             if (invisibleTimerInterval) { clearInterval(invisibleTimerInterval); invisibleTimerInterval = null; }
             document.body.classList.remove('secure-mode');
-            window.removeEventListener('blur', triggerCheatModal);
+            window.removeEventListener('blur', recordIncidentSilently);
             document.getElementById('system-sidebar').classList.remove('hidden');
             document.getElementById('exit-simulation-btn').classList.add('hidden');
         }
@@ -632,7 +625,6 @@
             const email = document.getElementById('cand-email').value.trim().toLowerCase();
             const currentVagaId = currentSelectedVagaForCandidate.id;
 
-            // Bloqueio 2: Impede injeção múltipla de formulários em lote
             const jaRespondido = window.candidatosData.some(c => c.email.toLowerCase() === email && c.vaga === currentSelectedVagaForCandidate.titulo);
             if (jaRespondido) {
                 localStorage.setItem(`submetido-exame-${currentVagaId}`, "true");
@@ -653,7 +645,6 @@
                 }
             });
 
-            // Grava o token de bloqueio permanente no navegador do candidato
             localStorage.setItem(`submetido-exame-${currentVagaId}`, "true");
 
             await addDoc(candidatosRef, {
@@ -799,7 +790,7 @@
                     <td class="px-6 py-4 font-bold text-white">${cand.nome}<p class="text-[10px] font-normal text-brand-textSecondary">${cand.email}</p></td>
                     <td class="px-6 py-4">${cand.vaga}</td>
                     <td class="px-6 py-4 font-mono">${cand.tempoTotal}s</td>
-                    <td class="px-6 py-4 text-amber-400">${cand.incidentes} saídas</td>
+                    <td class="px-6 py-4 text-amber-400 font-semibold">${cand.incidentes} saídas</td>
                     <td class="px-6 py-4"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${cand.status === 'Risco Crítico' ? 'bg-red-500/10 text-red-400' : 'bg-emerald-500/10 text-emerald-400'}">${cand.status}</span></td>
                     <td class="px-6 py-4 text-center space-x-2">
                         <button onclick="window.viewCandidateRespostas('${cand.firestoreId}')" class="bg-brand-pink/10 text-brand-pink px-2 py-1 rounded-lg font-bold">Auditoria</button>
