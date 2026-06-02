@@ -696,18 +696,30 @@
             const container = document.getElementById('dynamic-questions-container');
             container.innerHTML = "";
             currentSelectedVagaForCandidate.questoes.forEach((q, idx) => {
-                const block = document.createElement('div');
+    // --- AJUSTE CIRÚRGICO: RENDERIZAR IMAGEM OPCIONAL EM QUALQUER TIPO ---
+                const imgSrc = q.imagemBase64 || '';
+                const imgHtml = imgSrc ? `<img src="${imgSrc}" alt="Contexto visual" class="w-full rounded-xl max-h-72 object-contain border border-brand-border/40 mb-3">` : '';
+
                 if (q.tipo === "secao") {
                     block.className = "pt-4 pb-2 border-b border-brand-border/40";
                     block.innerHTML = `<h4 class="font-display text-sm font-bold text-brand-pink uppercase tracking-widest">${q.pergunta}</h4>`;
                 } else if (q.tipo === "texto") {
                     block.className = "space-y-3 bg-brand-darkBg/40 p-5 rounded-2xl border border-brand-border/40";
-                    block.innerHTML = `<label class="block text-sm font-bold text-white leading-relaxed">${q.pergunta} *</label><textarea id="cand-ans-${idx}" required rows="3" class="w-full px-4 py-3 bg-brand-darkBg border border-brand-border rounded-xl text-white text-sm resize-none focus:outline-none focus:ring-1 focus:ring-brand-pink"></textarea>`;
+                    block.innerHTML = `
+                        ${imgHtml}
+                        <label class="block text-sm font-bold text-white leading-relaxed">${q.pergunta} *</label>
+                        <textarea id="cand-ans-${idx}" required rows="3" class="w-full px-4 py-3 bg-brand-darkBg border border-brand-border rounded-xl text-white text-sm resize-none focus:outline-none focus:ring-1 focus:ring-brand-pink"></textarea>`;
                 } else if (q.tipo === "multipla") {
                     let opts = '';
-                    q.opcoes.forEach(opt => { opts += `<label class="flex items-center space-x-3 bg-brand-darkBg/60 p-3 rounded-xl border border-brand-border/40 cursor-pointer hover:border-brand-pink/40 transition-colors"><input type="radio" name="cand-ans-${idx}" value="${opt}" required class="w-4 h-4 accent-brand-pink shrink-0"><span class="text-xs text-slate-200">${opt}</span></label>`; });
+                    q.opcoes.forEach(opt => { 
+                        opts += `<label class="flex items-center space-x-3 bg-brand-darkBg/60 p-3 rounded-xl border border-brand-border/40 cursor-pointer hover:border-brand-pink/40 transition-colors"><input type="radio" name="cand-ans-${idx}" value="${opt}" required class="w-4 h-4 accent-brand-pink shrink-0"><span class="text-xs text-slate-200">${opt}</span></label>`; 
+                    });
                     block.className = "space-y-3 bg-brand-darkBg/40 p-5 rounded-2xl border border-brand-border/40";
-                    block.innerHTML = `<label class="block text-sm font-bold text-white mb-3">${q.pergunta} *</label><div class="space-y-2">${opts}</div>`;
+                    block.innerHTML = `
+                        ${imgHtml}
+                        <label class="block text-sm font-bold text-white mb-3">${q.pergunta} *</label>
+                        <div class="space-y-2">${opts}</div>`;
+                }
                } else if (type === 'imagem') {
                 block.innerHTML = `
                     ${removeBtn}
@@ -859,7 +871,7 @@
             });
         }
 
-        // ── QUESTION BUILDER ──────────────────────────────────────────────
+// ── QUESTION BUILDER (UNIFICADO COM IMAGEM OPCIONAL) ──
         window.addQuestionField = function(containerId, type = 'texto') {
             const container = document.getElementById(containerId);
             const idx = questionFieldCounter++;
@@ -869,28 +881,45 @@
 
             const removeBtn = `<button type="button" onclick="this.closest('.question-item').remove()" class="absolute top-3 right-3 text-brand-textSecondary hover:text-red-400 transition-colors p-1"><i class="fa-solid fa-xmark text-xs"></i></button>`;
 
+            // Código base para inserir a zona de upload de imagem (comentado para clareza, mas inserido dinamicamente abaixo)
+            const imageUploadHtml = `
+                <input type="hidden" class="q-imagem-base64" value="">
+                <div class="img-drop-zone rounded-xl p-4 text-center cursor-pointer relative" id="drop-zone-${idx}">
+                    <input type="file" accept="image/*" class="q-img-file absolute inset-0 opacity-0 cursor-pointer w-full h-full" onchange="window.handleImageUpload(this, '${idx}')">
+                    <div class="q-img-placeholder text-brand-textSecondary space-y-1">
+                        <i class="fa-solid fa-image text-2xl text-brand-pink/40"></i>
+                        <p class="text-xs font-bold text-brand-textSecondary">Adicionar imagem (Opcional)</p>
+                        <p class="text-[10px] text-brand-textSecondary/50">PNG, JPG, WEBP — máx. 2MB</p>
+                    </div>
+                    <img class="q-img-preview hidden mx-auto" alt="preview">
+                </div>`;
+
             if (type === 'secao') {
                 block.innerHTML = `${removeBtn}<input type="hidden" class="q-type-select" value="secao"><label class="block text-[10px] text-brand-pink font-bold uppercase tracking-widest">Título da Seção</label><input type="text" required class="q-pergunta-input w-full px-3 py-2.5 bg-brand-darkBg border border-brand-border rounded-xl text-white text-xs focus:outline-none focus:ring-1 focus:ring-brand-pink">`;
-            } else if (type === 'texto') {
-                block.innerHTML = `${removeBtn}<input type="hidden" class="q-type-select" value="texto"><label class="block text-[10px] text-brand-textSecondary font-bold uppercase tracking-widest">Pergunta Aberta</label><input type="text" required class="q-pergunta-input w-full px-3 py-2.5 bg-brand-darkBg border border-brand-border rounded-xl text-white text-xs focus:outline-none focus:ring-1 focus:ring-brand-pink">`;
-            } else if (type === 'multipla') {
-                block.innerHTML = `${removeBtn}<input type="hidden" class="q-type-select" value="multipla"><label class="block text-[10px] text-brand-textSecondary font-bold uppercase tracking-widest">Pergunta de Múltipla Escolha</label><input type="text" required class="q-pergunta-input w-full px-3 py-2.5 bg-brand-darkBg border border-brand-border rounded-xl text-white text-xs focus:outline-none focus:ring-1 focus:ring-brand-pink"><label class="block text-[10px] text-brand-textSecondary font-bold uppercase tracking-widest mt-2">Opções (uma por linha)</label><textarea required class="q-opcoes-input w-full px-3 py-2.5 bg-brand-darkBg border border-brand-border rounded-xl text-white text-xs resize-none focus:outline-none focus:ring-1 focus:ring-brand-pink" rows="3" placeholder="Opção A&#10;Opção B&#10;Opção C"></textarea>`;
-            } else if (type === 'imagem') {
+            } 
+            
+            // --- NOVA ESTRUTURA PARA PERGUNTA DE TEXTO (COM IMAGEM OPCIONAL) ---
+            else if (type === 'texto') {
                 block.innerHTML = `
                     ${removeBtn}
-                    <input type="hidden" class="q-type-select" value="imagem">
-                    <input type="hidden" class="q-imagem-base64" value="">
-                    <label class="block text-[10px] text-brand-textSecondary font-bold uppercase tracking-widest">Pergunta com Imagem</label>
-                    <input type="text" required class="q-pergunta-input w-full px-3 py-2.5 bg-brand-darkBg border border-brand-border rounded-xl text-white text-xs focus:outline-none focus:ring-1 focus:ring-brand-pink" placeholder="Texto da pergunta...">
-                    <div class="img-drop-zone rounded-xl p-4 text-center cursor-pointer relative" id="drop-zone-${idx}">
-                        <input type="file" accept="image/*" class="q-img-file absolute inset-0 opacity-0 cursor-pointer w-full h-full" onchange="window.handleImageUpload(this, '${idx}')">
-                        <div class="q-img-placeholder text-brand-textSecondary space-y-1">
-                            <i class="fa-solid fa-image text-2xl text-brand-pink/40"></i>
-                            <p class="text-xs font-bold text-brand-textSecondary">Clique ou arraste uma imagem</p>
-                            <p class="text-[10px] text-brand-textSecondary/50">PNG, JPG, WEBP — máx. 2MB</p>
-                        </div>
-                        <img class="q-img-preview hidden mx-auto" alt="preview">
-                    </div>`;
+                    <input type="hidden" class="q-type-select" value="texto">
+                    <label class="block text-[10px] text-brand-textSecondary font-bold uppercase tracking-widest">Pergunta Aberta (Texto)</label>
+                    <input type="text" required class="q-pergunta-input w-full px-3 py-2.5 bg-brand-darkBg border border-brand-border rounded-xl text-white text-xs focus:outline-none focus:ring-1 focus:ring-brand-pink">
+                    
+                    ${imageUploadHtml} `;
+            } 
+            
+            // --- NOVA ESTRUTURA PARA MÚLTIPLA ESCOLHA (COM IMAGEM OPCIONAL) ---
+            else if (type === 'multipla') {
+                block.innerHTML = `
+                    ${removeBtn}
+                    <input type="hidden" class="q-type-select" value="multipla">
+                    <label class="block text-[10px] text-brand-textSecondary font-bold uppercase tracking-widest">Pergunta de Múltipla Escolha</label>
+                    <input type="text" required class="q-pergunta-input w-full px-3 py-2.5 bg-brand-darkBg border border-brand-border rounded-xl text-white text-xs focus:outline-none focus:ring-1 focus:ring-brand-pink">
+                    
+                    ${imageUploadHtml} <label class="block text-[10px] text-brand-textSecondary font-bold uppercase tracking-widest mt-2">Opções (uma por linha)</label>
+                    <textarea required class="q-opcoes-input w-full px-3 py-2.5 bg-brand-darkBg border border-brand-border rounded-xl text-white text-xs resize-none focus:outline-none focus:ring-1 focus:ring-brand-pink" rows="3" placeholder="Opção A&#10;Opção B&#10;Opção C"></textarea>
+                `;
             }
             container.appendChild(block);
         };
