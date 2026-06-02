@@ -773,7 +773,7 @@
             isSubmitting = false;
         }
 
-        // ── RENDER VAGAS ──────────────────────────────────────────────────
+// ── RENDER VAGAS (CORRIGIDO PARA SANAR O CORTE DO DROPDOWN) ──
         function renderVagas() {
             const grid = document.getElementById('vagas-grid');
             if (!grid) return; grid.innerHTML = "";
@@ -784,17 +784,19 @@
             window.vagasData.forEach(vaga => {
                 const subsCount = window.candidatosData.filter(c => c.vaga === vaga.titulo).length;
                 const card = document.createElement('div');
-                card.className = "vaga-card bg-brand-cardBg p-6 rounded-2xl border border-brand-border flex flex-col justify-between space-y-4 relative overflow-hidden";
+                // REMOVIDO: overflow-hidden que realizava o corte do dropdown.
+                // ADICIONADO: z-10 padrão e controle relativo para o dropdown flutuar de verdade.
+                card.className = "vaga-card bg-brand-cardBg p-6 rounded-2xl border border-brand-border flex flex-col justify-between space-y-4 relative z-10";
                 const statusDot = vaga.ativo ? '<span class="w-2 h-2 bg-emerald-400 rounded-full inline-block"></span>' : '<span class="w-2 h-2 bg-red-400 rounded-full inline-block"></span>';
                 card.innerHTML = `
-                    ${vaga.ativo ? '' : '<div class="absolute top-0 left-0 right-0 h-0.5 bg-red-400/40"></div>'}
+                    ${vaga.ativo ? '' : '<div class="absolute top-0 left-0 right-0 h-0.5 bg-red-400/40 rounded-t-2xl"></div>'}
                     <div>
                         <div class="flex items-start justify-between gap-2">
                             <span class="text-[9px] font-bold uppercase text-brand-pink bg-brand-pink/5 px-2 py-1 rounded-lg border border-brand-pink/10 font-text tracking-widest">${vaga.depto}</span>
                             <div class="relative flex items-center space-x-2">
                                 ${statusDot}
                                 <button onclick="window.toggleCardDropdown(event, ${vaga.id})" class="text-brand-textSecondary hover:text-white p-1 transition-colors"><i class="fa-solid fa-ellipsis-vertical text-sm"></i></button>
-                                <div id="dropdown-${vaga.id}" class="card-dropdown hidden absolute right-0 mt-1 top-8 w-48 rounded-2xl bg-[#1D1D24] border border-brand-border shadow-2xl z-20 overflow-hidden text-xs">
+                                <div id="dropdown-${vaga.id}" class="card-dropdown hidden absolute right-0 mt-1 top-7 w-48 rounded-2xl bg-[#1D1D24] border border-brand-border shadow-2xl z-30 overflow-hidden text-xs">
                                     <button onclick="window.openVagaSubmissions('${vaga.titulo}')" class="w-full px-4 py-2.5 hover:bg-brand-pink/10 text-left flex items-center space-x-2 text-slate-300 transition-colors"><i class="fa-solid fa-users text-brand-pink w-4"></i><span>Candidatos</span></button>
                                     <button onclick="window.openShareModal(${vaga.id})" class="w-full px-4 py-2.5 hover:bg-brand-pink/10 text-left flex items-center space-x-2 text-white font-semibold border-t border-brand-border/40 transition-colors"><i class="fa-solid fa-share-nodes text-brand-pink w-4"></i><span>Obter Link</span></button>
                                     <button onclick="window.previewVaga(${vaga.id})" class="w-full px-4 py-2.5 hover:bg-brand-pink/10 text-left flex items-center space-x-2 text-slate-300 border-t border-brand-border/40 transition-colors"><i class="fa-solid fa-eye text-brand-pink w-4"></i><span>Pré-visualizar</span></button>
