@@ -696,18 +696,29 @@
             const container = document.getElementById('dynamic-questions-container');
             container.innerHTML = "";
             currentSelectedVagaForCandidate.questoes.forEach((q, idx) => {
-                const block = document.createElement('div');
+              const imgSrc = q.imagemBase64 || '';
+                const imgHtml = imgSrc ? `<img src="${imgSrc}" alt="Contexto visual" class="w-full rounded-xl max-h-72 object-contain border border-brand-border/40 mb-3">` : '';
+
                 if (q.tipo === "secao") {
                     block.className = "pt-4 pb-2 border-b border-brand-border/40";
                     block.innerHTML = `<h4 class="font-display text-sm font-bold text-brand-pink uppercase tracking-widest">${q.pergunta}</h4>`;
                 } else if (q.tipo === "texto") {
                     block.className = "space-y-3 bg-brand-darkBg/40 p-5 rounded-2xl border border-brand-border/40";
-                    block.innerHTML = `<label class="block text-sm font-bold text-white leading-relaxed">${q.pergunta} *</label><textarea id="cand-ans-${idx}" required rows="3" class="w-full px-4 py-3 bg-brand-darkBg border border-brand-border rounded-xl text-white text-sm resize-none focus:outline-none focus:ring-1 focus:ring-brand-pink"></textarea>`;
+                    block.innerHTML = `
+                        ${imgHtml}
+                        <label class="block text-sm font-bold text-white leading-relaxed">${q.pergunta} *</label>
+                        <textarea id="cand-ans-${idx}" required rows="3" class="w-full px-4 py-3 bg-brand-darkBg border border-brand-border rounded-xl text-white text-sm resize-none focus:outline-none focus:ring-1 focus:ring-brand-pink"></textarea>`;
                 } else if (q.tipo === "multipla") {
                     let opts = '';
-                    q.opcoes.forEach(opt => { opts += `<label class="flex items-center space-x-3 bg-brand-darkBg/60 p-3 rounded-xl border border-brand-border/40 cursor-pointer hover:border-brand-pink/40 transition-colors"><input type="radio" name="cand-ans-${idx}" value="${opt}" required class="w-4 h-4 accent-brand-pink shrink-0"><span class="text-xs text-slate-200">${opt}</span></label>`; });
+                    q.opcoes.forEach(opt => { 
+                        opts += `<label class="flex items-center space-x-3 bg-brand-darkBg/60 p-3 rounded-xl border border-brand-border/40 cursor-pointer hover:border-brand-pink/40 transition-colors"><input type="radio" name="cand-ans-${idx}" value="${opt}" required class="w-4 h-4 accent-brand-pink shrink-0"><span class="text-xs text-slate-200">${opt}</span></label>`; 
+                    });
                     block.className = "space-y-3 bg-brand-darkBg/40 p-5 rounded-2xl border border-brand-border/40";
-                    block.innerHTML = `<label class="block text-sm font-bold text-white mb-3">${q.pergunta} *</label><div class="space-y-2">${opts}</div>`;
+                    block.innerHTML = `
+                        ${imgHtml}
+                        <label class="block text-sm font-bold text-white mb-3">${q.pergunta} *</label>
+                        <div class="space-y-2">${opts}</div>`;
+                }
                } else if (type === 'imagem') {
                 block.innerHTML = `
                     ${removeBtn}
@@ -765,8 +776,8 @@
             if (jaRespondido) { localStorage.setItem(`submetido-exame-${currentVagaId}`, "true"); showCandidateBlocked(); isSubmitting = false; return; }
             exitCandidateSimulationQuietly();
             let respostasMapeadas = [];
-            currentSelectedVagaForCandidate.questoes.forEach((q, idx) => {
-                if (q.tipo === "texto" || q.tipo === "imagem") {
+           currentSelectedVagaForCandidate.questoes.forEach((q, idx) => {
+                if (q.tipo === "texto") {
                     const el = document.getElementById(`cand-ans-${idx}`);
                     respostasMapeadas.push({ questao: q.pergunta, resposta: el ? el.value : "" });
                 } else if (q.tipo === "multipla") {
