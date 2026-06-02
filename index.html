@@ -680,6 +680,7 @@
         }
 
         // ── CANDIDATE EXAM ────────────────────────────────────────────────
+       // ── CANDIDATE EXAM (CORRIGIDO: IMAGEM EM QUALQUER PERGUNTA) ──
         function setupCandidateExam() {
             const activeView = document.getElementById('candidate-active-view');
             const closedView = document.getElementById('candidate-closed-view');
@@ -695,8 +696,10 @@
             document.getElementById('candidate-job-title').innerText = `${currentSelectedVagaForCandidate.titulo} — ${currentSelectedVagaForCandidate.nivel}`;
             const container = document.getElementById('dynamic-questions-container');
             container.innerHTML = "";
+            
             currentSelectedVagaForCandidate.questoes.forEach((q, idx) => {
-              const imgSrc = q.imagemBase64 || '';
+                const block = document.createElement('div');
+                const imgSrc = q.imagemBase64 || '';
                 const imgHtml = imgSrc ? `<img src="${imgSrc}" alt="Contexto visual" class="w-full rounded-xl max-h-72 object-contain border border-brand-border/40 mb-3">` : '';
 
                 if (q.tipo === "secao") {
@@ -719,29 +722,9 @@
                         <label class="block text-sm font-bold text-white mb-3">${q.pergunta} *</label>
                         <div class="space-y-2">${opts}</div>`;
                 }
-               } else if (type === 'imagem') {
-                block.innerHTML = `
-                    ${removeBtn}
-                    <input type="hidden" class="q-type-select" value="imagem">
-                    <input type="hidden" class="q-imagem-base64" value="">
-                    <label class="block text-[10px] text-brand-textSecondary font-bold uppercase tracking-widest">Pergunta com Imagem</label>
-                    <input type="text" required class="q-pergunta-input w-full px-3 py-2.5 bg-brand-darkBg border border-brand-border rounded-xl text-white text-xs focus:outline-none focus:ring-1 focus:ring-brand-pink" placeholder="Texto da pergunta...">
-                    
-                    <div class="img-drop-zone rounded-xl p-4 text-center cursor-pointer relative" id="drop-zone-${idx}">
-                        <input type="file" accept="image/*" class="q-img-file absolute inset-0 opacity-0 cursor-pointer w-full h-full" onchange="window.handleImageUpload(this, '${idx}')">
-                        <div class="q-img-placeholder text-brand-textSecondary space-y-1">
-                            <i class="fa-solid fa-image text-2xl text-brand-pink/40"></i>
-                            <p class="text-xs font-bold text-brand-textSecondary">Clique ou arraste uma imagem</p>
-                            <p class="text-[10px] text-brand-textSecondary/50">PNG, JPG, WEBP — máx. 2MB</p>
-                        </div>
-                        <img class="q-img-preview hidden mx-auto" alt="preview">
-                    </div>
-                    
-                    <label class="block text-[10px] text-brand-textSecondary font-bold uppercase tracking-widest mt-2">Opções de Múltipla Escolha (Opcional — Uma por linha. Se deixar vazio, será pergunta aberta)</label>
-                    <textarea class="q-opcoes-input w-full px-3 py-2.5 bg-brand-darkBg border border-brand-border rounded-xl text-white text-xs resize-none focus:outline-none focus:ring-1 focus:ring-brand-pink" rows="3" placeholder="Opção A&#10;Opção B&#10;Opção C"></textarea>`;
-            }
                 container.appendChild(block);
             });
+
             if (isRealCandidate) {
                 document.body.classList.add('secure-mode');
                 window.addEventListener('blur', recordIncidentSilently);
@@ -775,8 +758,9 @@
             const jaRespondido = window.candidatosData.some(c => c.email.toLowerCase() === email && c.vaga === currentSelectedVagaForCandidate.titulo);
             if (jaRespondido) { localStorage.setItem(`submetido-exame-${currentVagaId}`, "true"); showCandidateBlocked(); isSubmitting = false; return; }
             exitCandidateSimulationQuietly();
+            
             let respostasMapeadas = [];
-           currentSelectedVagaForCandidate.questoes.forEach((q, idx) => {
+            currentSelectedVagaForCandidate.questoes.forEach((q, idx) => {
                 if (q.tipo === "texto") {
                     const el = document.getElementById(`cand-ans-${idx}`);
                     respostasMapeadas.push({ questao: q.pergunta, resposta: el ? el.value : "" });
@@ -785,6 +769,7 @@
                     respostasMapeadas.push({ questao: q.pergunta, resposta: r ? r.value : "Não respondida" });
                 }
             });
+
             localStorage.setItem(`submetido-exame-${currentVagaId}`, "true");
             await addDoc(candidatosRef, {
                 id: Date.now(), nome, email, phone, vaga: currentSelectedVagaForCandidate.titulo,
