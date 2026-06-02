@@ -910,32 +910,58 @@
             reader.readAsDataURL(file);
         };
 
+// ── SALVAR QUESTIONÁRIO NA NUVEM (CORRIGIDO E BLINDADO) ──
         async function handleCreateVaga(e) {
             e.preventDefault();
-            const titulo = document.getElementById('vaga-titulo').value;
-            const depto = document.getElementById('vaga-departamento').value;
-            const nivel = document.getElementById('vaga-nivel').value;
-            const regime = document.getElementById('vaga-localidade').value;
-            const items = document.querySelectorAll('#create-questions-container .question-item');
-            let questoes = [];
-            items.forEach(item => {
-                const tipo = item.querySelector('.q-type-select').value;
-                const pergunta = item.querySelector('.q-pergunta-input').value;
-                if (tipo === 'secao' || tipo === 'texto') {
-                    questoes.push({ tipo, pergunta });
-                } else if (tipo === 'multipla') {
-                    const raw = item.querySelector('.q-opcoes-input').value;
-                    const opcoes = raw.split('\n').map(o => o.trim()).filter(o => o.length > 0);
-                    questoes.push({ tipo, pergunta, opcoes });
-                } else if (tipo === 'imagem') {
-                    const imagemBase64 = item.querySelector('.q-imagem-base64').value;
-                    questoes.push({ tipo, pergunta, imagemBase64 });
-                }
-            });
-            await addDoc(vagasRef, { id: Date.now(), titulo, depto, regime, nivel, ativo: true, questoes });
-            closeModal('add-vaga-modal'); e.target.reset();
-            document.getElementById('create-questions-container').innerHTML = '';
-            showToast('Questionário criado com sucesso!');
+            try {
+                const titulo = document.getElementById('vaga-titulo').value;
+                const depto = document.getElementById('vaga-departamento').value;
+                const nivel = document.getElementById('vaga-nivel').value;
+                const regime = document.getElementById('vaga-localidade').value;
+                const items = document.querySelectorAll('#create-questions-container .question-item');
+                
+                let questoes = [];
+                items.forEach(item => {
+                    const tipo = item.querySelector('.q-type-select').value;
+                    const pergunta = item.querySelector('.q-pergunta-input').value;
+                    
+                    if (tipo === 'secao' || tipo === 'texto') {
+                        questoes.push({ tipo, pergunta });
+                    } else if (tipo === 'multipla') {
+                        const raw = item.querySelector('.q-opcoes-input').value;
+                        const opcoes = raw.split('\n').map(o => o.trim()).filter(o => o.length > 0);
+                        questoes.push({ tipo, pergunta, opcoes });
+                    } else if (tipo === 'imagem') {
+                        // Correção: Garante a captura da imagem de apoio/enunciado com segurança
+                        const imgInput = item.querySelector('.q-imagem-base64');
+                        const imagemBase64 = imgInput ? imgInput.value : '';
+                        questoes.push({ tipo, pergunta, imagemBase64 });
+                    }
+                });
+                
+                // Envia direto para a coleção "vagas" do Firestore
+                await addDoc(vagasRef, { 
+                    id: Date.now(), 
+                    titulo, 
+                    depto, 
+                    regime, 
+                    nivel, 
+                    ativo: true, 
+                    questoes 
+                });
+                
+                // Fecha o modal de criação e limpa o formulário
+                closeModal('add-vaga-modal'); 
+                e.target.reset();
+                document.getElementById('create-questions-container').innerHTML = '';
+                
+                // Dispara o alerta de sucesso na tela
+                showToast('Questionário criado com sucesso!');
+                
+            } catch (error) {
+                console.error("Erro ao salvar o questionário no Firebase:", error);
+                showToast('Erro ao salvar na nuvem. Verifique o console.', 'bg-red-500');
+            }
         }
 
         // ── MODALS ────────────────────────────────────────────────────────
