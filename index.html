@@ -1104,13 +1104,17 @@
                         lastItem.querySelector('.q-min-selecoes').value = q.minLimit || 2;
                         lastItem.querySelector('.q-max-selecoes').value = q.maxLimit || 5;
                     }
-                } else if (q.tipo === 'imagem' && q.imagemBase64) {
-                    lastItem.querySelector('.q-imagem-base64').value = q.imagemBase64;
-                    const preview = lastItem.querySelector('.q-img-preview');
-                    preview.src = q.imagemBase64;
-                    preview.classList.remove('hidden');
-                    lastItem.querySelector('.q-img-placeholder').classList.add('hidden');
-                }
+             } else if (q.tipo === 'imagem' && q.imagemBase64) {
+    lastItem.querySelector('.q-imagem-base64').value = q.imagemBase64;
+    const preview = lastItem.querySelector('.q-img-preview');
+    preview.src = q.imagemBase64;
+    preview.classList.remove('hidden');
+    lastItem.querySelector('.q-img-placeholder').classList.add('hidden');
+} 
+// ADICIONE ESSAS DUAS LINHAS EXATAMENTE AQUI:
+else if (q.tipo === 'colunas') {
+    lastItem.querySelector('.q-colunas-input').value = q.colunas.join('\n');
+}
             });
             window.openModal('add-vaga-modal');
         };
