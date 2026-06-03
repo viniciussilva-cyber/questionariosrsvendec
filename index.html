@@ -65,16 +65,13 @@
             #system-sidebar { position: fixed; z-index: 40; height: 100%; }
             #system-sidebar.collapsed { width: 0 !important; }
         }
-        /* Modal overlay */
         .modal-overlay { background: rgba(14,14,16,0.92); backdrop-filter: blur(6px); }
     </style>
 </head>
 <body class="h-full text-slate-100 antialiased bg-brand-darkBg flex flex-col overflow-hidden noise-bg">
 
-    <!-- TOAST CONTAINER (FIX #1: estava ausente) -->
     <div id="toast-container" class="fixed bottom-6 right-6 z-[200] space-y-2 pointer-events-none"></div>
 
-    <!-- LOADING -->
     <div id="db-loading-screen" class="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-brand-darkBg space-y-5">
         <div class="relative">
             <div class="w-16 h-16 rounded-full border-4 border-brand-pink/15 border-t-brand-pink animate-spin"></div>
@@ -83,7 +80,6 @@
         <p class="text-[11px] text-brand-textSecondary font-semibold tracking-widest uppercase">Conectando ao servidor...</p>
     </div>
 
-    <!-- LOGIN -->
     <div id="screen-login" class="fixed inset-0 z-50 flex items-center justify-center bg-brand-darkBg px-4 hidden overflow-y-auto py-8">
         <div class="max-w-md w-full">
             <div class="text-center mb-10">
@@ -115,14 +111,12 @@
                     </button>
                 </form>
             </div>
-            <p class="text-center text-[10px] text-brand-textSecondary mt-6 tracking-widest uppercase">© 2025 VENDE-C · Todos os direitos reservados</p>
+            <p class="text-center text-[10px] text-brand-textSecondary mt-6 tracking-widest uppercase">© 2026 VENDE-C · Todos os direitos reservados</p>
         </div>
     </div>
 
-    <!-- MAIN LAYOUT -->
     <div id="main-system-layout" class="hidden h-full flex flex-row overflow-hidden relative z-10">
 
-        <!-- SIDEBAR -->
         <aside id="system-sidebar" class="w-64 bg-brand-cardBg border-r border-brand-border flex flex-col justify-between shrink-0 overflow-hidden">
             <div>
                 <div class="h-20 flex items-center px-6 border-b border-brand-border/50 space-x-3">
@@ -153,9 +147,7 @@
             </div>
         </aside>
 
-        <!-- CONTENT -->
         <main class="flex-1 flex flex-col overflow-hidden">
-            <!-- HEADER -->
             <header id="rh-system-header" class="h-16 border-b border-brand-border bg-brand-cardBg/30 flex items-center justify-between px-5 shrink-0">
                 <div class="flex items-center space-x-4">
                     <button id="sidebar-toggle-btn" title="Ocultar/mostrar menu" class="p-2 rounded-lg text-brand-textSecondary hover:text-white hover:bg-white/5 transition-colors">
@@ -176,7 +168,6 @@
 
             <div class="flex-1 overflow-y-auto p-6 bg-brand-darkBg">
 
-                <!-- PAINEL -->
                 <div id="screen-painel" class="space-y-8">
                     <div class="relative bg-brand-cardBg p-8 rounded-3xl border border-brand-border overflow-hidden">
                         <div class="brand-stripe absolute top-0 left-0 right-0 h-[3px] opacity-70"></div>
@@ -207,15 +198,11 @@
                     </div>
                     <div id="vagas-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"></div>
                 </div>
-</div>
-                <!-- RESULTS -->
+
                 <div id="screen-results" class="hidden space-y-8">
                     <div class="relative bg-brand-cardBg p-8 rounded-3xl border border-brand-border overflow-hidden">
                         <div class="brand-stripe absolute top-0 left-0 right-0 h-[3px] opacity-70"></div>
                         <p class="font-display font-black text-4xl text-white tracking-tight leading-none">RESPOSTAS <span class="text-brand-pink">DOS CANDIDATOS</span></p>
-                        <button type="button" onclick="window.addQuestionField('create-questions-container','imagem')" class="px-3 py-1.5 bg-brand-darkBg border border-brand-border rounded-xl text-[10px] font-bold text-brand-textSecondary hover:text-white hover:border-brand-pink/40 transition-colors">+ Imagem</button>
-    <button type="button" onclick="window.addQuestionField('create-questions-container','colunas')" class="px-3 py-1.5 bg-brand-darkBg border border-brand-border rounded-xl text-[10px] font-bold text-brand-textSecondary hover:text-white hover:border-brand-pink/40 transition-colors">+ Colunas</button>
-</div>
                         <p class="text-brand-textSecondary text-sm mt-2">Monitore e audite as submissões com rastreamento de integridade.</p>
                     </div>
                     <div class="bg-brand-cardBg p-5 rounded-2xl border border-brand-border grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -263,7 +250,6 @@
                     </div>
                 </div>
 
-                <!-- CANDIDATE SCREEN -->
                 <div id="screen-candidate" class="hidden max-w-3xl mx-auto space-y-6">
                     <div id="candidate-brand-bar" class="relative bg-brand-cardBg rounded-3xl border border-brand-border overflow-hidden p-8 text-center">
                         <div class="brand-stripe absolute top-0 left-0 right-0 h-[3px]"></div>
@@ -273,7 +259,7 @@
                     </div>
                     <div id="candidate-closed-view" class="bg-brand-cardBg border border-red-500/20 rounded-3xl p-12 text-center space-y-5 hidden">
                         <div class="w-20 h-20 bg-red-500/10 text-red-500 rounded-full flex items-center justify-center text-3xl mx-auto"><i class="fa-solid fa-lock"></i></div>
-                        <p class="font-display font-black text-3xl text-white">QUESTIONÁRIO FECHADO</p>
+                        <p class="font-display font-black text-3xl text-white">QUESTIONÁRIOS FECHADO</p>
                         <p class="text-brand-textSecondary text-sm">Este fluxo foi encerrado pelo RH. Aguarde novos processos seletivos.</p>
                     </div>
                     <div id="candidate-success-view" class="bg-brand-cardBg border border-brand-border rounded-3xl p-14 text-center space-y-8 hidden">
@@ -333,9 +319,6 @@
         </main>
     </div>
 
-    <!-- ═══════════════════════════════════════════════════════════════════ -->
-    <!-- MODAL: Criar / Editar Questionário                                 -->
-    <!-- ═══════════════════════════════════════════════════════════════════ -->
     <div id="add-vaga-modal" class="fixed inset-0 modal-overlay z-50 flex items-center justify-center p-4 hidden">
         <div class="bg-brand-cardBg rounded-3xl max-w-2xl w-full border border-brand-border shadow-2xl overflow-hidden">
             <div class="p-6 bg-brand-darkBg flex items-center justify-between border-b border-brand-border">
@@ -378,6 +361,7 @@
                             <button type="button" onclick="window.addQuestionField('create-questions-container','texto')" class="px-3 py-1.5 bg-brand-darkBg border border-brand-border rounded-xl text-[10px] font-bold text-brand-textSecondary hover:text-white hover:border-brand-pink/40 transition-colors">+ Aberta</button>
                             <button type="button" onclick="window.addQuestionField('create-questions-container','multipla')" class="px-3 py-1.5 bg-brand-darkBg border border-brand-border rounded-xl text-[10px] font-bold text-brand-textSecondary hover:text-white hover:border-brand-pink/40 transition-colors">+ Múltipla</button>
                             <button type="button" onclick="window.addQuestionField('create-questions-container','imagem')" class="px-3 py-1.5 bg-brand-darkBg border border-brand-border rounded-xl text-[10px] font-bold text-brand-textSecondary hover:text-white hover:border-brand-pink/40 transition-colors">+ Imagem</button>
+                            <button type="button" onclick="window.addQuestionField('create-questions-container','colunas')" class="px-3 py-1.5 bg-brand-darkBg border border-brand-border rounded-xl text-[10px] font-bold text-brand-textSecondary hover:text-white hover:border-brand-pink/40 transition-colors">+ Colunas</button>
                         </div>
                     </div>
                     <div id="create-questions-container" class="space-y-3"></div>
@@ -389,9 +373,6 @@
         </div>
     </div>
 
-    <!-- ═══════════════════════════════════════════════════════════════════ -->
-    <!-- MODAL: Obter Link (FIX #2: estava ausente)                        -->
-    <!-- ═══════════════════════════════════════════════════════════════════ -->
     <div id="share-modal" class="fixed inset-0 modal-overlay z-50 flex items-center justify-center p-4 hidden">
         <div class="bg-brand-cardBg rounded-3xl max-w-lg w-full border border-brand-border shadow-2xl overflow-hidden">
             <div class="p-6 bg-brand-darkBg flex items-center justify-between border-b border-brand-border">
@@ -413,9 +394,6 @@
         </div>
     </div>
 
-    <!-- ═══════════════════════════════════════════════════════════════════ -->
-    <!-- MODAL: Candidatos da Vaga (FIX #3: estava ausente)                -->
-    <!-- ═══════════════════════════════════════════════════════════════════ -->
     <div id="vaga-submissions-modal" class="fixed inset-0 modal-overlay z-50 flex items-center justify-center p-4 hidden">
         <div class="bg-brand-cardBg rounded-3xl max-w-4xl w-full border border-brand-border shadow-2xl overflow-hidden">
             <div class="p-6 bg-brand-darkBg flex items-center justify-between border-b border-brand-border">
@@ -443,9 +421,6 @@
         </div>
     </div>
 
-    <!-- ═══════════════════════════════════════════════════════════════════ -->
-    <!-- MODAL: Detalhe do Candidato (FIX #4: estava ausente)              -->
-    <!-- ═══════════════════════════════════════════════════════════════════ -->
     <div id="candidate-details-modal" class="fixed inset-0 modal-overlay z-50 flex items-center justify-center p-4 hidden">
         <div class="bg-brand-cardBg rounded-3xl max-w-2xl w-full border border-brand-border shadow-2xl overflow-hidden">
             <div class="p-6 bg-brand-darkBg flex items-center justify-between border-b border-brand-border">
@@ -471,7 +446,6 @@
         </div>
     </div>
 
-    <!-- Firebase + App Logic (FIX #5: movido para fora do <form>) -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, addDoc, doc, deleteDoc, updateDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -500,7 +474,7 @@
         let questionFieldCounter = 0;
         let isSubmitting = false;
         let sidebarOpen = true;
-        let dataReady = false; // FIX #6: flag para evitar checkHash repetido
+        let dataReady = false;
 
         window.vagasData = [];
         window.candidatosData = [];
@@ -508,15 +482,13 @@
         const allowedEmails = ['vinicius.silva@vende-c.com', 'lucas.izan@vende-c.com', 'vagas@vende-c.com', 'carlos@vende-c.com'];
         const masterPassword = 'rh2026!';
 
-        // ── MODAL helpers (FIX #7: funções nunca definidas) ───────────────
         window.openModal = function(id) { document.getElementById(id)?.classList.remove('hidden'); };
         window.closeModal = function(id) { document.getElementById(id)?.classList.add('hidden'); };
-        // Fechar modal clicando no overlay
+        
         document.querySelectorAll('[id$="-modal"]').forEach(modal => {
             modal.addEventListener('click', e => { if (e.target === modal) window.closeModal(modal.id); });
         });
 
-        // ── TOAST ─────────────────────────────────────────────────────────
         function showToast(msg, color = 'bg-emerald-500') {
             const container = document.getElementById('toast-container');
             if (!container) return;
@@ -527,14 +499,12 @@
             setTimeout(() => toast.remove(), 2800);
         }
 
-        // ── SIDEBAR TOGGLE ────────────────────────────────────────────────
         document.getElementById('sidebar-toggle-btn')?.addEventListener('click', () => {
             const sidebar = document.getElementById('system-sidebar');
             sidebarOpen = !sidebarOpen;
             sidebar.classList.toggle('collapsed', !sidebarOpen);
         });
 
-        // ── REALTIME SYNC ─────────────────────────────────────────────────
         function startRealtimeSync() {
             onSnapshot(query(vagasRef, orderBy("id", "asc")), (snapshot) => {
                 window.vagasData = [];
@@ -545,7 +515,6 @@
                 updateStatsCounters();
                 populateFilters();
                 if (currentActiveScreen === 'painel') renderVagas();
-                // FIX #6: só faz checkHash na primeira carga de dados
                 if (!dataReady) { dataReady = true; checkUrlHashOnLoad(); }
             });
             onSnapshot(query(candidatosRef, orderBy("id", "desc")), (snapshot) => {
@@ -575,12 +544,11 @@
             const saved = select.value;
             select.innerHTML = '<option value="todos">Todos os Cargos</option>';
             [...new Set(window.vagasData.map(v => v.titulo))].forEach(t => {
-                select.innerHTML += `<option value="${t}">${t}</option>`;
+                select.innerHTML += `<option value="${t}">${t}</option scheme>`;
             });
             select.value = saved;
         }
 
-        // ── URL HASH ──────────────────────────────────────────────────────
         function checkUrlHashOnLoad() {
             const hash = window.location.hash;
             if (hash && hash.startsWith('#exame-')) {
@@ -624,7 +592,6 @@
             document.getElementById('screen-login').classList.remove('hidden');
         }
 
-        // ── LOGIN ─────────────────────────────────────────────────────────
         function handleLoginSubmit(e) {
             e.preventDefault();
             const email = document.getElementById('login-email').value.trim().toLowerCase();
@@ -644,7 +611,6 @@
             }
         }
 
-        // ── LOGOUT ────────────────────────────────────────────────────────
         function handleLogout() {
             loggedInUser = null;
             document.getElementById('main-system-layout').classList.add('hidden');
@@ -657,48 +623,225 @@
             document.getElementById('login-error-alert').classList.add('hidden');
         }
 
-        // ── NAVIGATE ──────────────────────────────────────────────────────
-function navigate(screenId) {
-    // 1. Garante que se estiver saindo da simulação, limpe os timers
-    if (currentActiveScreen === 'candidate' && screenId !== 'candidate') exitCandidateSimulationQuietly();
-    if (isRealCandidate && screenId !== 'candidate') { showCandidateBlocked(); return; }
-    
-    // 2. CORREÇÃO DA MISTURA: Esta linha ESCONDE as três telas principais de forma absoluta
-    document.getElementById('screen-painel').classList.add('hidden');
-    document.getElementById('screen-results').classList.add('hidden');
-    document.getElementById('screen-candidate').classList.add('hidden');
-    
-    // 3. MOSTRA APENAS A PÁGINA CLICADA: Remove o hidden da página atual
-    const telaParaMostrar = document.getElementById(`screen-${screenId}`);
-    if (telaParaMostrar) {
-        telaParaMostrar.classList.remove('hidden');
-    }
-    
-    // 4. Controla o visual do menu lateral (qual botão fica rosa)
-    const menuPainel = document.getElementById('menu-painel');
-    const menuResults = document.getElementById('menu-results');
-    const activeClass = "w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-semibold text-white bg-brand-pink shadow-md";
-    const inactiveClass = "w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-semibold text-brand-textSecondary hover:text-white hover:bg-white/5 transition-colors";
-    
-    if (screenId === 'painel') {
-        if (menuPainel) menuPainel.className = activeClass;
-        if (menuResults) menuResults.className = inactiveClass;
-        renderVagas();
-        document.getElementById('header-context-title').innerText = 'Questionários';
-        document.getElementById('header-context-subtitle').innerText = 'Painel de Controle R&S';
-    } else if (screenId === 'results') {
-        if (menuResults) menuResults.className = activeClass;
-        if (menuPainel) menuPainel.className = inactiveClass;
-        renderDashboard();
-        document.getElementById('header-context-title').innerText = 'Respostas';
-        document.getElementById('header-context-subtitle').innerText = 'Dashboard de Candidatos';
-    } else if (screenId === 'candidate') {
-        setupCandidateExam();
-    }
-    
-    currentActiveScreen = screenId;
-}
-        // ── CANDIDATE EXAM ────────────────────────────────────────────────
+        function navigate(screenId) {
+            if (currentActiveScreen === 'candidate' && screenId !== 'candidate') exitCandidateSimulationQuietly();
+            if (isRealCandidate && screenId !== 'candidate') { showCandidateBlocked(); return; }
+            
+            document.getElementById('screen-painel').classList.add('hidden');
+            document.getElementById('screen-results').classList.add('hidden');
+            document.getElementById('screen-candidate').classList.add('hidden');
+            
+            const telaParaMostrar = document.getElementById(`screen-${screenId}`);
+            if (telaParaMostrar) {
+                telaParaMostrar.classList.remove('hidden');
+            }
+            
+            const menuPainel = document.getElementById('menu-painel');
+            const menuResults = document.getElementById('menu-results');
+            const activeClass = "w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-semibold text-white bg-brand-pink shadow-md";
+            const inactiveClass = "w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-semibold text-brand-textSecondary hover:text-white hover:bg-white/5 transition-colors";
+            
+            if (screenId === 'painel') {
+                if (menuPainel) menuPainel.className = activeClass;
+                if (menuResults) menuResults.className = inactiveClass;
+                renderVagas();
+                document.getElementById('header-context-title').innerText = 'Questionários';
+                document.getElementById('header-context-subtitle').innerText = 'Painel de Controle R&S';
+            } else if (screenId === 'results') {
+                if (menuResults) menuResults.className = activeClass;
+                if (menuPainel) menuPainel.className = inactiveClass;
+                renderDashboard();
+                document.getElementById('header-context-title').innerText = 'Respostas';
+                document.getElementById('header-context-subtitle').innerText = 'Dashboard de Candidatos';
+            } else if (screenId === 'candidate') {
+                setupCandidateExam();
+            }
+            
+            currentActiveScreen = screenId;
+        }
+
+        window.addQuestionField = function(containerId, type = 'texto') {
+            const container = document.getElementById(containerId);
+            const idx = questionFieldCounter++;
+            const block = document.createElement('div');
+            block.className = "question-item p-4 bg-brand-darkBg/70 border border-brand-border rounded-2xl relative space-y-3";
+            block.id = `q-block-${idx}`;
+            const removeBtn = `<button type="button" onclick="this.closest('.question-item').remove()" class="absolute top-3 right-3 text-brand-textSecondary hover:text-red-400 transition-colors p-1"><i class="fa-solid fa-xmark text-xs"></i></button>`;
+
+            if (type === 'secao') {
+                block.innerHTML = `${removeBtn}<input type="hidden" class="q-type-select" value="secao"><label class="block text-[10px] text-brand-pink font-bold uppercase tracking-widest">Título da Seção</label><input type="text" required class="q-pergunta-input w-full px-3 py-2.5 bg-brand-darkBg border border-brand-border rounded-xl text-white text-xs focus:outline-none focus:ring-1 focus:ring-brand-pink">`;
+            } else if (type === 'texto') {
+                block.innerHTML = `${removeBtn}<input type="hidden" class="q-type-select" value="texto"><label class="block text-[10px] text-brand-textSecondary font-bold uppercase tracking-widest">Pergunta Aberta</label><input type="text" required class="q-pergunta-input w-full px-3 py-2.5 bg-brand-darkBg border border-brand-border rounded-xl text-white text-xs focus:outline-none focus:ring-1 focus:ring-brand-pink">`;
+            } else if (type === 'multipla') {
+                block.innerHTML = `
+                    ${removeBtn}
+                    <input type="hidden" class="q-type-select" value="multipla">
+                    <div class="space-y-3">
+                        <div>
+                            <label class="block text-[10px] text-brand-textSecondary font-bold uppercase tracking-widest mb-1">Pergunta de Múltipla Escolha</label>
+                            <input type="text" required class="q-pergunta-input w-full px-3 py-2.5 bg-brand-darkBg border border-brand-border rounded-xl text-white text-xs focus:outline-none focus:ring-1 focus:ring-brand-pink">
+                        </div>
+                        <div class="grid grid-cols-3 gap-3">
+                            <div>
+                                <label class="text-[10px] font-bold text-brand-textSecondary uppercase tracking-widest block mb-1">Seleção</label>
+                                <select class="q-modo-selecao w-full bg-brand-darkBg border border-brand-border rounded-xl p-2.5 text-xs text-white focus:outline-none" onchange="const box = this.closest('.question-item').querySelector('.limites-box'); this.value === 'multipla' ? box.classList.remove('hidden') : box.classList.add('hidden')">
+                                    <option value="unica">Única (Bolinha)</option>
+                                    <option value="multipla">Várias (Quadradinho)</option>
+                                </select>
+                            </div>
+                            <div class="limites-box hidden col-span-2 grid grid-cols-2 gap-2">
+                                <div>
+                                    <label class="text-[10px] font-bold text-brand-textSecondary uppercase tracking-widest block mb-1">Mínimo</label>
+                                    <input type="number" class="q-min-selecoes w-full bg-brand-darkBg border border-brand-border rounded-xl p-2 text-xs text-white focus:outline-none" value="2" min="2">
+                                </div>
+                                <div>
+                                    <label class="text-[10px] font-bold text-brand-textSecondary uppercase tracking-widest block mb-1">Máximo</label>
+                                    <input type="number" class="q-max-selecoes w-full bg-brand-darkBg border border-brand-border rounded-xl p-2 text-xs text-white focus:outline-none" value="5" max="5">
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-[10px] text-brand-textSecondary font-bold uppercase tracking-widest mb-1">Opções (uma por linha)</label>
+                            <textarea required class="q-opcoes-input w-full px-3 py-2.5 bg-brand-darkBg border border-brand-border rounded-xl text-white text-xs resize-none focus:outline-none" rows="3" placeholder="Opção A&#10;Opção B"></textarea>
+                        </div>
+                    </div>`;
+            } else if (type === 'imagem') {
+                block.innerHTML = `
+                    ${removeBtn}
+                    <input type="hidden" class="q-type-select" value="imagem">
+                    <input type="hidden" class="q-imagem-base64" value="">
+                    <label class="block text-[10px] text-brand-textSecondary font-bold uppercase tracking-widest">Pergunta com Imagem</label>
+                    <input type="text" required class="q-pergunta-input w-full px-3 py-2.5 bg-brand-darkBg border border-brand-border rounded-xl text-white text-xs focus:outline-none">
+                    <div class="img-drop-zone rounded-xl p-4 text-center cursor-pointer relative" id="drop-zone-${idx}">
+                        <input type="file" accept="image/*" class="q-img-file absolute inset-0 opacity-0 cursor-pointer w-full h-full" onchange="window.handleImageUpload(this, '${idx}')">
+                        <div class="q-img-placeholder text-brand-textSecondary space-y-1">
+                            <i class="fa-solid fa-image text-2xl text-brand-pink/40"></i>
+                            <p class="text-xs font-bold text-brand-textSecondary">Clique ou arraste uma imagem</p>
+                        </div>
+                        <img class="q-img-preview hidden mx-auto" alt="preview">
+                    </div>`;
+            } else if (type === 'colunas') {
+                block.innerHTML = `
+                    ${removeBtn}
+                    <input type="hidden" class="q-type-select" value="colunas">
+                    <div>
+                        <label class="block text-[10px] text-brand-textSecondary font-bold uppercase tracking-widest mb-1">Enunciado da Pergunta em Colunas</label>
+                        <input type="text" required class="q-pergunta-input w-full px-3 py-2.5 bg-brand-darkBg border border-brand-border rounded-xl text-white text-xs focus:outline-none" placeholder="Ex: Avalie seu nível de familiaridade com CRM:">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] text-brand-textSecondary font-bold uppercase tracking-widest mb-1">Cabeçalhos das Colunas (um por linha)</label>
+                        <textarea required class="q-colunas-input w-full px-3 py-2.5 bg-brand-darkBg border border-brand-border rounded-xl text-white text-xs resize-none focus:outline-none" rows="3" placeholder="Pouco Familiar&#10;Familiar&#10;Muito Familiar"></textarea>
+                    </div>`;
+            }
+            container.appendChild(block);
+        };
+
+        window.handleImageUpload = function(input, idx) {
+            const file = input.files[0];
+            if (!file) return;
+            if (file.size > 2 * 1024 * 1024) { showToast('Imagem muito grande! Máx. 2MB.', 'bg-red-500'); return; }
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const base64 = e.target.result;
+                const block = document.getElementById(`q-block-${idx}`);
+                if (!block) return;
+                block.querySelector('.q-imagem-base64').value = base64;
+                const preview = block.querySelector('.q-img-preview');
+                const placeholder = block.querySelector('.q-img-placeholder');
+                preview.src = base64;
+                preview.classList.remove('hidden');
+                placeholder.classList.add('hidden');
+            };
+            reader.readAsDataURL(file);
+        };
+
+        async function handleCreateVaga(e) {
+            e.preventDefault();
+            try {
+                const titulo = document.getElementById('vaga-titulo').value;
+                const depto = document.getElementById('vaga-departamento').value;
+                const nivel = document.getElementById('vaga-nivel').value;
+                const regime = document.getElementById('vaga-localidade').value;
+                const items = document.querySelectorAll('#create-questions-container .question-item');
+                let questoes = [];
+                items.forEach(item => {
+                    const tipo = item.querySelector('.q-type-select').value;
+                    const pergunta = item.querySelector('.q-pergunta-input').value;
+                    if (tipo === 'secao' || tipo === 'texto') {
+                        questoes.push({ tipo, pergunta });
+                    } else if (tipo === 'multipla') {
+                        const raw = item.querySelector('.q-opcoes-input').value;
+                        const opcoes = raw.split('\n').map(o => o.trim()).filter(o => o.length > 0);
+                        const modo = item.querySelector('.q-modo-selecao').value;
+                        const minLimit = modo === 'multipla' ? (parseInt(item.querySelector('.q-min-selecoes').value) || 2) : 1;
+                        const maxLimit = modo === 'multipla' ? (parseInt(item.querySelector('.q-max-selecoes').value) || 5) : 1;
+                        questoes.push({ tipo, pergunta, opcoes, modo, minLimit, maxLimit });
+                    } else if (tipo === 'imagem') {
+                        const imagemBase64 = item.querySelector('.q-imagem-base64')?.value || '';
+                        questoes.push({ tipo, pergunta, imagemBase64 });
+                    } else if (tipo === 'colunas') {
+                        const rawColunas = item.querySelector('.q-colunas-input').value;
+                        const colunas = rawColunas.split('\n').map(c => c.trim()).filter(c => c.length > 0);
+                        questoes.push({ tipo, pergunta, colunas });
+                    }
+                });
+                const dadosVaga = { titulo, depto, regime, nivel, questoes };
+                const editId = e.target.dataset.editId;
+                if (editId) {
+                    await updateDoc(doc(db, "vagas", e.target.dataset.docFirestoreId), dadosVaga);
+                    showToast('Questionário updated com sucesso!');
+                } else {
+                    await addDoc(vagasRef, { ...dadosVaga, id: Date.now(), ativo: true });
+                    showToast('Questionário criado com sucesso!');
+                }
+                delete e.target.dataset.editId;
+                delete e.target.dataset.docFirestoreId;
+                window.closeModal('add-vaga-modal');
+                e.target.reset();
+                document.getElementById('create-questions-container').innerHTML = '';
+            } catch (error) {
+                console.error("Erro ao salvar no Firebase:", error);
+                showToast('Erro ao salvar as alterações.', 'bg-red-500');
+            }
+        }
+
+        window.openEditVagaModal = function(vagaIdFirestore, vagaIdNumerico) {
+            const vaga = window.vagasData.find(v => v.id === vagaIdNumerico || v.firestoreId === vagaIdFirestore);
+            if (!vaga) return;
+            document.getElementById('vaga-titulo').value = vaga.titulo;
+            document.getElementById('vaga-departamento').value = vaga.depto;
+            document.getElementById('vaga-nivel').value = vaga.nivel;
+            document.getElementById('vaga-localidade').value = vaga.regime;
+            const form = document.getElementById('form-create-vaga');
+            form.dataset.editId = vaga.id;
+            form.dataset.docFirestoreId = vagaIdFirestore;
+            const container = document.getElementById('create-questions-container');
+            container.innerHTML = '';
+            vaga.questoes.forEach(q => {
+                window.addQuestionField('create-questions-container', q.tipo);
+                const lastItem = container.lastElementChild;
+                lastItem.querySelector('.q-pergunta-input').value = q.pergunta;
+                if (q.tipo === 'multipla') {
+                    lastItem.querySelector('.q-opcoes-input').value = q.opcoes.join('\n');
+                    lastItem.querySelector('.q-modo-selecao').value = q.modo || 'unica';
+                    if (q.modo === 'multipla') {
+                        lastItem.querySelector('.limites-box').classList.remove('hidden');
+                        lastItem.querySelector('.q-min-selecoes').value = q.minLimit || 2;
+                        lastItem.querySelector('.q-max-selecoes').value = q.maxLimit || 5;
+                    }
+                } else if (q.tipo === 'imagem' && q.imagemBase64) {
+                    lastItem.querySelector('.q-imagem-base64').value = q.imagemBase64;
+                    const preview = lastItem.querySelector('.q-img-preview');
+                    preview.src = q.imagemBase64;
+                    preview.classList.remove('hidden');
+                    lastItem.querySelector('.q-img-placeholder').classList.add('hidden');
+                } else if (q.tipo === 'colunas') {
+                    lastItem.querySelector('.q-colunas-input').value = q.colunas.join('\n');
+                }
+            });
+            window.openModal('add-vaga-modal');
+        };
+
         function setupCandidateExam() {
             const activeView = document.getElementById('candidate-active-view');
             const closedView = document.getElementById('candidate-closed-view');
@@ -751,7 +894,6 @@ function navigate(screenId) {
                         ${imgHtml}
                         <label class="block text-sm font-bold text-white mb-1">${q.pergunta} * <span class="text-xs font-normal text-gray-400">${instrucao}</span></label>
                         <div class="space-y-2" data-min="${q.minLimit || 1}" data-max="${q.maxLimit || 1}" data-modo="${q.modo || 'unica'}">${opts}</div>`;
-                // FIX #8: tipos imagem e colunas agora renderizados para o candidato
                 } else if (q.tipo === "imagem") {
                     block.className = "space-y-3 bg-brand-darkBg/40 p-5 rounded-2xl border border-brand-border/40";
                     block.innerHTML = `
@@ -792,8 +934,7 @@ function navigate(screenId) {
             document.removeEventListener('visibilitychange', handleVisibilityChange);
             document.getElementById('system-sidebar').classList.remove('hidden');
             document.getElementById('exit-simulation-btn').classList.add('hidden');
-            // FIX #9: navega de volta ao painel ao sair da simulação
-            currentActiveScreen = 'candidate'; // garante que navigate não entra em loop
+            currentActiveScreen = 'candidate';
             navigate('painel');
         }
 
@@ -840,7 +981,7 @@ function navigate(screenId) {
                     respostasMapeadas.push({ questao: q.pergunta, resposta: respostaFinal });
                 } else if (q.tipo === "colunas") {
                     const r = document.querySelector(`input[name="cand-ans-${idx}"]:checked`);
-                    const respostaFinal = r ? r.value : "Não respondida";
+                    const respostaFinal = r ? r.value : "Non respondida";
                     if (respostaFinal === "Não respondida") {
                         alert(`Por favor, responda a pergunta: "${q.pergunta}"`);
                         valid = false; return;
@@ -864,275 +1005,6 @@ function navigate(screenId) {
             isSubmitting = false;
         }
 
-        // ── RENDER VAGAS ──────────────────────────────────────────────────
-        function renderVagas() {
-            const grid = document.getElementById('vagas-grid');
-            if (!grid) return;
-            grid.innerHTML = "";
-            if (window.vagasData.length === 0) {
-                grid.innerHTML = `<div class="col-span-full text-center py-16 text-brand-textSecondary text-sm">Nenhum questionário criado ainda.</div>`;
-                return;
-            }
-            window.vagasData.forEach(vaga => {
-                const subsCount = window.candidatosData.filter(c => c.vaga === vaga.titulo).length;
-                const card = document.createElement('div');
-                card.className = "vaga-card bg-brand-cardBg p-6 rounded-2xl border border-brand-border flex flex-col justify-between space-y-4 relative z-10";
-                const statusDot = vaga.ativo
-                    ? '<span class="w-2 h-2 bg-emerald-400 rounded-full inline-block"></span>'
-                    : '<span class="w-2 h-2 bg-red-400 rounded-full inline-block"></span>';
-                card.innerHTML = `
-                    ${vaga.ativo ? '' : '<div class="absolute top-0 left-0 right-0 h-0.5 bg-red-400/40 rounded-t-2xl"></div>'}
-                    <div>
-                        <div class="flex items-start justify-between gap-2">
-                            <span class="text-[9px] font-bold uppercase text-brand-pink bg-brand-pink/5 px-2 py-1 rounded-lg border border-brand-pink/10 font-text tracking-widest">${vaga.depto}</span>
-                            <div class="relative flex items-center space-x-2">
-                                ${statusDot}
-                                <button onclick="window.toggleCardDropdown(event, ${vaga.id})" class="text-brand-textSecondary hover:text-white p-1 transition-colors"><i class="fa-solid fa-ellipsis-vertical text-sm"></i></button>
-                                <div id="dropdown-${vaga.id}" class="card-dropdown hidden absolute right-0 mt-1 top-7 w-48 rounded-2xl bg-[#1D1D24] border border-brand-border shadow-2xl z-30 overflow-hidden text-xs">
-                                    <button onclick="window.openVagaSubmissions('${vaga.titulo}')" class="w-full px-4 py-2.5 hover:bg-brand-pink/10 text-left flex items-center space-x-2 text-slate-300 transition-colors"><i class="fa-solid fa-users text-brand-pink w-4"></i><span>Candidatos</span></button>
-                                    <button onclick="window.openShareModal(${vaga.id})" class="w-full px-4 py-2.5 hover:bg-brand-pink/10 text-left flex items-center space-x-2 text-white font-semibold border-t border-brand-border/40 transition-colors"><i class="fa-solid fa-share-nodes text-brand-pink w-4"></i><span>Obter Link</span></button>
-                                    <button onclick="window.openEditVagaModal('${vaga.firestoreId}', ${vaga.id})" class="w-full px-4 py-2.5 hover:bg-brand-pink/10 text-left flex items-center space-x-2 text-slate-300 border-t border-brand-border/40 transition-colors"><i class="fa-solid fa-pen-to-square text-brand-pink w-4"></i><span>Editar</span></button>
-                                    <button onclick="window.previewVaga(${vaga.id})" class="w-full px-4 py-2.5 hover:bg-brand-pink/10 text-left flex items-center space-x-2 text-slate-300 border-t border-brand-border/40 transition-colors"><i class="fa-solid fa-eye text-brand-pink w-4"></i><span>Pré-visualizar</span></button>
-                                    <button onclick="window.toggleVagaAtiva('${vaga.firestoreId}', ${vaga.ativo})" class="w-full px-4 py-2.5 hover:bg-brand-pink/10 text-left flex items-center space-x-2 text-slate-300 border-t border-brand-border/40 transition-colors"><i class="fa-solid fa-lock w-4"></i><span>${vaga.ativo ? 'Fechar Fluxo' : 'Abrir Fluxo'}</span></button>
-                                    <button onclick="window.deleteVaga('${vaga.firestoreId}')" class="w-full px-4 py-2.5 hover:bg-red-500/10 text-left flex items-center space-x-2 text-red-400 border-t border-brand-border/40 transition-colors"><i class="fa-solid fa-trash-can w-4"></i><span>Deletar</span></button>
-                                </div>
-                            </div>
-                        </div>
-                        <h3 class="font-display font-black text-lg text-white mt-3 tracking-tight leading-tight">${vaga.titulo}</h3>
-                        <p class="text-xs text-brand-textSecondary mt-1">${vaga.nivel} · ${vaga.regime || ''}</p>
-                    </div>
-                    <div class="flex justify-between items-center pt-2 border-t border-brand-border/30">
-                        <span class="text-[10px] text-brand-textSecondary uppercase font-bold tracking-widest">${vaga.ativo ? 'Ativo' : 'Fechado'}</span>
-                        <span class="bg-brand-pink/10 text-brand-pink px-2.5 py-1 rounded-full text-[10px] font-bold border border-brand-pink/20">${subsCount} Inscritos</span>
-                    </div>`;
-                grid.appendChild(card);
-            });
-        }
-
-        // ── RENDER DASHBOARD ──────────────────────────────────────────────
-        function renderDashboard() {
-            const tbody = document.getElementById('dashboard-results-table-body');
-            if (!tbody) return;
-            tbody.innerHTML = "";
-            const vagaFiltro = document.getElementById('filter-vaga').value;
-            const dataFiltro = document.getElementById('filter-data').value;
-            let filtrados = window.candidatosData.filter(c =>
-                (vagaFiltro === "todos" || c.vaga === vagaFiltro) && (!dataFiltro || c.data === dataFiltro)
-            );
-            document.getElementById('dash-total-answers').innerText = filtrados.length;
-            if (filtrados.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-xs text-brand-textSecondary">Nenhuma submissão encontrada.</td></tr>`;
-                document.getElementById('dash-avg-time').innerText = '0s';
-                document.getElementById('dash-integrity-rate').innerText = '100%';
-                return;
-            }
-            let totalS = 0, totalCriticos = 0;
-            filtrados.forEach(c => { totalS += c.tempoTotal; if (c.incidentes > 2) totalCriticos++; });
-            document.getElementById('dash-avg-time').innerText = Math.round(totalS / filtrados.length) + "s";
-            document.getElementById('dash-integrity-rate').innerText = Math.round(((filtrados.length - totalCriticos) / filtrados.length) * 100) + "%";
-            filtrados.forEach(cand => {
-                const tr = document.createElement('tr');
-                tr.className = "border-b border-brand-border/20 text-xs text-slate-300 hover:bg-white/[0.02] transition-colors";
-                tr.innerHTML = `
-                    <td class="px-6 py-4"><p class="font-bold text-white">${cand.nome}</p><p class="text-[10px] text-brand-textSecondary mt-0.5">${cand.email}</p>${cand.phone ? `<p class="text-[10px] text-brand-pink mt-0.5">${cand.phone}</p>` : ''}</td>
-                    <td class="px-6 py-4">${cand.vaga}</td>
-                    <td class="px-6 py-4 font-mono">${cand.tempoTotal}s</td>
-                    <td class="px-6 py-4 text-amber-400 font-semibold">${cand.incidentes} saídas</td>
-                    <td class="px-6 py-4"><span class="px-2.5 py-1 rounded-full text-[10px] font-bold ${cand.status === 'Risco Crítico' ? 'bg-red-500/10 text-red-400 border border-red-400/20' : 'bg-emerald-500/10 text-emerald-400 border border-emerald-400/20'}">${cand.status}</span></td>
-                    <td class="px-6 py-4 text-center space-x-2">
-                        <button onclick="window.viewCandidateRespostas('${cand.firestoreId}')" class="bg-brand-pink/10 text-brand-pink px-3 py-1.5 rounded-lg font-bold text-[10px] hover:bg-brand-pink/20 transition-colors border border-brand-pink/20">Auditoria</button>
-                        <button onclick="window.deleteCandidato('${cand.firestoreId}')" class="text-brand-textSecondary hover:text-red-400 transition-colors ml-1"><i class="fa-solid fa-trash-can"></i></button>
-                    </td>`;
-                tbody.appendChild(tr);
-            });
-        }
-
-        // ── QUESTION BUILDER ──────────────────────────────────────────────
-        window.addQuestionField = function(containerId, type = 'texto') {
-            const container = document.getElementById(containerId);
-            const idx = questionFieldCounter++;
-            const block = document.createElement('div');
-            block.className = "question-item p-4 bg-brand-darkBg/70 border border-brand-border rounded-2xl relative space-y-3";
-            block.id = `q-block-${idx}`;
-            const removeBtn = `<button type="button" onclick="this.closest('.question-item').remove()" class="absolute top-3 right-3 text-brand-textSecondary hover:text-red-400 transition-colors p-1"><i class="fa-solid fa-xmark text-xs"></i></button>`;
-
-            if (type === 'secao') {
-                block.innerHTML = `${removeBtn}<input type="hidden" class="q-type-select" value="secao"><label class="block text-[10px] text-brand-pink font-bold uppercase tracking-widest">Título da Seção</label><input type="text" required class="q-pergunta-input w-full px-3 py-2.5 bg-brand-darkBg border border-brand-border rounded-xl text-white text-xs focus:outline-none focus:ring-1 focus:ring-brand-pink">`;
-            } else if (type === 'texto') {
-                block.innerHTML = `${removeBtn}<input type="hidden" class="q-type-select" value="texto"><label class="block text-[10px] text-brand-textSecondary font-bold uppercase tracking-widest">Pergunta Aberta</label><input type="text" required class="q-pergunta-input w-full px-3 py-2.5 bg-brand-darkBg border border-brand-border rounded-xl text-white text-xs focus:outline-none focus:ring-1 focus:ring-brand-pink">`;
-            } else if (type === 'multipla') {
-                block.innerHTML = `
-                    ${removeBtn}
-                    <input type="hidden" class="q-type-select" value="multipla">
-                    <div class="space-y-3">
-                        <div>
-                            <label class="block text-[10px] text-brand-textSecondary font-bold uppercase tracking-widest mb-1">Pergunta de Múltipla Escolha</label>
-                            <input type="text" required class="q-pergunta-input w-full px-3 py-2.5 bg-brand-darkBg border border-brand-border rounded-xl text-white text-xs focus:outline-none focus:ring-1 focus:ring-brand-pink">
-                        </div>
-                        <div class="grid grid-cols-3 gap-3">
-                            <div>
-                                <label class="text-[10px] font-bold text-brand-textSecondary uppercase tracking-widest block mb-1">Seleção</label>
-                                <select class="q-modo-selecao w-full bg-brand-darkBg border border-brand-border rounded-xl p-2.5 text-xs text-white focus:outline-none focus:ring-1 focus:ring-brand-pink" onchange="const box = this.closest('.question-item').querySelector('.limites-box'); this.value === 'multipla' ? box.classList.remove('hidden') : box.classList.add('hidden')">
-                                    <option value="unica">Única (Bolinha)</option>
-                                    <option value="multipla">Várias (Quadradinho)</option>
-                                </select>
-                            </div>
-                            <div class="limites-box hidden col-span-2 grid grid-cols-2 gap-2">
-                                <div>
-                                    <label class="text-[10px] font-bold text-brand-textSecondary uppercase tracking-widest block mb-1">Mínimo</label>
-                                    <input type="number" class="q-min-selecoes w-full bg-brand-darkBg border border-brand-border rounded-xl p-2 text-xs text-white focus:outline-none" value="2" min="2">
-                                </div>
-                                <div>
-                                    <label class="text-[10px] font-bold text-brand-textSecondary uppercase tracking-widest block mb-1">Máximo</label>
-                                    <input type="number" class="q-max-selecoes w-full bg-brand-darkBg border border-brand-border rounded-xl p-2 text-xs text-white focus:outline-none" value="5" max="5">
-                                </div>
-                            </div>
-                        </div>
-                        <div>
-                            <label class="block text-[10px] text-brand-textSecondary font-bold uppercase tracking-widest mb-1">Opções (uma por linha)</label>
-                            <textarea required class="q-opcoes-input w-full px-3 py-2.5 bg-brand-darkBg border border-brand-border rounded-xl text-white text-xs resize-none focus:outline-none focus:ring-1 focus:ring-brand-pink" rows="3" placeholder="Opção A&#10;Opção B&#10;Opção C"></textarea>
-                        </div>
-                    </div>`;
-            } else if (type === 'imagem') {
-                block.innerHTML = `
-                    ${removeBtn}
-                    <input type="hidden" class="q-type-select" value="imagem">
-                    <input type="hidden" class="q-imagem-base64" value="">
-                    <label class="block text-[10px] text-brand-textSecondary font-bold uppercase tracking-widest">Pergunta com Imagem</label>
-                    <input type="text" required class="q-pergunta-input w-full px-3 py-2.5 bg-brand-darkBg border border-brand-border rounded-xl text-white text-xs focus:outline-none focus:ring-1 focus:ring-brand-pink" placeholder="Texto da pergunta...">
-                    <div class="img-drop-zone rounded-xl p-4 text-center cursor-pointer relative" id="drop-zone-${idx}">
-                        <input type="file" accept="image/*" class="q-img-file absolute inset-0 opacity-0 cursor-pointer w-full h-full" onchange="window.handleImageUpload(this, '${idx}')">
-                        <div class="q-img-placeholder text-brand-textSecondary space-y-1">
-                            <i class="fa-solid fa-image text-2xl text-brand-pink/40"></i>
-                            <p class="text-xs font-bold text-brand-textSecondary">Clique ou arraste uma imagem</p>
-                            <p class="text-[10px] text-brand-textSecondary/50">PNG, JPG, WEBP — máx. 2MB</p>
-                        </div>
-                        <img class="q-img-preview hidden mx-auto" alt="preview">
-                    </div>`;
-            }
-            container.appendChild(block);
-        };
-
-        window.handleImageUpload = function(input, idx) {
-            const file = input.files[0];
-            if (!file) return;
-            if (file.size > 2 * 1024 * 1024) { showToast('Imagem muito grande! Máx. 2MB.', 'bg-red-500'); return; }
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                const base64 = e.target.result;
-                const block = document.getElementById(`q-block-${idx}`);
-                if (!block) return;
-                block.querySelector('.q-imagem-base64').value = base64;
-                const preview = block.querySelector('.q-img-preview');
-                const placeholder = block.querySelector('.q-img-placeholder');
-                preview.src = base64;
-                preview.classList.remove('hidden');
-                placeholder.classList.add('hidden');
-            };
-            reader.readAsDataURL(file);
-        };
-
-        // ── SALVAR / ATUALIZAR QUESTIONÁRIO ───────────────────────────────
-        async function handleCreateVaga(e) {
-            e.preventDefault();
-            try {
-                const titulo = document.getElementById('vaga-titulo').value;
-                const depto = document.getElementById('vaga-departamento').value;
-                const nivel = document.getElementById('vaga-nivel').value;
-                const regime = document.getElementById('vaga-localidade').value;
-                const items = document.querySelectorAll('#create-questions-container .question-item');
-                let questoes = [];
-                items.forEach(item => {
-                    const tipo = item.querySelector('.q-type-select').value;
-                    const pergunta = item.querySelector('.q-pergunta-input').value;
-                    if (tipo === 'secao' || tipo === 'texto') {
-                        questoes.push({ tipo, pergunta });
-                    } else if (tipo === 'multipla') {
-                        const raw = item.querySelector('.q-opcoes-input').value;
-                        const opcoes = raw.split('\n').map(o => o.trim()).filter(o => o.length > 0);
-                        const modo = item.querySelector('.q-modo-selecao').value;
-                        const minLimit = modo === 'multipla' ? (parseInt(item.querySelector('.q-min-selecoes').value) || 2) : 1;
-                        const maxLimit = modo === 'multipla' ? (parseInt(item.querySelector('.q-max-selecoes').value) || 5) : 1;
-                        questoes.push({ tipo, pergunta, opcoes, modo, minLimit, maxLimit });
-                    } else if (tipo === 'imagem') {
-                        const imagemBase64 = item.querySelector('.q-imagem-base64')?.value || '';
-                        questoes.push({ tipo, pergunta, imagemBase64 });
-                    }
-                    else if (type === 'colunas') {
-    block.innerHTML = `
-        ${removeBtn}
-        <input type="hidden" class="q-type-select" value="colunas">
-        <div>
-            <label class="block text-[10px] text-brand-textSecondary font-bold uppercase tracking-widest mb-1">Enunciado da Pergunta em Colunas</label>
-            <input type="text" required class="q-pergunta-input w-full px-3 py-2.5 bg-brand-darkBg border border-brand-border rounded-xl text-white text-xs focus:outline-none focus:ring-1 focus:ring-brand-pink" placeholder="Ex: Avalie seu nível de familiaridade com CRM:">
-        </div>
-        <div>
-            <label class="block text-[10px] text-brand-textSecondary font-bold uppercase tracking-widest mb-1">Cabeçalhos das Colunas (um por linha)</label>
-            <textarea required class="q-colunas-input w-full px-3 py-2.5 bg-brand-darkBg border border-brand-border rounded-xl text-white text-xs resize-none focus:outline-none focus:ring-1 focus:ring-brand-pink" rows="3" placeholder="Pouco Familiar&#10;Familiar&#10;Muito Familiar"></textarea>
-        </div>`;
-}
-                });
-                const dadosVaga = { titulo, depto, regime, nivel, questoes };
-                const editId = e.target.dataset.editId;
-                if (editId) {
-                    await updateDoc(doc(db, "vagas", e.target.dataset.docFirestoreId), dadosVaga);
-                    showToast('Questionário atualizado com sucesso!');
-                } else {
-                    await addDoc(vagasRef, { ...dadosVaga, id: Date.now(), ativo: true });
-                    showToast('Questionário criado com sucesso!');
-                }
-                delete e.target.dataset.editId;
-                delete e.target.dataset.docFirestoreId;
-                window.closeModal('add-vaga-modal');
-                e.target.reset();
-                document.getElementById('create-questions-container').innerHTML = '';
-            } catch (error) {
-                console.error("Erro ao salvar no Firebase:", error);
-                showToast('Erro ao salvar as alterações.', 'bg-red-500');
-            }
-        }
-
-        // ── EDITAR QUESTIONÁRIO ───────────────────────────────────────────
-        window.openEditVagaModal = function(vagaIdFirestore, vagaIdNumerico) {
-            const vaga = window.vagasData.find(v => v.id === vagaIdNumerico || v.firestoreId === vagaIdFirestore);
-            if (!vaga) return;
-            document.getElementById('vaga-titulo').value = vaga.titulo;
-            document.getElementById('vaga-departamento').value = vaga.depto;
-            document.getElementById('vaga-nivel').value = vaga.nivel;
-            document.getElementById('vaga-localidade').value = vaga.regime;
-            const form = document.getElementById('form-create-vaga');
-            form.dataset.editId = vaga.id;
-            form.dataset.docFirestoreId = vagaIdFirestore;
-            const container = document.getElementById('create-questions-container');
-            container.innerHTML = '';
-            vaga.questoes.forEach(q => {
-                window.addQuestionField('create-questions-container', q.tipo);
-                const lastItem = container.lastElementChild;
-                lastItem.querySelector('.q-pergunta-input').value = q.pergunta;
-                if (q.tipo === 'multipla') {
-                    lastItem.querySelector('.q-opcoes-input').value = q.opcoes.join('\n');
-                    lastItem.querySelector('.q-modo-selecao').value = q.modo || 'unica';
-                    if (q.modo === 'multipla') {
-                        lastItem.querySelector('.limites-box').classList.remove('hidden');
-                        lastItem.querySelector('.q-min-selecoes').value = q.minLimit || 2;
-                        lastItem.querySelector('.q-max-selecoes').value = q.maxLimit || 5;
-                    }
-             } else if (q.tipo === 'imagem' && q.imagemBase64) {
-    lastItem.querySelector('.q-imagem-base64').value = q.imagemBase64;
-    const preview = lastItem.querySelector('.q-img-preview');
-    preview.src = q.imagemBase64;
-    preview.classList.remove('hidden');
-    lastItem.querySelector('.q-img-placeholder').classList.add('hidden');
-} 
-// ADICIONE ESSAS DUAS LINHAS EXATAMENTE AQUI:
-else if (q.tipo === 'colunas') {
-    lastItem.querySelector('.q-colunas-input').value = q.colunas.join('\n');
-}
-            });
-            window.openModal('add-vaga-modal');
-        };
-
-        // ── MODAL: SHARE ──────────────────────────────────────────────────
         window.openShareModal = function(vagaId) {
             const vaga = window.vagasData.find(v => v.id === vagaId);
             if (!vaga) return;
@@ -1151,7 +1023,6 @@ else if (q.tipo === 'colunas') {
             } catch (err) { console.error(err); }
         };
 
-        // ── MODAL: SUBMISSIONS ────────────────────────────────────────────
         window.openVagaSubmissions = function(vagaTitulo) {
             const body = document.getElementById('vaga-results-table-body');
             if (!body) return;
@@ -1175,7 +1046,6 @@ else if (q.tipo === 'colunas') {
             window.openModal('vaga-submissions-modal');
         };
 
-        // ── MODAL: DETALHES DO CANDIDATO ──────────────────────────────────
         window.viewCandidateRespostas = function(firestoreId) {
             window.closeModal('vaga-submissions-modal');
             const cand = window.candidatosData.find(c => c.firestoreId === firestoreId);
@@ -1192,7 +1062,6 @@ else if (q.tipo === 'colunas') {
             window.openModal('candidate-details-modal');
         };
 
-        // ── OUTROS ────────────────────────────────────────────────────────
         window.previewVaga = function(vagaId) {
             const vaga = window.vagasData.find(v => v.id === vagaId);
             if (!vaga) return;
@@ -1248,7 +1117,87 @@ else if (q.tipo === 'colunas') {
             showToast(state ? 'Fluxo fechado.' : 'Fluxo aberto!');
         };
 
-        // ── EVENT LISTENERS ───────────────────────────────────────────────
+        function renderVagas() {
+            const grid = document.getElementById('vagas-grid');
+            if (!grid) return;
+            grid.innerHTML = "";
+            if (window.vagasData.length === 0) {
+                grid.innerHTML = `<div class="col-span-full text-center py-16 text-brand-textSecondary text-sm">Nenhum questionário criado ainda.</div>`;
+                return;
+            }
+            window.vagasData.forEach(vaga => {
+                const subsCount = window.candidatosData.filter(c => c.vaga === vaga.titulo).length;
+                const card = document.createElement('div');
+                card.className = "vaga-card bg-brand-cardBg p-6 rounded-2xl border border-brand-border flex flex-col justify-between space-y-4 relative z-10";
+                const statusDot = vaga.ativo
+                    ? '<span class="w-2 h-2 bg-emerald-400 rounded-full inline-block"></span>'
+                    : '<span class="w-2 h-2 bg-red-400 rounded-full inline-block"></span>';
+                card.innerHTML = `
+                    ${vaga.ativo ? '' : '<div class="absolute top-0 left-0 right-0 h-0.5 bg-red-400/40 rounded-t-2xl"></div>'}
+                    <div>
+                        <div class="flex items-start justify-between gap-2">
+                            <span class="text-[9px] font-bold uppercase text-brand-pink bg-brand-pink/5 px-2 py-1 rounded-lg border border-brand-pink/10 font-text tracking-widest">${vaga.depto}</span>
+                            <div class="relative flex items-center space-x-2">
+                                ${statusDot}
+                                <button onclick="window.toggleCardDropdown(event, ${vaga.id})" class="text-brand-textSecondary hover:text-white p-1 transition-colors"><i class="fa-solid fa-ellipsis-vertical text-sm"></i></button>
+                                <div id="dropdown-${vaga.id}" class="card-dropdown hidden absolute right-0 mt-1 top-7 w-48 rounded-2xl bg-[#1D1D24] border border-brand-border shadow-2xl z-30 overflow-hidden text-xs">
+                                    <button onclick="window.openVagaSubmissions('${vaga.titulo}')" class="w-full px-4 py-2.5 hover:bg-brand-pink/10 text-left flex items-center space-x-2 text-slate-300 transition-colors"><i class="fa-solid fa-users text-brand-pink w-4"></i><span>Candidatos</span></button>
+                                    <button onclick="window.openShareModal(${vaga.id})" class="w-full px-4 py-2.5 hover:bg-brand-pink/10 text-left flex items-center space-x-2 text-white font-semibold border-t border-brand-border/40 transition-colors"><i class="fa-solid fa-share-nodes text-brand-pink w-4"></i><span>Obter Link</span></button>
+                                    <button onclick="window.openEditVagaModal('${vaga.firestoreId}', ${vaga.id})" class="w-full px-4 py-2.5 hover:bg-brand-pink/10 text-left flex items-center space-x-2 text-slate-300 border-t border-brand-border/40 transition-colors"><i class="fa-solid fa-pen-to-square text-brand-pink w-4"></i><span>Editar</span></button>
+                                    <button onclick="window.previewVaga(${vaga.id})" class="w-full px-4 py-2.5 hover:bg-brand-pink/10 text-left flex items-center space-x-2 text-slate-300 border-t border-brand-border/40 transition-colors"><i class="fa-solid fa-eye text-brand-pink w-4"></i><span>Pré-visualizar</span></button>
+                                    <button onclick="window.toggleVagaAtiva('${vaga.firestoreId}', ${vaga.ativo})" class="w-full px-4 py-2.5 hover:bg-brand-pink/10 text-left flex items-center space-x-2 text-slate-300 border-t border-brand-border/40 transition-colors"><i class="fa-solid fa-lock w-4"></i><span>${vaga.ativo ? 'Fechar Fluxo' : 'Abrir Fluxo'}</span></button>
+                                    <button onclick="window.deleteVaga('${vaga.firestoreId}')" class="w-full px-4 py-2.5 hover:bg-red-500/10 text-left flex items-center space-x-2 text-red-400 border-t border-brand-border/40 transition-colors"><i class="fa-solid fa-trash-can w-4"></i><span>Deletar</span></button>
+                                </div>
+                            </div>
+                        </div>
+                        <h3 class="font-display font-black text-lg text-white mt-3 tracking-tight leading-tight">${vaga.titulo}</h3>
+                        <p class="text-xs text-brand-textSecondary mt-1">${vaga.nivel} · ${vaga.regime || ''}</p>
+                    </div>
+                    <div class="flex justify-between items-center pt-2 border-t border-brand-border/30">
+                        <span class="text-[10px] text-brand-textSecondary uppercase font-bold tracking-widest">${vaga.ativo ? 'Ativo' : 'Fechado'}</span>
+                        <span class="bg-brand-pink/10 text-brand-pink px-2.5 py-1 rounded-full text-[10px] font-bold border border-brand-pink/20">${subsCount} Inscritos</span>
+                    </div>`;
+                grid.appendChild(card);
+            });
+        }
+
+        function renderDashboard() {
+            const tbody = document.getElementById('dashboard-results-table-body');
+            if (!tbody) return;
+            tbody.innerHTML = "";
+            const vagaFiltro = document.getElementById('filter-vaga').value;
+            const dataFiltro = document.getElementById('filter-data').value;
+            let filtrados = window.candidatosData.filter(c =>
+                (vagaFiltro === "todos" || c.vaga === vagaFiltro) && (!dataFiltro || c.data === dataFiltro)
+            );
+            document.getElementById('dash-total-answers').innerText = filtrados.length;
+            if (filtrados.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-xs text-brand-textSecondary">Nenhuma submissão encontrada.</td></tr>`;
+                document.getElementById('dash-avg-time').innerText = '0s';
+                document.getElementById('dash-integrity-rate').innerText = '100%';
+                return;
+            }
+            let totalS = 0, totalCriticos = 0;
+            filtrados.forEach(c => { totalS += c.tempoTotal; if (c.incidentes > 2) totalCriticos++; });
+            document.getElementById('dash-avg-time').innerText = Math.round(totalS / filtrados.length) + "s";
+            document.getElementById('dash-integrity-rate').innerText = Math.round(((filtrados.length - totalCriticos) / filtrados.length) * 100) + "%";
+            filtrados.forEach(cand => {
+                const tr = document.createElement('tr');
+                tr.className = "border-b border-brand-border/20 text-xs text-slate-300 hover:bg-white/[0.02] transition-colors";
+                tr.innerHTML = `
+                    <td class="px-6 py-4"><p class="font-bold text-white">${cand.nome}</p><p class="text-[10px] text-brand-textSecondary mt-0.5">${cand.email}</p>${cand.phone ? `<p class="text-[10px] text-brand-pink mt-0.5">${cand.phone}</p>` : ''}</td>
+                    <td class="px-6 py-4">${cand.vaga}</td>
+                    <td class="px-6 py-4 font-mono">${cand.tempoTotal}s</td>
+                    <td class="px-6 py-4 text-amber-400 font-semibold">${cand.incidentes} saídas</td>
+                    <td class="px-6 py-4"><span class="px-2.5 py-1 rounded-full text-[10px] font-bold ${cand.status === 'Risco Crítico' ? 'bg-red-500/10 text-red-400 border border-red-400/20' : 'bg-emerald-500/10 text-emerald-400 border border-emerald-400/20'}">${cand.status}</span></td>
+                    <td class="px-6 py-4 text-center space-x-2">
+                        <button onclick="window.viewCandidateRespostas('${cand.firestoreId}')" class="bg-brand-pink/10 text-brand-pink px-3 py-1.5 rounded-lg font-bold text-[10px] hover:bg-brand-pink/20 transition-colors border border-brand-pink/20">Auditoria</button>
+                        <button onclick="window.deleteCandidato('${cand.firestoreId}')" class="text-brand-textSecondary hover:text-red-400 transition-colors ml-1"><i class="fa-solid fa-trash-can"></i></button>
+                    </td>`;
+                tbody.appendChild(tr);
+            });
+        }
+
         document.getElementById('form-login')?.addEventListener('submit', handleLoginSubmit);
         document.getElementById('btn-toggle-password')?.addEventListener('click', window.togglePasswordVisibility);
         document.getElementById('menu-painel')?.addEventListener('click', () => navigate('painel'));
