@@ -1040,6 +1040,39 @@ async function handleCreateVaga(e) {
             document.getElementById(`dropdown-${id}`)?.classList.toggle('hidden');
         };
 
+       // ==================== COPIE E SUBSTITUA A PARTIR DAQUI ====================
+
+        // ── CORREÇÃO DAS COLUNAS (Garante que o clique crie os campos e não a barra vazia) ──
+        const originalAddQuestionField = window.addQuestionField;
+        window.addQuestionField = function(containerId, tipo) {
+            if (originalAddQuestionField && tipo !== 'colunas') {
+                return originalAddQuestionField(containerId, tipo);
+            }
+            if (tipo === 'colunas') {
+                const container = document.getElementById(containerId);
+                const questionItem = document.createElement('div');
+                questionItem.className = 'question-item bg-black/20 border border-white/5 rounded-xl p-4 mb-4 relative';
+                questionItem.innerHTML = `
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-xs font-bold text-brand-pink uppercase tracking-wider">Pergunta em Colunas (Tabela)</span>
+                        <button type="button" onclick="this.closest('.question-item').remove()" class="text-gray-500 hover:text-white text-sm">✕</button>
+                    </div>
+                    <input type="hidden" class="q-type-select" value="colunas">
+                    <div class="space-y-3">
+                        <div>
+                            <label class="text-xs font-semibold text-gray-400 block mb-1">Enunciado da Pergunta / Título da Tabela:</label>
+                            <input type="text" class="q-pergunta-input w-full bg-black/40 border border-white/10 rounded-lg p-2 text-sm text-white placeholder-gray-600" placeholder="Ex: Avalie seu nível nas competências abaixo:">
+                        </div>
+                        <div>
+                            <label class="text-xs font-semibold text-gray-400 block mb-1">Títulos das Colunas (separe por vírgula):</label>
+                            <input type="text" class="q-colunas-titulos w-full bg-black/40 border border-white/10 rounded-lg p-2 text-sm text-white placeholder-gray-600" placeholder="Ex: Básico, Intermediário, Avançado">
+                        </div>
+                    </div>
+                `;
+                container.appendChild(questionItem);
+            }
+        };
+
         window.openCreateModal = () => {
             document.getElementById('create-questions-container').innerHTML = "";
             window.addQuestionField('create-questions-container', 'secao');
@@ -1047,6 +1080,71 @@ async function handleCreateVaga(e) {
             window.addQuestionField('create-questions-container', 'texto');
             openModal('add-vaga-modal');
         };
+
+        window.deleteVaga = async id => { if (confirm("Remover este questionário permanentemente?")) { await deleteDoc(doc(db, "vagas", id)); showToast('Questionário removido.', 'bg-red-500'); } };
+        window.deleteCandidato = async id => { if (confirm("Remover este registo?")) { await deleteDoc(doc(db, "candidatos", id)); showToast('Candidato removido.', 'bg-red-500'); } };
+        window.toggleVagaAtiva = async (id, state) => { await updateDoc(doc(db, "vagas", id), { ativo: !state }); showToast(state ? 'Fluxo fechado.' : 'Fluxo aberto!'); };
+
+        // ── EVENTS ────────────────────────────────────────────────────────
+        document.getElementById('form-login')?.addEventListener('submit', handleLoginSubmit);
+        document.getElementById('btn-toggle-password')?.addEventListener('click', window.togglePasswordVisibility);
+        document.getElementById('menu-painel')?.addEventListener('click', () => navigate('painel'));
+        document.getElementById('menu-results')?.addEventListener('click', () => navigate('results'));
+        document.getElementById('btn-create-questionnaire')?.addEventListener('click', window.openCreateModal);
+        document.getElementById('btn-logout')?.addEventListener('click', handleLogout);
+        document.getElementById('exit-simulation-btn')?.addEventListener('click', exitCandidateSimulationQuietly);
+        document.getElementById('btn-copy-link')?.addEventListener('click', window.copyToClipboard);
+        document.getElementById('candidate-form')?.addEventListener('submit', handleCandidateSubmit);
+        document.getElementById('form-create-vaga')?.addEventListener('submit', handleCreateVaga);
+        document.getElementById('filter-vaga')?.addEventListener('change', renderDashboard);
+        document.getElementById('filter-data')?.addEventListener('input', renderDashboard);
+        window.addEventListener('click', () => document.querySelectorAll('.card-dropdown').forEach(d => d.classList.add('hidden')));
+        window.addEventListener('hashchange', () => { hashChecked = false; checkUrlHashOnLoad(); });
+
+        // ── CARREGAR QUESTIONÁRIO PARA EDIÇÃO ──
+        window.openEditVagaModal = function(vagaIdFirestore, vagaIdNumerico) {
+            const vaga = window.vagasData.find(v => v.id === vagaIdNumerico || v.firestoreId === vagaIdFirestore);
+            if (!vaga) return;
+
+            document.getElementById('modal-vaga-title').innerText = "Editar Questionário";
+            
+            document.getElementById('vaga-titulo').value = vaga.titulo;
+            document.getElementById('vaga-departamento').value = vaga.depto;
+            document.getElementById('vaga-nivel').value = vaga.nivel;
+            document.getElementById('vaga-localidade').value = vaga.regime;
+
+            // Ajustado para 'form-create-vaga' para bater certinho com o seu eventListener da linha 24
+            const form = document.getElementById('form-create-vaga');
+            form.dataset.editId = vaga.id;
+            form.dataset.docFirestoreId = vagaIdFirestore;
+
+            const container = document.getElementById('create-questions-container');
+            container.innerHTML = ''; 
+
+            vaga.questoes.forEach(q => {
+                window.addQuestionField('create-questions-container', q.tipo);
+                const lastItem = container.lastElementChild;
+                
+                lastItem.querySelector('.q-pergunta-input').value = q.pergunta;
+
+                if (q.tipo === 'multipla') {
+                    lastItem.querySelector('.q-opcoes-input').value = q.opcoes.join('\n');
+                    if(q.limite) lastItem.querySelector('.q-limite-selecoes').value = q.limite;
+                } else if (q.tipo === 'colunas') {
+                    lastItem.querySelector('.q-colunas-titulos').value = q.colunas.join(', ');
+                } else if (q.tipo === 'imagem' && q.imagemBase64) {
+                    lastItem.querySelector('.q-imagem-base64').value = q.imagemBase64;
+                    const preview = lastItem.querySelector('.q-img-preview');
+                    preview.src = q.imagemBase64;
+                    preview.classList.remove('hidden');
+                    lastItem.querySelector('.q-img-placeholder').classList.add('hidden');
+                }
+            });
+
+            openModal('add-vaga-modal');
+        };
+
+// ==================== FINAL DA SUBSTITUIÇÃO ====================
 
         window.deleteVaga = async id => { if (confirm("Remover este questionário permanentemente?")) { await deleteDoc(doc(db, "vagas", id)); showToast('Questionário removido.', 'bg-red-500'); } };
         window.deleteCandidato = async id => { if (confirm("Remover este registo?")) { await deleteDoc(doc(db, "candidatos", id)); showToast('Candidato removido.', 'bg-red-500'); } };
