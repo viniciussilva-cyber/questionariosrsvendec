@@ -404,6 +404,7 @@
                             <button type="button" onclick="window.addQuestionField('create-questions-container', 'texto')" class="px-3 py-1.5 bg-brand-pink/10 text-brand-pink rounded-lg text-xs font-bold border border-brand-pink/20 hover:bg-brand-pink/20 transition-colors">+ Texto</button>
                             <button type="button" onclick="window.addQuestionField('create-questions-container', 'multipla')" class="px-3 py-1.5 bg-brand-pink/10 text-brand-pink rounded-lg text-xs font-bold border border-brand-pink/20 hover:bg-brand-pink/20 transition-colors">+ Múltipla</button>
                             <button type="button" onclick="window.addQuestionField('create-questions-container', 'imagem')" class="px-3 py-1.5 bg-brand-pink/10 text-brand-pink rounded-lg text-xs font-bold border border-brand-pink/20 hover:bg-brand-pink/20 transition-colors">+ Imagem</button>
+                            <button type="button" onclick="window.addQuestionField('create-questions-container', 'colunas')" class="px-3 py-1.5 bg-brand-pink/10 hover:bg-brand-pink/20 text-brand-pink rounded-xl text-xs font-bold transition-colors">+ Colunas (Tabela)</button>
                         </div>
                     </div>
                     <div id="create-questions-container" class="space-y-3"></div>
@@ -911,79 +912,66 @@
         };
 
 // ── SALVAR QUESTIONÁRIO NA NUVEM (BLINDADO CONTRA ERRO DE IMAGEM) ──
-        async function handleCreateVaga(e) {
-            e.preventDefault();
-            try {
-                const titulo = document.getElementById('vaga-titulo').value;
-                const depto = document.getElementById('vaga-departamento').value;
-                const nivel = document.getElementById('vaga-nivel').value;
-                const regime = document.getElementById('vaga-localidade').value;
-                const items = document.querySelectorAll('#create-questions-container .question-item');
-                
-                let questoes = [];
-                let tamanhoTotalEstimado = 0;
+// ── SALVAR OU ATUALIZAR QUESTIONÁRIO NA NUVEM ──
+// ── SALVAR OU ATUALIZAR QUESTIONÁRIO NA NUVEM ──
+async function handleCreateVaga(e) {
+    e.preventDefault();
+    try {
+        const titulo = document.getElementById('vaga-titulo').value;
+        const depto = document.getElementById('vaga-departamento').value;
+        const nivel = document.getElementById('vaga-nivel').value;
+        const regime = document.getElementById('vaga-localidade').value;
+        const items = document.querySelectorAll('#create-questions-container .question-item');
+        
+        let questoes = [];
 
-                items.forEach(item => {
-                    const tipo = item.querySelector('.q-type-select').value;
-                    const pergunta = item.querySelector('.q-pergunta-input').value;
-                    
-                    if (tipo === 'secao' || tipo === 'texto') {
-                        questoes.push({ tipo, pergunta });
-                   } else if (tipo === 'multipla') {
-                        const raw = item.querySelector('.q-opcoes-input').value;
-                        const opcoes = raw.split('\n').map(o => o.trim()).filter(o => o.length > 0);
-                        const limite = parseInt(item.querySelector('.q-limite-selecoes').value) || 1;
-                        questoes.push({ tipo, pergunta, opcoes, limite });
-} else if (type === 'colunas') {
-                block.innerHTML = `
-                    ${removeBtn}
-                    <input type="hidden" class="q-type-select" value="colunas">
-                    <label class="block text-[10px] text-brand-pink font-bold uppercase tracking-widest">Pergunta Estruturada em Colunas (Tabela Dinâmica)</label>
-                    <input type="text" required class="q-pergunta-input w-full px-3 py-2.5 bg-brand-darkBg border border-brand-border rounded-xl text-white text-xs focus:outline-none focus:ring-1 focus:ring-brand-pink" placeholder="Digite o enunciado da pergunta para o candidato...">
-                    
-                    <label class="block text-[10px] text-brand-textSecondary font-bold uppercase tracking-widest mt-2">Títulos das Colunas (Escreva os títulos que quiser, separados por vírgula)</label>
-                    <input type="text" required class="q-colunas-titulos w-full px-3 py-2 bg-brand-darkBg border border-brand-border rounded-xl text-white text-xs focus:outline-none focus:ring-1 focus:ring-brand-pink" placeholder="Ex: Problema, Causa, Solução  OU  Canal, Persona, Orçamento">`;
+        items.forEach(item => {
+            const tipo = item.querySelector('.q-type-select').value;
+            const pergunta = item.querySelector('.q-pergunta-input').value;
+            
+            if (tipo === 'secao' || tipo === 'texto') {
+                questoes.push({ tipo, pergunta });
+            } else if (tipo === 'multipla') {
+                const raw = item.querySelector('.q-opcoes-input').value;
+                const opcoes = raw.split('\n').map(o => o.trim()).filter(o => o.length > 0);
+                const limite = parseInt(item.querySelector('.q-limite-selecoes').value) || 1;
+                questoes.push({ tipo, pergunta, opcoes, limite });
+            } else if (tipo === 'colunas') {
+                const rawColunas = item.querySelector('.q-colunas-titulos').value;
+                const colunas = rawColunas.split(',').map(c => c.trim()).filter(c => c.length > 0);
+                questoes.push({ tipo, pergunta, colunas });
+            } else if (tipo === 'imagem') {
+                const imgInput = item.querySelector('.q-imagem-base64');
+                const imagemBase64 = imgInput ? imgInput.value : '';
+                questoes.push({ tipo, pergunta, imagemBase64 });
             }
-                    } else if (tipo === 'imagem') {
-                        const imgInput = item.querySelector('.q-imagem-base64');
-                        const imagemBase64 = imgInput ? imgInput.value : '';
-                        
-                        if (imagemBase64) {
-                            tamanhoTotalEstimado += imagemBase64.length;
-                        }
-                        
-                        questoes.push({ tipo, pergunta, imagemBase64 });
-                    }
+        });
 
-                // Se o tamanho do Base64 for maior que ~800KB, avisa o usuário para não travar
-                if (tamanhoTotalEstimado > 850000) {
-                    showToast('Imagem muito pesada! Reduza a resolução ou use prints menores.', 'bg-red-500');
-                    return; // Para a execução aqui e não trava o painel
-                }
-                
-                // Envia para o Firestore
-                await addDoc(vagasRef, { 
-                    id: Date.now(), 
-                    titulo, 
-                    depto, 
-                    regime, 
-                    nivel, 
-                    ativo: true, 
-                    questoes 
-                });
-                
-                // Limpa e fecha tudo se der certo
-                closeModal('add-vaga-modal'); 
-                e.target.reset();
-                document.getElementById('create-questions-container').innerHTML = '';
-                
-                showToast('Questionário criado com sucesso!');
-                
-            } catch (error) {
-                console.error("Erro crítico ao salvar no Firebase:", error);
-                showToast('Erro ao salvar. Imagem pode estar grande demais!', 'bg-red-500');
-            }
+        const dadosVaga = { titulo, depto, regime, nivel, questoes };
+        
+        // SISTEMA INTELIGENTE: Verifica se é uma Edição ou Nova Criação
+        const editId = e.target.dataset.editId;
+        if (editId) {
+            const docId = e.target.dataset.docFirestoreId;
+            await updateDoc(doc(db, "vagas", docId), dadosVaga);
+            showToast('Questionário atualizado com sucesso!');
+        } else {
+            await addDoc(vagasRef, { ...dadosVaga, id: Date.now(), ativo: true });
+            showToast('Questionário criado com sucesso!');
         }
+        
+        // Limpa o estado de edição e fecha o modal
+        delete e.target.dataset.editId;
+        delete e.target.dataset.docFirestoreId;
+        closeModal('add-vaga-modal'); 
+        e.target.reset();
+        document.getElementById('create-questions-container').innerHTML = '';
+        
+    } catch (error) {
+        console.error("Erro ao salvar no Firebase:", error);
+        showToast('Erro ao salvar as alterações.', 'bg-red-500');
+    }
+}
         // ── MODALS ────────────────────────────────────────────────────────
         window.openShareModal = function(vagaId) {
             const vaga = window.vagasData.find(v => v.id === vagaId);
@@ -1079,6 +1067,48 @@
         document.getElementById('filter-data')?.addEventListener('input', renderDashboard);
         window.addEventListener('click', () => document.querySelectorAll('.card-dropdown').forEach(d => d.classList.add('hidden')));
         window.addEventListener('hashchange', () => { hashChecked = false; checkUrlHashOnLoad(); });
+
+        // ── CARREGAR QUESTIONÁRIO PARA EDIÇÃO ──
+window.openEditVagaModal = function(vagaIdFirestore, vagaIdNumerico) {
+    const vaga = window.vagasData.find(v => v.id === vagaIdNumerico || v.firestoreId === vagaIdFirestore);
+    if (!vaga) return;
+
+    document.getElementById('modal-vaga-title').innerText = "Editar Questionário";
+    
+    document.getElementById('vaga-titulo').value = vaga.titulo;
+    document.getElementById('vaga-departamento').value = vaga.depto;
+    document.getElementById('vaga-nivel').value = vaga.nivel;
+    document.getElementById('vaga-localidade').value = vaga.regime;
+
+    const form = document.getElementById('add-vaga-form');
+    form.dataset.editId = vaga.id;
+    form.dataset.docFirestoreId = vagaIdFirestore;
+
+    const container = document.getElementById('create-questions-container');
+    container.innerHTML = ''; 
+
+    vaga.questoes.forEach(q => {
+        window.addQuestionField('create-questions-container', q.tipo);
+        const lastItem = container.lastElementChild;
+        
+        lastItem.querySelector('.q-pergunta-input').value = q.pergunta;
+
+        if (q.tipo === 'multipla') {
+            lastItem.querySelector('.q-opcoes-input').value = q.opcoes.join('\n');
+            if(q.limite) lastItem.querySelector('.q-limite-selecoes').value = q.limite;
+        } else if (q.tipo === 'colunas') {
+            lastItem.querySelector('.q-colunas-titulos').value = q.colunas.join(', ');
+        } else if (q.tipo === 'imagem' && q.imagemBase64) {
+            lastItem.querySelector('.q-imagem-base64').value = q.imagemBase64;
+            const preview = lastItem.querySelector('.q-img-preview');
+            preview.src = q.imagemBase64;
+            preview.classList.remove('hidden');
+            lastItem.querySelector('.q-img-placeholder').classList.add('hidden');
+        }
+    });
+
+    openModal('add-vaga-modal');
+};
 
         startRealtimeSync();
     </script>
