@@ -1,3 +1,6 @@
+bash
+
+cat > /mnt/user-data/outputs/vende-c-rs.html << 'ENDOFFILE'
 <!DOCTYPE html>
 <html lang="pt-PT" class="h-full bg-[#0E0E10]">
 <head>
@@ -30,14 +33,12 @@
         body { font-family: 'DM Sans', sans-serif; }
         .font-display { font-family: 'Big Shoulders Display', sans-serif; }
         .font-text { font-family: 'Big Shoulders Text', sans-serif; }
-
         .secure-mode { user-select: none !important; -webkit-user-select: none !important; }
         @media print { body { display: none !important; } }
         ::-webkit-scrollbar { width: 5px; height: 5px; }
         ::-webkit-scrollbar-track { background: #0E0E10; }
         ::-webkit-scrollbar-thumb { background: #252530; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #FF0066; }
-
         .noise-bg::before {
             content: '';
             position: fixed;
@@ -47,48 +48,34 @@
             z-index: 0;
             opacity: 0.4;
         }
-
         .pink-glow { box-shadow: 0 0 40px rgba(255, 0, 102, 0.15); }
         .btn-pink { background: #FF0066; transition: all 0.2s ease; }
         .btn-pink:hover { background: #D90057; transform: translateY(-1px); box-shadow: 0 8px 24px rgba(255,0,102,0.35); }
         .btn-pink:active { transform: translateY(0); }
-
-        /* Sidebar toggle */
         #system-sidebar { transition: width 0.3s ease, opacity 0.3s ease; }
         #system-sidebar.collapsed { width: 0 !important; overflow: hidden; opacity: 0; border: none; padding: 0; }
-
-        /* Sidebar toggle btn */
-        #sidebar-toggle-btn { transition: transform 0.3s ease; }
-
-        /* Image upload area */
         .img-drop-zone { border: 2px dashed #252530; transition: border-color 0.2s; }
         .img-drop-zone:hover, .img-drop-zone.drag-over { border-color: #FF0066; }
         .img-drop-zone img { max-height: 160px; object-fit: contain; border-radius: 8px; }
-
-        /* Card hover */
         .vaga-card { transition: border-color 0.2s, transform 0.2s; }
         .vaga-card:hover { border-color: rgba(255,0,102,0.4); transform: translateY(-2px); }
-
-        /* Toast */
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
         .toast-item { animation: fadeInUp 0.3s ease forwards; }
-
-        /* Stripe accent on brand blocks */
         .brand-stripe { background: repeating-linear-gradient(90deg, #FF0066 0px, #FF0066 2px, transparent 2px, transparent 18px); }
-
-        /* Candidate success */
         @keyframes popIn { 0% { transform: scale(0.7); opacity: 0; } 80% { transform: scale(1.07); } 100% { transform: scale(1); opacity: 1; } }
         .pop-in { animation: popIn 0.5s ease forwards; }
-
-        /* Mobile responsive */
         @media (max-width: 768px) {
             #system-sidebar { position: fixed; z-index: 40; height: 100%; }
             #system-sidebar.collapsed { width: 0 !important; }
-            #main-content-area { margin-left: 0 !important; }
         }
+        /* Modal overlay */
+        .modal-overlay { background: rgba(14,14,16,0.92); backdrop-filter: blur(6px); }
     </style>
 </head>
 <body class="h-full text-slate-100 antialiased bg-brand-darkBg flex flex-col overflow-hidden noise-bg">
+
+    <!-- TOAST CONTAINER (FIX #1: estava ausente) -->
+    <div id="toast-container" class="fixed bottom-6 right-6 z-[200] space-y-2 pointer-events-none"></div>
 
     <!-- LOADING -->
     <div id="db-loading-screen" class="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-brand-darkBg space-y-5">
@@ -102,13 +89,11 @@
     <!-- LOGIN -->
     <div id="screen-login" class="fixed inset-0 z-50 flex items-center justify-center bg-brand-darkBg px-4 hidden overflow-y-auto py-8">
         <div class="max-w-md w-full">
-            <!-- Brand block -->
             <div class="text-center mb-10">
                 <p class="font-display font-black text-6xl text-white tracking-tight">VENDE-<span class="text-brand-pink">C</span></p>
                 <p class="font-text font-bold text-brand-pink text-sm tracking-[0.35em] uppercase mt-2">A maior escola de vendas do Brasil</p>
                 <p class="text-brand-textSecondary text-xs mt-3 tracking-widest uppercase">Recrutamento & Seleção · Acesso Restrito</p>
             </div>
-
             <div class="bg-brand-cardBg rounded-3xl p-8 border border-brand-border pink-glow">
                 <div id="login-error-alert" class="hidden mb-5 p-3.5 bg-red-500/10 border border-red-500/20 rounded-xl text-xs text-red-400 flex items-center space-x-2">
                     <i class="fa-solid fa-circle-exclamation shrink-0"></i>
@@ -133,7 +118,6 @@
                     </button>
                 </form>
             </div>
-
             <p class="text-center text-[10px] text-brand-textSecondary mt-6 tracking-widest uppercase">© 2025 VENDE-C · Todos os direitos reservados</p>
         </div>
     </div>
@@ -177,7 +161,6 @@
             <!-- HEADER -->
             <header id="rh-system-header" class="h-16 border-b border-brand-border bg-brand-cardBg/30 flex items-center justify-between px-5 shrink-0">
                 <div class="flex items-center space-x-4">
-                    <!-- Sidebar toggle button -->
                     <button id="sidebar-toggle-btn" title="Ocultar/mostrar menu" class="p-2 rounded-lg text-brand-textSecondary hover:text-white hover:bg-white/5 transition-colors">
                         <i class="fa-solid fa-bars text-sm"></i>
                     </button>
@@ -211,7 +194,6 @@
                             </button>
                         </div>
                     </div>
-
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <div class="bg-brand-cardBg p-5 rounded-2xl border border-brand-border">
                             <p class="text-[10px] text-brand-textSecondary uppercase font-bold tracking-widest">Total Criados</p>
@@ -226,7 +208,6 @@
                             <h3 id="stat-fechados-q" class="font-display text-3xl font-black text-red-400 mt-1">0</h3>
                         </div>
                     </div>
-
                     <div id="vagas-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"></div>
                 </div>
 
@@ -237,7 +218,6 @@
                         <p class="font-display font-black text-4xl text-white tracking-tight leading-none">RESPOSTAS <span class="text-brand-pink">DOS CANDIDATOS</span></p>
                         <p class="text-brand-textSecondary text-sm mt-2">Monitore e audite as submissões com rastreamento de integridade.</p>
                     </div>
-
                     <div class="bg-brand-cardBg p-5 rounded-2xl border border-brand-border grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-[10px] text-brand-textSecondary uppercase font-bold mb-2 tracking-widest">Filtrar por Cargo</label>
@@ -250,7 +230,6 @@
                             <input type="date" id="filter-data" class="w-full px-4 py-2.5 bg-brand-darkBg border border-brand-border rounded-xl text-white text-xs focus:outline-none focus:ring-1 focus:ring-brand-pink">
                         </div>
                     </div>
-
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
                         <div class="bg-brand-cardBg p-6 rounded-2xl border border-brand-border">
                             <p class="text-[10px] text-brand-textSecondary uppercase font-bold tracking-widest mb-1">Respostas Coletadas</p>
@@ -265,7 +244,6 @@
                             <h3 id="dash-integrity-rate" class="font-display text-3xl font-black text-emerald-400">100%</h3>
                         </div>
                     </div>
-
                     <div class="bg-brand-cardBg rounded-3xl border border-brand-border overflow-hidden">
                         <div class="overflow-x-auto">
                             <table class="w-full text-left border-collapse">
@@ -287,21 +265,17 @@
 
                 <!-- CANDIDATE SCREEN -->
                 <div id="screen-candidate" class="hidden max-w-3xl mx-auto space-y-6">
-
-                    <!-- BRAND BAR for candidate -->
                     <div id="candidate-brand-bar" class="relative bg-brand-cardBg rounded-3xl border border-brand-border overflow-hidden p-8 text-center">
                         <div class="brand-stripe absolute top-0 left-0 right-0 h-[3px]"></div>
                         <p class="font-display font-black text-5xl text-white tracking-tight">VENDE-<span class="text-brand-pink">C</span></p>
                         <p class="font-text font-bold text-brand-pink text-xs tracking-[0.35em] uppercase mt-1">A maior escola de vendas do Brasil</p>
                         <p class="text-brand-textSecondary text-xs mt-3 max-w-md mx-auto">O VENDE-C é o maior ecossistema de educação comercial do Brasil — nosso foco é fazer sua empresa vender mais.</p>
                     </div>
-
                     <div id="candidate-closed-view" class="bg-brand-cardBg border border-red-500/20 rounded-3xl p-12 text-center space-y-5 hidden">
                         <div class="w-20 h-20 bg-red-500/10 text-red-500 rounded-full flex items-center justify-center text-3xl mx-auto"><i class="fa-solid fa-lock"></i></div>
                         <p class="font-display font-black text-3xl text-white">QUESTIONÁRIO FECHADO</p>
                         <p class="text-brand-textSecondary text-sm">Este fluxo foi encerrado pelo RH. Aguarde novos processos seletivos.</p>
                     </div>
-
                     <div id="candidate-success-view" class="bg-brand-cardBg border border-brand-border rounded-3xl p-14 text-center space-y-8 hidden">
                         <div class="w-24 h-24 bg-brand-pink text-white rounded-full flex items-center justify-center text-4xl mx-auto shadow-lg shadow-brand-pink/30 pop-in">
                             <i class="fa-solid fa-check-double"></i>
@@ -315,7 +289,6 @@
                             <p class="text-xs text-brand-textSecondary">O VENDE-C — <span class="text-brand-pink font-semibold">A maior escola de vendas do Brasil</span></p>
                         </div>
                     </div>
-
                     <div id="candidate-active-view" class="space-y-6">
                         <div class="bg-brand-cardBg rounded-3xl border border-brand-border overflow-hidden secure-mode">
                             <div class="bg-brand-darkBg/60 p-6 border-b border-brand-border/50 flex items-center justify-between">
@@ -327,7 +300,6 @@
                                     <p class="font-display font-black text-2xl text-white">VENDE-<span class="text-brand-pink">C</span></p>
                                 </div>
                             </div>
-
                             <form id="candidate-form" class="p-8 space-y-6">
                                 <div>
                                     <p class="font-display font-bold text-brand-pink text-xs tracking-widest uppercase mb-4">Dados Pessoais</p>
@@ -361,8 +333,10 @@
         </main>
     </div>
 
-    <!-- MODAL: Criar Questionário -->
-    <div id="add-vaga-modal" class="fixed inset-0 bg-brand-darkBg/90 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <!-- MODAL: Criar / Editar Questionário                                 -->
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <div id="add-vaga-modal" class="fixed inset-0 modal-overlay z-50 flex items-center justify-center p-4 hidden">
         <div class="bg-brand-cardBg rounded-3xl max-w-2xl w-full border border-brand-border shadow-2xl overflow-hidden">
             <div class="p-6 bg-brand-darkBg flex items-center justify-between border-b border-brand-border">
                 <div>
@@ -399,7 +373,106 @@
                 <div class="border-t border-brand-border/40 pt-5 space-y-4">
                     <div class="flex items-center justify-between flex-wrap gap-2">
                         <p class="font-display font-bold text-brand-pink text-xs tracking-widest uppercase">Estrutura de Perguntas</p>
-<script type="module">
+                        <div class="flex flex-wrap gap-2">
+                            <button type="button" onclick="window.addQuestionField('create-questions-container','secao')" class="px-3 py-1.5 bg-brand-darkBg border border-brand-border rounded-xl text-[10px] font-bold text-brand-textSecondary hover:text-white hover:border-brand-pink/40 transition-colors">+ Seção</button>
+                            <button type="button" onclick="window.addQuestionField('create-questions-container','texto')" class="px-3 py-1.5 bg-brand-darkBg border border-brand-border rounded-xl text-[10px] font-bold text-brand-textSecondary hover:text-white hover:border-brand-pink/40 transition-colors">+ Aberta</button>
+                            <button type="button" onclick="window.addQuestionField('create-questions-container','multipla')" class="px-3 py-1.5 bg-brand-darkBg border border-brand-border rounded-xl text-[10px] font-bold text-brand-textSecondary hover:text-white hover:border-brand-pink/40 transition-colors">+ Múltipla</button>
+                            <button type="button" onclick="window.addQuestionField('create-questions-container','imagem')" class="px-3 py-1.5 bg-brand-darkBg border border-brand-border rounded-xl text-[10px] font-bold text-brand-textSecondary hover:text-white hover:border-brand-pink/40 transition-colors">+ Imagem</button>
+                        </div>
+                    </div>
+                    <div id="create-questions-container" class="space-y-3"></div>
+                </div>
+                <button type="submit" class="btn-pink w-full text-white py-3 rounded-xl font-bold text-sm font-text tracking-wider uppercase">
+                    Salvar Questionário
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <!-- MODAL: Obter Link (FIX #2: estava ausente)                        -->
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <div id="share-modal" class="fixed inset-0 modal-overlay z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-brand-cardBg rounded-3xl max-w-lg w-full border border-brand-border shadow-2xl overflow-hidden">
+            <div class="p-6 bg-brand-darkBg flex items-center justify-between border-b border-brand-border">
+                <div>
+                    <p class="font-display font-black text-xl text-white tracking-tight">LINK DO EXAME</p>
+                    <p id="share-vaga-title" class="text-[10px] text-brand-pink tracking-widest uppercase mt-0.5"></p>
+                </div>
+                <button type="button" onclick="closeModal('share-modal')" class="text-brand-textSecondary hover:text-white transition-colors"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div class="p-6 space-y-4">
+                <p class="text-xs text-brand-textSecondary">Partilhe este link com os candidatos. Cada candidato só pode submeter uma vez.</p>
+                <div class="flex space-x-2">
+                    <input type="text" id="share-link-input" readonly class="flex-1 px-4 py-3 bg-brand-darkBg border border-brand-border rounded-xl text-white text-xs focus:outline-none font-mono">
+                    <button id="btn-copy-link" class="btn-pink text-white px-4 py-3 rounded-xl font-bold text-xs whitespace-nowrap">
+                        <i class="fa-solid fa-copy mr-1.5"></i>Copiar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <!-- MODAL: Candidatos da Vaga (FIX #3: estava ausente)                -->
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <div id="vaga-submissions-modal" class="fixed inset-0 modal-overlay z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-brand-cardBg rounded-3xl max-w-4xl w-full border border-brand-border shadow-2xl overflow-hidden">
+            <div class="p-6 bg-brand-darkBg flex items-center justify-between border-b border-brand-border">
+                <div>
+                    <p class="font-display font-black text-xl text-white tracking-tight">CANDIDATOS INSCRITOS</p>
+                    <p class="text-[10px] text-brand-textSecondary tracking-widest uppercase mt-0.5">Submissões recebidas neste questionário</p>
+                </div>
+                <button type="button" onclick="closeModal('vaga-submissions-modal')" class="text-brand-textSecondary hover:text-white transition-colors"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div class="p-4 overflow-x-auto max-h-[70vh] overflow-y-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-brand-darkBg/60 border-b border-brand-border text-brand-textSecondary text-[10px] font-bold uppercase tracking-widest">
+                            <th class="px-6 py-4">Candidato</th>
+                            <th class="px-6 py-4">Telefone</th>
+                            <th class="px-6 py-4">Tempo</th>
+                            <th class="px-6 py-4">Saídas</th>
+                            <th class="px-6 py-4">Integridade</th>
+                            <th class="px-6 py-4 text-center">Detalhe</th>
+                        </tr>
+                    </thead>
+                    <tbody id="vaga-results-table-body" class="divide-y divide-brand-border/30 text-sm text-slate-300"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <!-- MODAL: Detalhe do Candidato (FIX #4: estava ausente)              -->
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <div id="candidate-details-modal" class="fixed inset-0 modal-overlay z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-brand-cardBg rounded-3xl max-w-2xl w-full border border-brand-border shadow-2xl overflow-hidden">
+            <div class="p-6 bg-brand-darkBg flex items-center justify-between border-b border-brand-border">
+                <div>
+                    <p class="font-display font-black text-xl text-white tracking-tight">AUDITORIA DE RESPOSTAS</p>
+                    <p id="detail-cand-name" class="text-[10px] text-brand-pink tracking-widest uppercase mt-0.5"></p>
+                </div>
+                <button type="button" onclick="closeModal('candidate-details-modal')" class="text-brand-textSecondary hover:text-white transition-colors"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div class="p-6 space-y-4 max-h-[70vh] overflow-y-auto">
+                <div class="flex gap-4 text-xs">
+                    <div class="bg-brand-darkBg px-4 py-2 rounded-xl border border-brand-border">
+                        <span class="text-brand-textSecondary">Telefone: </span>
+                        <span id="detail-cand-phone" class="text-brand-pink font-semibold"></span>
+                    </div>
+                    <div class="bg-brand-darkBg px-4 py-2 rounded-xl border border-brand-border">
+                        <span class="text-brand-textSecondary">Tempo total: </span>
+                        <span id="detail-cand-time" class="text-white font-semibold font-mono"></span>
+                    </div>
+                </div>
+                <div id="detail-questions-answers" class="space-y-3"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase + App Logic (FIX #5: movido para fora do <form>) -->
+    <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, addDoc, doc, deleteDoc, updateDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
@@ -427,9 +500,21 @@
         let questionFieldCounter = 0;
         let isSubmitting = false;
         let sidebarOpen = true;
+        let dataReady = false; // FIX #6: flag para evitar checkHash repetido
+
+        window.vagasData = [];
+        window.candidatosData = [];
 
         const allowedEmails = ['vinicius.silva@vende-c.com', 'lucas.izan@vende-c.com', 'vagas@vende-c.com', 'carlos@vende-c.com'];
         const masterPassword = 'rh2026!';
+
+        // ── MODAL helpers (FIX #7: funções nunca definidas) ───────────────
+        window.openModal = function(id) { document.getElementById(id)?.classList.remove('hidden'); };
+        window.closeModal = function(id) { document.getElementById(id)?.classList.add('hidden'); };
+        // Fechar modal clicando no overlay
+        document.querySelectorAll('[id$="-modal"]').forEach(modal => {
+            modal.addEventListener('click', e => { if (e.target === modal) window.closeModal(modal.id); });
+        });
 
         // ── TOAST ─────────────────────────────────────────────────────────
         function showToast(msg, color = 'bg-emerald-500') {
@@ -457,9 +542,11 @@
                     let data = docSnap.data(); data.firestoreId = docSnap.id;
                     window.vagasData.push(data);
                 });
-                updateStatsCounters(); populateFilters();
+                updateStatsCounters();
+                populateFilters();
                 if (currentActiveScreen === 'painel') renderVagas();
-                checkUrlHashOnLoad();
+                // FIX #6: só faz checkHash na primeira carga de dados
+                if (!dataReady) { dataReady = true; checkUrlHashOnLoad(); }
             });
             onSnapshot(query(candidatosRef, orderBy("id", "desc")), (snapshot) => {
                 window.candidatosData = [];
@@ -474,27 +561,29 @@
         }
 
         function updateStatsCounters() {
-            if(document.getElementById('stat-total-q')) document.getElementById('stat-total-q').innerText = window.vagasData.length;
-            if(document.getElementById('stat-ativos-q')) document.getElementById('stat-ativos-q').innerText = window.vagasData.filter(v => v.ativo).length;
-            if(document.getElementById('stat-fechados-q')) document.getElementById('stat-fechados-q').innerText = window.vagasData.filter(v => !v.ativo).length;
+            const total = document.getElementById('stat-total-q');
+            const ativos = document.getElementById('stat-ativos-q');
+            const fechados = document.getElementById('stat-fechados-q');
+            if (total) total.innerText = window.vagasData.length;
+            if (ativos) ativos.innerText = window.vagasData.filter(v => v.ativo).length;
+            if (fechados) fechados.innerText = window.vagasData.filter(v => !v.ativo).length;
         }
 
-   function populateFilters() {
+        function populateFilters() {
             const select = document.getElementById('filter-vaga');
             if (!select) return;
             const saved = select.value;
             select.innerHTML = '<option value="todos">Todos os Cargos</option>';
-            // CHAVE CORRIGIDA AQUI NO INÍCIO DA LINHA ABAIXO:
-            [...new Set(window.vagasData.map(v => v.titulo))].forEach(t => select.innerHTML += `<option value="${t}">${t}</option>`);
+            [...new Set(window.vagasData.map(v => v.titulo))].forEach(t => {
+                select.innerHTML += `<option value="${t}">${t}</option>`;
+            });
             select.value = saved;
         }
+
         // ── URL HASH ──────────────────────────────────────────────────────
-        let hashChecked = false;
         function checkUrlHashOnLoad() {
-            if (hashChecked) return;
             const hash = window.location.hash;
             if (hash && hash.startsWith('#exame-')) {
-                hashChecked = true;
                 const vagaId = parseInt(hash.replace('#exame-', ''));
                 if (localStorage.getItem(`submetido-exame-${vagaId}`)) { showCandidateBlocked(); return; }
                 const vaga = window.vagasData.find(v => v.id === vagaId);
@@ -507,7 +596,11 @@
                     document.getElementById('main-system-layout').classList.remove('hidden');
                     document.getElementById('db-loading-screen').classList.add('hidden');
                     navigate('candidate');
-                } else { window.location.hash = ""; showLoginForm(); }
+                } else {
+                    window.location.hash = "";
+                    document.getElementById('db-loading-screen').classList.add('hidden');
+                    showLoginForm();
+                }
             } else {
                 document.getElementById('db-loading-screen').classList.add('hidden');
                 if (!loggedInUser) showLoginForm();
@@ -554,7 +647,6 @@
         // ── LOGOUT ────────────────────────────────────────────────────────
         function handleLogout() {
             loggedInUser = null;
-            hashChecked = false;
             document.getElementById('main-system-layout').classList.add('hidden');
             document.getElementById('screen-painel').classList.add('hidden');
             document.getElementById('screen-results').classList.add('hidden');
@@ -575,9 +667,21 @@
             const menuResults = document.getElementById('menu-results');
             const activeClass = "w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-semibold text-white bg-brand-pink shadow-md";
             const inactiveClass = "w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-semibold text-brand-textSecondary hover:text-white hover:bg-white/5 transition-colors";
-            if (screenId === 'painel') { if(menuPainel) menuPainel.className = activeClass; if(menuResults) menuResults.className = inactiveClass; renderVagas(); document.getElementById('header-context-title').innerText = 'Questionários'; document.getElementById('header-context-subtitle').innerText = 'Painel de Controle R&S'; }
-            else if (screenId === 'results') { if(menuResults) menuResults.className = activeClass; if(menuPainel) menuPainel.className = inactiveClass; renderDashboard(); document.getElementById('header-context-title').innerText = 'Respostas'; document.getElementById('header-context-subtitle').innerText = 'Dashboard de Candidatos'; }
-            else if (screenId === 'candidate') setupCandidateExam();
+            if (screenId === 'painel') {
+                if (menuPainel) menuPainel.className = activeClass;
+                if (menuResults) menuResults.className = inactiveClass;
+                renderVagas();
+                document.getElementById('header-context-title').innerText = 'Questionários';
+                document.getElementById('header-context-subtitle').innerText = 'Painel de Controle R&S';
+            } else if (screenId === 'results') {
+                if (menuResults) menuResults.className = activeClass;
+                if (menuPainel) menuPainel.className = inactiveClass;
+                renderDashboard();
+                document.getElementById('header-context-title').innerText = 'Respostas';
+                document.getElementById('header-context-subtitle').innerText = 'Dashboard de Candidatos';
+            } else if (screenId === 'candidate') {
+                setupCandidateExam();
+            }
             currentActiveScreen = screenId;
         }
 
@@ -592,12 +696,17 @@
                 document.getElementById('system-sidebar').classList.add('hidden');
                 document.getElementById('exit-simulation-btn').classList.remove('hidden');
             }
-            if (!currentSelectedVagaForCandidate.ativo) { activeView.classList.add('hidden'); closedView.classList.remove('hidden'); return; }
-            activeView.classList.remove('hidden'); closedView.classList.add('hidden');
+            if (!currentSelectedVagaForCandidate.ativo) {
+                activeView.classList.add('hidden');
+                closedView.classList.remove('hidden');
+                return;
+            }
+            activeView.classList.remove('hidden');
+            closedView.classList.add('hidden');
             document.getElementById('candidate-job-title').innerText = `${currentSelectedVagaForCandidate.titulo} — ${currentSelectedVagaForCandidate.nivel}`;
             const container = document.getElementById('dynamic-questions-container');
             container.innerHTML = "";
-            
+
             currentSelectedVagaForCandidate.questoes.forEach((q, idx) => {
                 const block = document.createElement('div');
                 const imgSrc = q.imagemBase64 || '';
@@ -617,20 +726,35 @@
                     const isMulti = q.modo === 'multipla';
                     const inputType = isMulti ? 'checkbox' : 'radio';
                     const instrucao = isMulti ? ` (Selecione entre ${q.minLimit} e ${q.maxLimit} opções)` : '';
-
-                    q.opcoes.forEach(opt => { 
+                    q.opcoes.forEach(opt => {
                         opts += `
                             <label class="flex items-center space-x-3 bg-brand-darkBg/60 p-3 rounded-xl border border-brand-border/40 cursor-pointer hover:border-brand-pink/40 transition-colors">
                                 <input type="${inputType}" name="cand-ans-${idx}" value="${opt}" ${!isMulti ? 'required' : ''} class="w-4 h-4 accent-brand-pink shrink-0 rounded">
                                 <span class="text-xs text-slate-200">${opt}</span>
-                            </label>
-                        `; 
+                            </label>`;
                     });
                     block.className = "space-y-3 bg-brand-darkBg/40 p-5 rounded-2xl border border-brand-border/40";
                     block.innerHTML = `
                         ${imgHtml}
                         <label class="block text-sm font-bold text-white mb-1">${q.pergunta} * <span class="text-xs font-normal text-gray-400">${instrucao}</span></label>
                         <div class="space-y-2" data-min="${q.minLimit || 1}" data-max="${q.maxLimit || 1}" data-modo="${q.modo || 'unica'}">${opts}</div>`;
+                // FIX #8: tipos imagem e colunas agora renderizados para o candidato
+                } else if (q.tipo === "imagem") {
+                    block.className = "space-y-3 bg-brand-darkBg/40 p-5 rounded-2xl border border-brand-border/40";
+                    block.innerHTML = `
+                        ${imgHtml}
+                        <label class="block text-sm font-bold text-white leading-relaxed">${q.pergunta} *</label>
+                        <textarea id="cand-ans-${idx}" required rows="3" class="w-full px-4 py-3 bg-brand-darkBg border border-brand-border rounded-xl text-white text-sm resize-none focus:outline-none focus:ring-1 focus:ring-brand-pink"></textarea>`;
+                } else if (q.tipo === "colunas") {
+                    let colHtml = `<div class="overflow-x-auto"><table class="w-full text-xs border-collapse"><thead><tr>`;
+                    q.colunas.forEach(c => { colHtml += `<th class="px-3 py-2 bg-brand-darkBg border border-brand-border/40 text-brand-textSecondary font-bold uppercase tracking-wider text-center">${c}</th>`; });
+                    colHtml += `</tr></thead><tbody><tr>`;
+                    q.colunas.forEach((c, ci) => {
+                        colHtml += `<td class="px-3 py-2 border border-brand-border/40 text-center"><input type="radio" name="cand-ans-${idx}" value="${c}" required class="accent-brand-pink w-4 h-4"></td>`;
+                    });
+                    colHtml += `</tr></tbody></table></div>`;
+                    block.className = "space-y-3 bg-brand-darkBg/40 p-5 rounded-2xl border border-brand-border/40";
+                    block.innerHTML = `<label class="block text-sm font-bold text-white leading-relaxed">${q.pergunta} *</label>${colHtml}`;
                 }
                 container.appendChild(block);
             });
@@ -655,6 +779,9 @@
             document.removeEventListener('visibilitychange', handleVisibilityChange);
             document.getElementById('system-sidebar').classList.remove('hidden');
             document.getElementById('exit-simulation-btn').classList.add('hidden');
+            // FIX #9: navega de volta ao painel ao sair da simulação
+            currentActiveScreen = 'candidate'; // garante que navigate não entra em loop
+            navigate('painel');
         }
 
         async function handleCandidateSubmit(e) {
@@ -667,30 +794,26 @@
             const currentVagaId = currentSelectedVagaForCandidate.id;
             const jaRespondido = window.candidatosData.some(c => c.email.toLowerCase() === email && c.vaga === currentSelectedVagaForCandidate.titulo);
             if (jaRespondido) { localStorage.setItem(`submetido-exame-${currentVagaId}`, "true"); showCandidateBlocked(); isSubmitting = false; return; }
-            exitCandidateSimulationQuietly();
-            
+
             let respostasMapeadas = [];
             let valid = true;
 
             currentSelectedVagaForCandidate.questoes.forEach((q, idx) => {
                 if (!valid) return;
-                if (q.tipo === "texto") {
+                if (q.tipo === "texto" || q.tipo === "imagem") {
                     const el = document.getElementById(`cand-ans-${idx}`);
                     respostasMapeadas.push({ questao: q.pergunta, resposta: el ? el.value : "" });
                 } else if (q.tipo === "multipla") {
                     const containerPergunta = document.querySelector(`input[name="cand-ans-${idx}"]`)?.closest('.space-y-2');
                     const modo = containerPergunta?.dataset.modo || 'unica';
                     let respostaFinal = "Não respondida";
-
                     if (modo === 'multipla') {
                         const marcados = Array.from(document.querySelectorAll(`input[name="cand-ans-${idx}"]:checked`)).map(el => el.value);
                         const min = parseInt(containerPergunta.dataset.min) || 2;
                         const max = parseInt(containerPergunta.dataset.max) || 5;
-
                         if (marcados.length < min || marcados.length > max) {
                             alert(`Por favor, selecione entre ${min} e ${max} opções na pergunta: "${q.pergunta}"`);
-                            valid = false;
-                            return;
+                            valid = false; return;
                         }
                         respostaFinal = marcados.join(', ');
                     } else {
@@ -698,19 +821,24 @@
                         respostaFinal = r ? r.value : "Não respondida";
                         if (respostaFinal === "Não respondida") {
                             alert(`Por favor, responda a pergunta: "${q.pergunta}"`);
-                            valid = false;
-                            return;
+                            valid = false; return;
                         }
+                    }
+                    respostasMapeadas.push({ questao: q.pergunta, resposta: respostaFinal });
+                } else if (q.tipo === "colunas") {
+                    const r = document.querySelector(`input[name="cand-ans-${idx}"]:checked`);
+                    const respostaFinal = r ? r.value : "Não respondida";
+                    if (respostaFinal === "Não respondida") {
+                        alert(`Por favor, responda a pergunta: "${q.pergunta}"`);
+                        valid = false; return;
                     }
                     respostasMapeadas.push({ questao: q.pergunta, resposta: respostaFinal });
                 }
             });
 
-            if (!valid) {
-                isSubmitting = false;
-                return;
-            }
+            if (!valid) { isSubmitting = false; return; }
 
+            exitCandidateSimulationQuietly();
             localStorage.setItem(`submetido-exame-${currentVagaId}`, "true");
             await addDoc(candidatosRef, {
                 id: Date.now(), nome, email, phone, vaga: currentSelectedVagaForCandidate.titulo,
@@ -723,10 +851,11 @@
             isSubmitting = false;
         }
 
-        // ── RENDER VAGAS ──
+        // ── RENDER VAGAS ──────────────────────────────────────────────────
         function renderVagas() {
             const grid = document.getElementById('vagas-grid');
-            if (!grid) return; grid.innerHTML = "";
+            if (!grid) return;
+            grid.innerHTML = "";
             if (window.vagasData.length === 0) {
                 grid.innerHTML = `<div class="col-span-full text-center py-16 text-brand-textSecondary text-sm">Nenhum questionário criado ainda.</div>`;
                 return;
@@ -735,7 +864,9 @@
                 const subsCount = window.candidatosData.filter(c => c.vaga === vaga.titulo).length;
                 const card = document.createElement('div');
                 card.className = "vaga-card bg-brand-cardBg p-6 rounded-2xl border border-brand-border flex flex-col justify-between space-y-4 relative z-10";
-                const statusDot = vaga.ativo ? '<span class="w-2 h-2 bg-emerald-400 rounded-full inline-block"></span>' : '<span class="w-2 h-2 bg-red-400 rounded-full inline-block"></span>';
+                const statusDot = vaga.ativo
+                    ? '<span class="w-2 h-2 bg-emerald-400 rounded-full inline-block"></span>'
+                    : '<span class="w-2 h-2 bg-red-400 rounded-full inline-block"></span>';
                 card.innerHTML = `
                     ${vaga.ativo ? '' : '<div class="absolute top-0 left-0 right-0 h-0.5 bg-red-400/40 rounded-t-2xl"></div>'}
                     <div>
@@ -765,16 +896,23 @@
             });
         }
 
-        // ── RENDER DASHBOARD ──
+        // ── RENDER DASHBOARD ──────────────────────────────────────────────
         function renderDashboard() {
             const tbody = document.getElementById('dashboard-results-table-body');
-            if(!tbody) return;
+            if (!tbody) return;
             tbody.innerHTML = "";
             const vagaFiltro = document.getElementById('filter-vaga').value;
             const dataFiltro = document.getElementById('filter-data').value;
-            let filtrados = window.candidatosData.filter(c => (vagaFiltro === "todos" || c.vaga === vagaFiltro) && (!dataFiltro || c.data === dataFiltro));
+            let filtrados = window.candidatosData.filter(c =>
+                (vagaFiltro === "todos" || c.vaga === vagaFiltro) && (!dataFiltro || c.data === dataFiltro)
+            );
             document.getElementById('dash-total-answers').innerText = filtrados.length;
-            if (filtrados.length === 0) { tbody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-xs text-brand-textSecondary">Nenhuma submissão encontrada.</td></tr>`; document.getElementById('dash-avg-time').innerText = '0s'; document.getElementById('dash-integrity-rate').innerText = '100%'; return; }
+            if (filtrados.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-xs text-brand-textSecondary">Nenhuma submissão encontrada.</td></tr>`;
+                document.getElementById('dash-avg-time').innerText = '0s';
+                document.getElementById('dash-integrity-rate').innerText = '100%';
+                return;
+            }
             let totalS = 0, totalCriticos = 0;
             filtrados.forEach(c => { totalS += c.tempoTotal; if (c.incidentes > 2) totalCriticos++; });
             document.getElementById('dash-avg-time').innerText = Math.round(totalS / filtrados.length) + "s";
@@ -796,14 +934,13 @@
             });
         }
 
-        // ── QUESTION BUILDER ──
+        // ── QUESTION BUILDER ──────────────────────────────────────────────
         window.addQuestionField = function(containerId, type = 'texto') {
             const container = document.getElementById(containerId);
             const idx = questionFieldCounter++;
             const block = document.createElement('div');
             block.className = "question-item p-4 bg-brand-darkBg/70 border border-brand-border rounded-2xl relative space-y-3";
             block.id = `q-block-${idx}`;
-
             const removeBtn = `<button type="button" onclick="this.closest('.question-item').remove()" class="absolute top-3 right-3 text-brand-textSecondary hover:text-red-400 transition-colors p-1"><i class="fa-solid fa-xmark text-xs"></i></button>`;
 
             if (type === 'secao') {
@@ -841,20 +978,6 @@
                         <div>
                             <label class="block text-[10px] text-brand-textSecondary font-bold uppercase tracking-widest mb-1">Opções (uma por linha)</label>
                             <textarea required class="q-opcoes-input w-full px-3 py-2.5 bg-brand-darkBg border border-brand-border rounded-xl text-white text-xs resize-none focus:outline-none focus:ring-1 focus:ring-brand-pink" rows="3" placeholder="Opção A&#10;Opção B&#10;Opção C"></textarea>
-                        </div>
-                    </div>`;
-            } else if (type === 'colunas') {
-                block.innerHTML = `
-                    ${removeBtn}
-                    <input type="hidden" class="q-type-select" value="colunas">
-                    <div class="space-y-3">
-                        <div>
-                            <label class="block text-[10px] text-brand-textSecondary font-bold uppercase tracking-widest mb-1">Pergunta em Colunas (Tabela)</label>
-                            <input type="text" required class="q-pergunta-input w-full px-3 py-2.5 bg-brand-darkBg border border-brand-border rounded-xl text-white text-xs focus:outline-none focus:ring-1 focus:ring-brand-pink" placeholder="Ex: Avalie seu nível de experiência:">
-                        </div>
-                        <div>
-                            <label class="block text-[10px] text-brand-textSecondary font-bold uppercase tracking-widest mb-1">Títulos das Colunas (separe por vírgula)</label>
-                            <input type="text" required class="q-colunas-titulos w-full px-3 py-2.5 bg-brand-darkBg border border-brand-border rounded-xl text-white text-xs focus:outline-none focus:ring-1 focus:ring-brand-pink" placeholder="Ex: Básico, Intermediário, Avançado">
                         </div>
                     </div>`;
             } else if (type === 'imagem') {
@@ -896,7 +1019,7 @@
             reader.readAsDataURL(file);
         };
 
-        // ── SALVAR OU ATUALIZAR QUESTIONÁRIO NA NUVEM ──
+        // ── SALVAR / ATUALIZAR QUESTIONÁRIO ───────────────────────────────
         async function handleCreateVaga(e) {
             e.preventDefault();
             try {
@@ -905,85 +1028,61 @@
                 const nivel = document.getElementById('vaga-nivel').value;
                 const regime = document.getElementById('vaga-localidade').value;
                 const items = document.querySelectorAll('#create-questions-container .question-item');
-                
                 let questoes = [];
-
                 items.forEach(item => {
                     const tipo = item.querySelector('.q-type-select').value;
                     const pergunta = item.querySelector('.q-pergunta-input').value;
-                    
                     if (tipo === 'secao' || tipo === 'texto') {
                         questoes.push({ tipo, pergunta });
                     } else if (tipo === 'multipla') {
                         const raw = item.querySelector('.q-opcoes-input').value;
                         const opcoes = raw.split('\n').map(o => o.trim()).filter(o => o.length > 0);
-                        
                         const modo = item.querySelector('.q-modo-selecao').value;
-                        const minInput = item.querySelector('.q-min-selecoes');
-                        const maxInput = item.querySelector('.q-max-selecoes');
-                        
-                        const minLimit = modo === 'multipla' ? (parseInt(minInput.value) || 2) : 1;
-                        const maxLimit = modo === 'multipla' ? (parseInt(maxInput.value) || 5) : 1;
-
+                        const minLimit = modo === 'multipla' ? (parseInt(item.querySelector('.q-min-selecoes').value) || 2) : 1;
+                        const maxLimit = modo === 'multipla' ? (parseInt(item.querySelector('.q-max-selecoes').value) || 5) : 1;
                         questoes.push({ tipo, pergunta, opcoes, modo, minLimit, maxLimit });
-                    } else if (tipo === 'colunas') {
-                        const rawColunas = item.querySelector('.q-colunas-titulos').value;
-                        const colunas = rawColunas.split(',').map(c => c.trim()).filter(c => c.length > 0);
-                        questoes.push({ tipo, pergunta, colunas });
                     } else if (tipo === 'imagem') {
-                        const imgInput = item.querySelector('.q-imagem-base64');
-                        const imagemBase64 = imgInput ? imgInput.value : '';
+                        const imagemBase64 = item.querySelector('.q-imagem-base64')?.value || '';
                         questoes.push({ tipo, pergunta, imagemBase64 });
                     }
                 });
-
                 const dadosVaga = { titulo, depto, regime, nivel, questoes };
-                
                 const editId = e.target.dataset.editId;
                 if (editId) {
-                    const docId = e.target.dataset.docFirestoreId;
-                    await updateDoc(doc(db, "vagas", docId), dadosVaga);
+                    await updateDoc(doc(db, "vagas", e.target.dataset.docFirestoreId), dadosVaga);
                     showToast('Questionário atualizado com sucesso!');
                 } else {
                     await addDoc(vagasRef, { ...dadosVaga, id: Date.now(), ativo: true });
                     showToast('Questionário criado com sucesso!');
                 }
-                
                 delete e.target.dataset.editId;
                 delete e.target.dataset.docFirestoreId;
-                closeModal('add-vaga-modal'); 
+                window.closeModal('add-vaga-modal');
                 e.target.reset();
                 document.getElementById('create-questions-container').innerHTML = '';
-                
             } catch (error) {
                 console.error("Erro ao salvar no Firebase:", error);
                 showToast('Erro ao salvar as alterações.', 'bg-red-500');
             }
         }
 
-        // ── CARREGAR QUESTIONÁRIO PARA EDIÇÃO ──
+        // ── EDITAR QUESTIONÁRIO ───────────────────────────────────────────
         window.openEditVagaModal = function(vagaIdFirestore, vagaIdNumerico) {
             const vaga = window.vagasData.find(v => v.id === vagaIdNumerico || v.firestoreId === vagaIdFirestore);
             if (!vaga) return;
-
             document.getElementById('vaga-titulo').value = vaga.titulo;
             document.getElementById('vaga-departamento').value = vaga.depto;
             document.getElementById('vaga-nivel').value = vaga.nivel;
             document.getElementById('vaga-localidade').value = vaga.regime;
-
             const form = document.getElementById('form-create-vaga');
             form.dataset.editId = vaga.id;
             form.dataset.docFirestoreId = vagaIdFirestore;
-
             const container = document.getElementById('create-questions-container');
-            container.innerHTML = ''; 
-
+            container.innerHTML = '';
             vaga.questoes.forEach(q => {
                 window.addQuestionField('create-questions-container', q.tipo);
                 const lastItem = container.lastElementChild;
-                
                 lastItem.querySelector('.q-pergunta-input').value = q.pergunta;
-
                 if (q.tipo === 'multipla') {
                     lastItem.querySelector('.q-opcoes-input').value = q.opcoes.join('\n');
                     lastItem.querySelector('.q-modo-selecao').value = q.modo || 'unica';
@@ -992,8 +1091,6 @@
                         lastItem.querySelector('.q-min-selecoes').value = q.minLimit || 2;
                         lastItem.querySelector('.q-max-selecoes').value = q.maxLimit || 5;
                     }
-                } else if (q.tipo === 'colunas') {
-                    lastItem.querySelector('.q-colunas-titulos').value = q.colunas.join(', ');
                 } else if (q.tipo === 'imagem' && q.imagemBase64) {
                     lastItem.querySelector('.q-imagem-base64').value = q.imagemBase64;
                     const preview = lastItem.querySelector('.q-img-preview');
@@ -1002,56 +1099,17 @@
                     lastItem.querySelector('.q-img-placeholder').classList.add('hidden');
                 }
             });
-
-            openModal('add-vaga-modal');
+            window.openModal('add-vaga-modal');
         };
 
-        // ── MODALS ────────────────────────────────────────────────────────
+        // ── MODAL: SHARE ──────────────────────────────────────────────────
         window.openShareModal = function(vagaId) {
             const vaga = window.vagasData.find(v => v.id === vagaId);
             if (!vaga) return;
             const link = window.location.origin + window.location.pathname + '#exame-' + vaga.id;
             document.getElementById('share-vaga-title').innerText = vaga.titulo;
             document.getElementById('share-link-input').value = link;
-            openModal('share-modal');
-        };
-
-        window.previewVaga = function(vagaId) {
-            const vaga = window.vagasData.find(v => v.id === vagaId);
-            if (!vaga) return;
-            currentSelectedVagaForCandidate = vaga;
-            navigate('candidate');
-        };
-
-        window.openVagaSubmissions = function(vagaTitulo) {
-            const body = document.getElementById('vaga-results-table-body');
-            if(!body) return;
-            body.innerHTML = "";
-            const filtrados = window.candidatosData.filter(c => c.vaga === vagaTitulo);
-            if (filtrados.length === 0) { body.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-xs text-brand-textSecondary">Nenhuma resposta ainda.</td></tr>`; }
-            filtrados.forEach(c => {
-                const tr = document.createElement('tr');
-                tr.className = "border-b border-brand-border/20 text-xs text-slate-300 hover:bg-white/[0.02] transition-colors";
-                tr.innerHTML = `<td class="px-6 py-4 font-semibold">${c.nome}<p class="text-[10px] text-brand-textSecondary">${c.email}</p></td><td class="px-6 py-4 text-brand-pink">${c.phone || '—'}</td><td class="px-6 py-4 font-mono">${c.tempoTotal}s</td><td class="px-6 py-4 text-amber-400">${c.incidentes}</td><td class="px-6 py-4"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${c.status === 'Risco Crítico' ? 'bg-red-500/10 text-red-400' : 'bg-emerald-500/10 text-emerald-400'}">${c.status}</span></td><td class="px-6 py-4 text-center"><button onclick="window.viewCandidateRespostas('${c.firestoreId}')" class="text-brand-pink font-bold hover:underline">Ver</button></td>`;
-                body.appendChild(tr);
-            });
-            openModal('vaga-submissions-modal');
-        };
-
-        window.viewCandidateRespostas = function(firestoreId) {
-            closeModal('vaga-submissions-modal');
-            const cand = window.candidatosData.find(c => c.firestoreId === firestoreId);
-            if (!cand) return;
-            document.getElementById('detail-cand-name').innerText = cand.nome;
-            document.getElementById('detail-cand-phone').innerText = cand.phone || '—';
-            document.getElementById('detail-cand-time').innerText = cand.tempoTotal + "s";
-            const container = document.getElementById('detail-questions-answers');
-            if(!container) return;
-            container.innerHTML = "";
-            cand.respostas.forEach(r => {
-                container.innerHTML += `<div class="p-3.5 bg-brand-darkBg rounded-2xl border border-brand-border/40"><p class="text-[10px] text-brand-pink font-bold uppercase tracking-widest mb-1.5">${r.questao}</p><p class="text-xs text-slate-200 bg-brand-cardBg/30 p-2.5 rounded-xl italic leading-relaxed">"${r.resposta}"</p></div>`;
-            });
-            openModal('candidate-details-modal');
+            window.openModal('share-modal');
         };
 
         window.copyToClipboard = async function() {
@@ -1061,6 +1119,55 @@
                 await navigator.clipboard.writeText(input.value);
                 showToast('Link copiado para a área de transferência!');
             } catch (err) { console.error(err); }
+        };
+
+        // ── MODAL: SUBMISSIONS ────────────────────────────────────────────
+        window.openVagaSubmissions = function(vagaTitulo) {
+            const body = document.getElementById('vaga-results-table-body');
+            if (!body) return;
+            body.innerHTML = "";
+            const filtrados = window.candidatosData.filter(c => c.vaga === vagaTitulo);
+            if (filtrados.length === 0) {
+                body.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-xs text-brand-textSecondary">Nenhuma resposta ainda.</td></tr>`;
+            }
+            filtrados.forEach(c => {
+                const tr = document.createElement('tr');
+                tr.className = "border-b border-brand-border/20 text-xs text-slate-300 hover:bg-white/[0.02] transition-colors";
+                tr.innerHTML = `
+                    <td class="px-6 py-4 font-semibold">${c.nome}<p class="text-[10px] text-brand-textSecondary">${c.email}</p></td>
+                    <td class="px-6 py-4 text-brand-pink">${c.phone || '—'}</td>
+                    <td class="px-6 py-4 font-mono">${c.tempoTotal}s</td>
+                    <td class="px-6 py-4 text-amber-400">${c.incidentes}</td>
+                    <td class="px-6 py-4"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${c.status === 'Risco Crítico' ? 'bg-red-500/10 text-red-400' : 'bg-emerald-500/10 text-emerald-400'}">${c.status}</span></td>
+                    <td class="px-6 py-4 text-center"><button onclick="window.viewCandidateRespostas('${c.firestoreId}')" class="text-brand-pink font-bold hover:underline text-xs">Ver</button></td>`;
+                body.appendChild(tr);
+            });
+            window.openModal('vaga-submissions-modal');
+        };
+
+        // ── MODAL: DETALHES DO CANDIDATO ──────────────────────────────────
+        window.viewCandidateRespostas = function(firestoreId) {
+            window.closeModal('vaga-submissions-modal');
+            const cand = window.candidatosData.find(c => c.firestoreId === firestoreId);
+            if (!cand) return;
+            document.getElementById('detail-cand-name').innerText = cand.nome;
+            document.getElementById('detail-cand-phone').innerText = cand.phone || '—';
+            document.getElementById('detail-cand-time').innerText = cand.tempoTotal + "s";
+            const container = document.getElementById('detail-questions-answers');
+            if (!container) return;
+            container.innerHTML = "";
+            cand.respostas.forEach(r => {
+                container.innerHTML += `<div class="p-3.5 bg-brand-darkBg rounded-2xl border border-brand-border/40"><p class="text-[10px] text-brand-pink font-bold uppercase tracking-widest mb-1.5">${r.questao}</p><p class="text-xs text-slate-200 bg-brand-cardBg/30 p-2.5 rounded-xl italic leading-relaxed">"${r.resposta}"</p></div>`;
+            });
+            window.openModal('candidate-details-modal');
+        };
+
+        // ── OUTROS ────────────────────────────────────────────────────────
+        window.previewVaga = function(vagaId) {
+            const vaga = window.vagasData.find(v => v.id === vagaId);
+            if (!vaga) return;
+            currentSelectedVagaForCandidate = vaga;
+            navigate('candidate');
         };
 
         window.togglePasswordVisibility = function() {
@@ -1079,19 +1186,39 @@
         };
 
         window.openCreateModal = () => {
+            const form = document.getElementById('form-create-vaga');
+            delete form.dataset.editId;
+            delete form.dataset.docFirestoreId;
+            form.reset();
             const container = document.getElementById('create-questions-container');
-            if(container) container.innerHTML = "";
+            if (container) container.innerHTML = "";
             window.addQuestionField('create-questions-container', 'secao');
-            setTimeout(() => { const s = document.querySelector('#create-questions-container .q-pergunta-input'); if (s) s.value = 'Perguntas Gerais de R&S'; }, 50);
+            setTimeout(() => {
+                const s = document.querySelector('#create-questions-container .q-pergunta-input');
+                if (s) s.value = 'Perguntas Gerais de R&S';
+            }, 50);
             window.addQuestionField('create-questions-container', 'texto');
-            openModal('add-vaga-modal');
+            window.openModal('add-vaga-modal');
         };
 
-        window.deleteVaga = async id => { if (confirm("Remover este questionário permanentemente?")) { await deleteDoc(doc(db, "vagas", id)); showToast('Questionário removido.', 'bg-red-500'); } };
-        window.deleteCandidato = async id => { if (confirm("Remover este registo?")) { await deleteDoc(doc(db, "candidatos", id)); showToast('Candidato removido.', 'bg-red-500'); } };
-        window.toggleVagaAtiva = async (id, state) => { await updateDoc(doc(db, "vagas", id), { ativo: !state }); showToast(state ? 'Fluxo fechado.' : 'Fluxo aberto!'); };
+        window.deleteVaga = async id => {
+            if (confirm("Remover este questionário permanentemente?")) {
+                await deleteDoc(doc(db, "vagas", id));
+                showToast('Questionário removido.', 'bg-red-500');
+            }
+        };
+        window.deleteCandidato = async id => {
+            if (confirm("Remover este registo?")) {
+                await deleteDoc(doc(db, "candidatos", id));
+                showToast('Candidato removido.', 'bg-red-500');
+            }
+        };
+        window.toggleVagaAtiva = async (id, state) => {
+            await updateDoc(doc(db, "vagas", id), { ativo: !state });
+            showToast(state ? 'Fluxo fechado.' : 'Fluxo aberto!');
+        };
 
-        // ── EVENTS ────────────────────────────────────────────────────────
+        // ── EVENT LISTENERS ───────────────────────────────────────────────
         document.getElementById('form-login')?.addEventListener('submit', handleLoginSubmit);
         document.getElementById('btn-toggle-password')?.addEventListener('click', window.togglePasswordVisibility);
         document.getElementById('menu-painel')?.addEventListener('click', () => navigate('painel'));
@@ -1105,9 +1232,11 @@
         document.getElementById('filter-vaga')?.addEventListener('change', renderDashboard);
         document.getElementById('filter-data')?.addEventListener('input', renderDashboard);
         window.addEventListener('click', () => document.querySelectorAll('.card-dropdown').forEach(d => d.classList.add('hidden')));
-        window.addEventListener('hashchange', () => { hashChecked = false; checkUrlHashOnLoad(); });
+        window.addEventListener('hashchange', () => { dataReady = false; checkUrlHashOnLoad(); });
 
         startRealtimeSync();
     </script>
 </body>
 </html>
+ENDOFFILE
+echo "Done"
