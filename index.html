@@ -910,7 +910,7 @@
             reader.readAsDataURL(file);
         };
 
-// ── SALVAR QUESTIONÁRIO NA NUVEM (CORRIGIDO E BLINDADO) ──
+// ── SALVAR QUESTIONÁRIO NA NUVEM (BLINDADO CONTRA ERRO DE IMAGEM) ──
         async function handleCreateVaga(e) {
             e.preventDefault();
             try {
@@ -921,6 +921,8 @@
                 const items = document.querySelectorAll('#create-questions-container .question-item');
                 
                 let questoes = [];
+                let tamanhoTotalEstimado = 0;
+
                 items.forEach(item => {
                     const tipo = item.querySelector('.q-type-select').value;
                     const pergunta = item.querySelector('.q-pergunta-input').value;
@@ -932,14 +934,25 @@
                         const opcoes = raw.split('\n').map(o => o.trim()).filter(o => o.length > 0);
                         questoes.push({ tipo, pergunta, opcoes });
                     } else if (tipo === 'imagem') {
-                        // Correção: Garante a captura da imagem de apoio/enunciado com segurança
                         const imgInput = item.querySelector('.q-imagem-base64');
                         const imagemBase64 = imgInput ? imgInput.value : '';
+                        
+                        // Validação de tamanho para não estourar o limite do Firebase (1MB)
+                        if (imagemBase64) {
+                            tamanhoTotalEstimado += imagemBase64.length;
+                        }
+                        
                         questoes.push({ tipo, pergunta, imagemBase64 });
                     }
                 });
+
+                // Se o tamanho do Base64 for maior que ~800KB, avisa o usuário para não travar
+                if (tamanhoTotalEstimado > 850000) {
+                    showToast('Imagem muito pesada! Reduza a resolução ou use prints menores.', 'bg-red-500');
+                    return; // Para a execução aqui e não trava o painel
+                }
                 
-                // Envia direto para a coleção "vagas" do Firestore
+                // Envia para o Firestore
                 await addDoc(vagasRef, { 
                     id: Date.now(), 
                     titulo, 
@@ -950,20 +963,18 @@
                     questoes 
                 });
                 
-                // Fecha o modal de criação e limpa o formulário
+                // Limpa e fecha tudo se der certo
                 closeModal('add-vaga-modal'); 
                 e.target.reset();
                 document.getElementById('create-questions-container').innerHTML = '';
                 
-                // Dispara o alerta de sucesso na tela
                 showToast('Questionário criado com sucesso!');
                 
             } catch (error) {
-                console.error("Erro ao salvar o questionário no Firebase:", error);
-                showToast('Erro ao salvar na nuvem. Verifique o console.', 'bg-red-500');
+                console.error("Erro crítico ao salvar no Firebase:", error);
+                showToast('Erro ao salvar. Imagem pode estar grande demais!', 'bg-red-500');
             }
         }
-
         // ── MODALS ────────────────────────────────────────────────────────
         window.openShareModal = function(vagaId) {
             const vaga = window.vagasData.find(v => v.id === vagaId);
