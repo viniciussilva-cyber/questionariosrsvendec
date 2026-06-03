@@ -914,6 +914,7 @@
 // ── SALVAR QUESTIONÁRIO NA NUVEM (BLINDADO CONTRA ERRO DE IMAGEM) ──
 // ── SALVAR OU ATUALIZAR QUESTIONÁRIO NA NUVEM ──
 // ── SALVAR OU ATUALIZAR QUESTIONÁRIO NA NUVEM ──
+// ── SUBSTITUA A SUA FUNÇÃO handleCreateVaga INTEIRA POR ESTA ──
 async function handleCreateVaga(e) {
     e.preventDefault();
     try {
@@ -934,7 +935,11 @@ async function handleCreateVaga(e) {
             } else if (tipo === 'multipla') {
                 const raw = item.querySelector('.q-opcoes-input').value;
                 const opcoes = raw.split('\n').map(o => o.trim()).filter(o => o.length > 0);
-                const limite = parseInt(item.querySelector('.q-limite-selecoes').value) || 1;
+                
+                // PROTEÇÃO: Verifica se o campo de limite existe no seu HTML atual para não dar erro
+                const limiteInput = item.querySelector('.q-limite-selecoes');
+                const limite = limiteInput ? (parseInt(limiteInput.value) || 1) : 1;
+                
                 questoes.push({ tipo, pergunta, opcoes, limite });
             } else if (tipo === 'colunas') {
                 const rawColunas = item.querySelector('.q-colunas-titulos').value;
@@ -949,7 +954,6 @@ async function handleCreateVaga(e) {
 
         const dadosVaga = { titulo, depto, regime, nivel, questoes };
         
-        // SISTEMA INTELIGENTE: Verifica se é uma Edição ou Nova Criação
         const editId = e.target.dataset.editId;
         if (editId) {
             const docId = e.target.dataset.docFirestoreId;
@@ -960,7 +964,6 @@ async function handleCreateVaga(e) {
             showToast('Questionário criado com sucesso!');
         }
         
-        // Limpa o estado de edição e fecha o modal
         delete e.target.dataset.editId;
         delete e.target.dataset.docFirestoreId;
         closeModal('add-vaga-modal'); 
