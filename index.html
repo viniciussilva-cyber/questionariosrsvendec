@@ -479,15 +479,15 @@
             if(document.getElementById('stat-fechados-q')) document.getElementById('stat-fechados-q').innerText = window.vagasData.filter(v => !v.ativo).length;
         }
 
-        function populateFilters() {
+   function populateFilters() {
             const select = document.getElementById('filter-vaga');
             if (!select) return;
             const saved = select.value;
             select.innerHTML = '<option value="todos">Todos os Cargos</option>';
+            // CHAVE CORRIGIDA AQUI NO INÍCIO DA LINHA ABAIXO:
             [...new Set(window.vagasData.map(v => v.titulo))].forEach(t => select.innerHTML += `<option value="${t}">${t}</option>`);
             select.value = saved;
         }
-
         // ── URL HASH ──────────────────────────────────────────────────────
         let hashChecked = false;
         function checkUrlHashOnLoad() {
