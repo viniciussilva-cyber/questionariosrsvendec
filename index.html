@@ -929,22 +929,31 @@
                     
                     if (tipo === 'secao' || tipo === 'texto') {
                         questoes.push({ tipo, pergunta });
-                    } else if (tipo === 'multipla') {
+                   } else if (tipo === 'multipla') {
                         const raw = item.querySelector('.q-opcoes-input').value;
                         const opcoes = raw.split('\n').map(o => o.trim()).filter(o => o.length > 0);
-                        questoes.push({ tipo, pergunta, opcoes });
+                        const limite = parseInt(item.querySelector('.q-limite-selecoes').value) || 1;
+                        questoes.push({ tipo, pergunta, opcoes, limite });
+} else if (type === 'colunas') {
+                block.innerHTML = `
+                    ${removeBtn}
+                    <input type="hidden" class="q-type-select" value="colunas">
+                    <label class="block text-[10px] text-brand-pink font-bold uppercase tracking-widest">Pergunta Estruturada em Colunas (Tabela Dinâmica)</label>
+                    <input type="text" required class="q-pergunta-input w-full px-3 py-2.5 bg-brand-darkBg border border-brand-border rounded-xl text-white text-xs focus:outline-none focus:ring-1 focus:ring-brand-pink" placeholder="Digite o enunciado da pergunta para o candidato...">
+                    
+                    <label class="block text-[10px] text-brand-textSecondary font-bold uppercase tracking-widest mt-2">Títulos das Colunas (Escreva os títulos que quiser, separados por vírgula)</label>
+                    <input type="text" required class="q-colunas-titulos w-full px-3 py-2 bg-brand-darkBg border border-brand-border rounded-xl text-white text-xs focus:outline-none focus:ring-1 focus:ring-brand-pink" placeholder="Ex: Problema, Causa, Solução  OU  Canal, Persona, Orçamento">`;
+            }
                     } else if (tipo === 'imagem') {
                         const imgInput = item.querySelector('.q-imagem-base64');
                         const imagemBase64 = imgInput ? imgInput.value : '';
                         
-                        // Validação de tamanho para não estourar o limite do Firebase (1MB)
                         if (imagemBase64) {
                             tamanhoTotalEstimado += imagemBase64.length;
                         }
                         
                         questoes.push({ tipo, pergunta, imagemBase64 });
                     }
-                });
 
                 // Se o tamanho do Base64 for maior que ~800KB, avisa o usuário para não travar
                 if (tamanhoTotalEstimado > 850000) {
