@@ -658,33 +658,46 @@
         }
 
         // ── NAVIGATE ──────────────────────────────────────────────────────
-        function navigate(screenId) {
-            if (currentActiveScreen === 'candidate' && screenId !== 'candidate') exitCandidateSimulationQuietly();
-            if (isRealCandidate && screenId !== 'candidate') { showCandidateBlocked(); return; }
-            ['screen-painel','screen-results','screen-candidate'].forEach(id => document.getElementById(id).classList.add('hidden'));
-            document.getElementById(`screen-${screenId}`).classList.remove('hidden');
-            const menuPainel = document.getElementById('menu-painel');
-            const menuResults = document.getElementById('menu-results');
-            const activeClass = "w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-semibold text-white bg-brand-pink shadow-md";
-            const inactiveClass = "w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-semibold text-brand-textSecondary hover:text-white hover:bg-white/5 transition-colors";
-            if (screenId === 'painel') {
-                if (menuPainel) menuPainel.className = activeClass;
-                if (menuResults) menuResults.className = inactiveClass;
-                renderVagas();
-                document.getElementById('header-context-title').innerText = 'Questionários';
-                document.getElementById('header-context-subtitle').innerText = 'Painel de Controle R&S';
-            } else if (screenId === 'results') {
-                if (menuResults) menuResults.className = activeClass;
-                if (menuPainel) menuPainel.className = inactiveClass;
-                renderDashboard();
-                document.getElementById('header-context-title').innerText = 'Respostas';
-                document.getElementById('header-context-subtitle').innerText = 'Dashboard de Candidatos';
-            } else if (screenId === 'candidate') {
-                setupCandidateExam();
-            }
-            currentActiveScreen = screenId;
-        }
-
+function navigate(screenId) {
+    // 1. Garante que se estiver saindo da simulação, limpe os timers
+    if (currentActiveScreen === 'candidate' && screenId !== 'candidate') exitCandidateSimulationQuietly();
+    if (isRealCandidate && screenId !== 'candidate') { showCandidateBlocked(); return; }
+    
+    // 2. CORREÇÃO DA MISTURA: Esta linha ESCONDE as três telas principais de forma absoluta
+    document.getElementById('screen-painel').classList.add('hidden');
+    document.getElementById('screen-results').classList.add('hidden');
+    document.getElementById('screen-candidate').classList.add('hidden');
+    
+    // 3. MOSTRA APENAS A PÁGINA CLICADA: Remove o hidden da página atual
+    const telaParaMostrar = document.getElementById(`screen-${screenId}`);
+    if (telaParaMostrar) {
+        telaParaMostrar.classList.remove('hidden');
+    }
+    
+    // 4. Controla o visual do menu lateral (qual botão fica rosa)
+    const menuPainel = document.getElementById('menu-painel');
+    const menuResults = document.getElementById('menu-results');
+    const activeClass = "w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-semibold text-white bg-brand-pink shadow-md";
+    const inactiveClass = "w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-semibold text-brand-textSecondary hover:text-white hover:bg-white/5 transition-colors";
+    
+    if (screenId === 'painel') {
+        if (menuPainel) menuPainel.className = activeClass;
+        if (menuResults) menuResults.className = inactiveClass;
+        renderVagas();
+        document.getElementById('header-context-title').innerText = 'Questionários';
+        document.getElementById('header-context-subtitle').innerText = 'Painel de Controle R&S';
+    } else if (screenId === 'results') {
+        if (menuResults) menuResults.className = activeClass;
+        if (menuPainel) menuPainel.className = inactiveClass;
+        renderDashboard();
+        document.getElementById('header-context-title').innerText = 'Respostas';
+        document.getElementById('header-context-subtitle').innerText = 'Dashboard de Candidatos';
+    } else if (screenId === 'candidate') {
+        setupCandidateExam();
+    }
+    
+    currentActiveScreen = screenId;
+}
         // ── CANDIDATE EXAM ────────────────────────────────────────────────
         function setupCandidateExam() {
             const activeView = document.getElementById('candidate-active-view');
