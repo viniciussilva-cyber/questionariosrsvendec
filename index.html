@@ -505,37 +505,76 @@
             sidebar.classList.toggle('collapsed', !sidebarOpen);
         });
 
+    // MECANISMO DE ESCAPE (FALLBACK): Se o Firebase falhar ou demorar, libera a tela após 3 segundos
+        setTimeout(() => {
+            if (!dataReady) {
+                console.warn("VENDE-C RH: Conexão com Firebase demorou muito. Ativando modo de segurança local.");
+                dataReady = true;
+                const loadingScreen = document.getElementById('db-loading-screen');
+                if (loadingScreen) loadingScreen.classList.add('hidden');
+                
+                // Força a exibição do layout para não travar o usuário
+                const mainLayout = document.getElementById('main-system-layout');
+                const loginScreen = document.getElementById('screen-login');
+                if (mainLayout && loginScreen) {
+                    loginScreen.classList.remove('hidden');
+                }
+                
+                updateStatsCounters();
+                renderVagas();
+            }
+        }, 3000);
+
         function startRealtimeSync() {
-            onSnapshot(query(vagasRef, orderBy("id", "asc")), (snapshot) => {
-                window.vagasData = [];
-                snapshot.forEach(docSnap => {
-                    let data = docSnap.data(); data.firestoreId = docSnap.id;
-                    window.vagasData.push(data);
+            try {
+                // BUSCA DE VAGAS: Sem travar com ordenações que exigem índices manuais
+                onSnapshot(vagasRef, (snapshot) => {
+                    window.vagasData = [];
+                    snapshot.forEach(docSnap => {
+                        let data = docSnap.data(); 
+                        data.firestoreId = docSnap.id;
+                        window.vagasData.push(data);
+                    });
+                    updateStatsCounters();
+                    populateFilters();
+                    if (currentActiveScreen === 'painel') renderVagas();
+                    if (!dataReady) { dataReady = true; checkUrlHashOnLoad(); }
+                }, (error) => {
+                    console.error("Erro na escuta de vagas:", error);
                 });
-                updateStatsCounters();
-                populateFilters();
-                if (currentActiveScreen === 'painel') renderVagas();
-                if (!dataReady) { dataReady = true; checkUrlHashOnLoad(); }
-            });
-            onSnapshot(query(candidatosRef, orderBy("id", "desc")), (snapshot) => {
-                window.candidatosData = [];
-                snapshot.forEach(docSnap => {
-                    let data = docSnap.data(); data.firestoreId = docSnap.id;
-                    window.candidatosData.push(data);
+
+                // BUSCA DE CANDIDATOS
+                onSnapshot(candidatosRef, (snapshot) => {
+                    window.candidatosData = [];
+                    snapshot.forEach(docSnap => {
+                        let data = docSnap.data(); 
+                        data.firestoreId = docSnap.id;
+                        window.candidatosData.push(data);
+                    });
+                    if (currentActiveScreen === 'results') renderDashboard();
+                    if (currentActiveScreen === 'painel') renderVagas();
+                    updateStatsCounters();
+                }, (error) => {
+                    console.error("Erro na escuta de candidatos:", error);
                 });
-                if (currentActiveScreen === 'results') renderDashboard();
-                if (currentActiveScreen === 'painel') renderVagas();
-                updateStatsCounters();
-            });
+            } catch (err) {
+                console.error("Falha ao iniciar sincronização:", err);
+            }
         }
 
         function updateStatsCounters() {
             const total = document.getElementById('stat-total-q');
             const ativos = document.getElementById('stat-ativos-q');
             const fechados = document.getElementById('stat-fechados-q');
-            if (total) total.innerText = window.vagasData.length;
-            if (ativos) ativos.innerText = window.vagasData.filter(v => v.ativo).length;
-            if (fechados) fechados.innerText = window.vagasData.filter(v => !v.ativo).length;
+            
+            // Proteção para o sistema não quebrar se os dados ainda estiverem vazios
+            const totalVagas = window.vagasData ? window.vagasData.length : 0;
+            const totalAtivos = window.vagasData ? window.vagasData.filter(v => v.ativo).length : 0;
+            const totalFechados = window.vagasData ? window.vagasData.filter(v => !v.ativo).length : 0;
+
+            if (total) total.innerText = totalVagas;
+            if (ativos) ativos.innerText = totalAtivos;
+            if (fechados) fechados.innerText = totalFechados;
         }
 
         function populateFilters() {
