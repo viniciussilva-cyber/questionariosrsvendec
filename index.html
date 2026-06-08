@@ -525,6 +525,26 @@
             }
         }, 3000);
 
+// MECANISMO DE ESCAPE (FALLBACK): Se o Firebase falhar ou demorar, libera a tela após 3 segundos
+        setTimeout(() => {
+            if (!dataReady) {
+                console.warn("VENDE-C RH: Conexão com Firebase demorou muito. Ativando modo de segurança local.");
+                dataReady = true;
+                const loadingScreen = document.getElementById('db-loading-screen');
+                if (loadingScreen) loadingScreen.classList.add('hidden');
+                
+                // Força a exibição do layout para não travar o usuário
+                const mainLayout = document.getElementById('main-system-layout');
+                const loginScreen = document.getElementById('screen-login');
+                if (mainLayout && loginScreen) {
+                    loginScreen.classList.remove('hidden');
+                }
+                
+                updateStatsCounters();
+                renderVagas();
+            }
+        }, 3000);
+
         function startRealtimeSync() {
             try {
                 // BUSCA DE VAGAS: Sem travar com ordenações que exigem índices manuais
