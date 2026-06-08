@@ -259,7 +259,7 @@
                     </div>
                     <div id="candidate-closed-view" class="bg-brand-cardBg border border-red-500/20 rounded-3xl p-12 text-center space-y-5 hidden">
                         <div class="w-20 h-20 bg-red-500/10 text-red-500 rounded-full flex items-center justify-center text-3xl mx-auto"><i class="fa-solid fa-lock"></i></div>
-                        <p class="font-display font-black text-3xl text-white">QUESTIONÁRIOS FECHADO</p>
+                        <p class="font-display font-black text-3xl text-white">QUESTIONÁRIO FECHADO</p>
                         <p class="text-brand-textSecondary text-sm">Este fluxo foi encerrado pelo RH. Aguarde novos processos seletivos.</p>
                     </div>
                     <div id="candidate-success-view" class="bg-brand-cardBg border border-brand-border rounded-3xl p-14 text-center space-y-8 hidden">
@@ -448,7 +448,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, doc, deleteDoc, updateDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, doc, deleteDoc, updateDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCHzy5QbGcgixl_frseXrdenVwOXkXzgq8",
@@ -505,41 +505,15 @@
             sidebar.classList.toggle('collapsed', !sidebarOpen);
         });
 
-    // MECANISMO DE ESCAPE (FALLBACK): Se o Firebase falhar ou demorar, libera a tela após 3 segundos
+        // MECANISMO DE ESCAPE (FALLBACK): Força a entrada se o Firebase demorar mais de 3 segundos
         setTimeout(() => {
             if (!dataReady) {
-                console.warn("VENDE-C RH: Conexão com Firebase demorou muito. Ativando modo de segurança local.");
+                console.warn("VENDE-C RH: Ativando modo de segurança local devido ao atraso do servidor.");
                 dataReady = true;
                 const loadingScreen = document.getElementById('db-loading-screen');
                 if (loadingScreen) loadingScreen.classList.add('hidden');
                 
-                // Força a exibição do layout para não travar o usuário
-                const mainLayout = document.getElementById('main-system-layout');
-                const loginScreen = document.getElementById('screen-login');
-                if (mainLayout && loginScreen) {
-                    loginScreen.classList.remove('hidden');
-                }
-                
-                updateStatsCounters();
-                renderVagas();
-            }
-        }, 3000);
-
-// MECANISMO DE ESCAPE (FALLBACK): Se o Firebase falhar ou demorar, libera a tela após 3 segundos
-        setTimeout(() => {
-            if (!dataReady) {
-                console.warn("VENDE-C RH: Conexão com Firebase demorou muito. Ativando modo de segurança local.");
-                dataReady = true;
-                const loadingScreen = document.getElementById('db-loading-screen');
-                if (loadingScreen) loadingScreen.classList.add('hidden');
-                
-                // Força a exibição do layout para não travar o usuário
-                const mainLayout = document.getElementById('main-system-layout');
-                const loginScreen = document.getElementById('screen-login');
-                if (mainLayout && loginScreen) {
-                    loginScreen.classList.remove('hidden');
-                }
-                
+                showLoginForm();
                 updateStatsCounters();
                 renderVagas();
             }
@@ -547,7 +521,7 @@
 
         function startRealtimeSync() {
             try {
-                // BUSCA DE VAGAS: Sem travar com ordenações que exigem índices manuais
+                // Sincronização em tempo real de Vagas sem ordenação complexa
                 onSnapshot(vagasRef, (snapshot) => {
                     window.vagasData = [];
                     snapshot.forEach(docSnap => {
@@ -563,7 +537,7 @@
                     console.error("Erro na escuta de vagas:", error);
                 });
 
-                // BUSCA DE CANDIDATOS
+                // Sincronização em tempo real de Candidatos
                 onSnapshot(candidatosRef, (snapshot) => {
                     window.candidatosData = [];
                     snapshot.forEach(docSnap => {
@@ -587,7 +561,6 @@
             const ativos = document.getElementById('stat-ativos-q');
             const fechados = document.getElementById('stat-fechados-q');
             
-            // Proteção para o sistema não quebrar se os dados ainda estiverem vazios
             const totalVagas = window.vagasData ? window.vagasData.length : 0;
             const totalAtivos = window.vagasData ? window.vagasData.filter(v => v.ativo).length : 0;
             const totalFechados = window.vagasData ? window.vagasData.filter(v => !v.ativo).length : 0;
@@ -602,9 +575,11 @@
             if (!select) return;
             const saved = select.value;
             select.innerHTML = '<option value="todos">Todos os Cargos</option>';
-            [...new Set(window.vagasData.map(v => v.titulo))].forEach(t => {
-                select.innerHTML += `<option value="${t}">${t}</option scheme>`;
-            });
+            if (window.vagasData) {
+                [...new Set(window.vagasData.map(v => v.titulo))].forEach(t => {
+                    select.innerHTML += `<option value="${t}">${t}</option>`;
+                });
+            }
             select.value = saved;
         }
 
@@ -657,7 +632,7 @@
             const pass = document.getElementById('login-password').value;
             const alertBox = document.getElementById('login-error-alert');
             if (allowedEmails.includes(email) && pass === masterPassword) {
-                alertBox.classList.add('hidden');
+                if (alertBox) alertBox.classList.add('hidden');
                 loggedInUser = email;
                 document.getElementById('screen-login').classList.add('hidden');
                 document.getElementById('main-system-layout').classList.remove('hidden');
@@ -666,7 +641,7 @@
                 document.getElementById('user-display-email').innerText = email;
                 navigate('painel');
             } else {
-                alertBox.classList.remove('hidden');
+                if (alertBox) alertBox.classList.remove('hidden');
             }
         }
 
@@ -721,6 +696,7 @@
 
         window.addQuestionField = function(containerId, type = 'texto') {
             const container = document.getElementById(containerId);
+            if (!container) return;
             const idx = questionFieldCounter++;
             const block = document.createElement('div');
             block.className = "question-item p-4 bg-brand-darkBg/70 border border-brand-border rounded-2xl relative space-y-3";
@@ -764,7 +740,7 @@
                             <textarea required class="q-opcoes-input w-full px-3 py-2.5 bg-brand-darkBg border border-brand-border rounded-xl text-white text-xs resize-none focus:outline-none" rows="3" placeholder="Opção A&#10;Opção B"></textarea>
                         </div>
                     </div>`;
-} else if (type === 'imagem') {
+            } else if (type === 'imagem') {
                 block.innerHTML = `
                     ${removeBtn}
                     <input type="hidden" class="q-type-select" value="imagem">
@@ -780,7 +756,6 @@
                         </div>
                         <img class="q-img-preview hidden mx-auto" alt="preview">
                     </div>`;
-            }
             } else if (type === 'colunas') {
                 block.innerHTML = `
                     ${removeBtn}
@@ -850,7 +825,7 @@
                 const editId = e.target.dataset.editId;
                 if (editId) {
                     await updateDoc(doc(db, "vagas", e.target.dataset.docFirestoreId), dadosVaga);
-                    showToast('Questionário updated com sucesso!');
+                    showToast('Questionário atualizado com sucesso!');
                 } else {
                     await addDoc(vagasRef, { ...dadosVaga, id: Date.now(), ativo: true });
                     showToast('Questionário criado com sucesso!');
@@ -1042,7 +1017,7 @@
                     respostasMapeadas.push({ questao: q.pergunta, resposta: respostaFinal });
                 } else if (q.tipo === "colunas") {
                     const r = document.querySelector(`input[name="cand-ans-${idx}"]:checked`);
-                    const respostaFinal = r ? r.value : "Non respondida";
+                    const respostaFinal = r ? r.value : "Não respondida";
                     if (respostaFinal === "Não respondida") {
                         alert(`Por favor, responda a pergunta: "${q.pergunta}"`);
                         valid = false; return;
@@ -1109,6 +1084,7 @@
 
         window.viewCandidateRespostas = function(firestoreId) {
             window.closeModal('vaga-submissions-modal');
+            window.closeModal('candidate-details-modal');
             const cand = window.candidatosData.find(c => c.firestoreId === firestoreId);
             if (!cand) return;
             document.getElementById('detail-cand-name').innerText = cand.nome;
@@ -1182,12 +1158,12 @@
             const grid = document.getElementById('vagas-grid');
             if (!grid) return;
             grid.innerHTML = "";
-            if (window.vagasData.length === 0) {
+            if (!window.vagasData || window.vagasData.length === 0) {
                 grid.innerHTML = `<div class="col-span-full text-center py-16 text-brand-textSecondary text-sm">Nenhum questionário criado ainda.</div>`;
                 return;
             }
             window.vagasData.forEach(vaga => {
-                const subsCount = window.candidatosData.filter(c => c.vaga === vaga.titulo).length;
+                const subsCount = window.candidatosData ? window.candidatosData.filter(c => c.vaga === vaga.titulo).length : 0;
                 const card = document.createElement('div');
                 card.className = "vaga-card bg-brand-cardBg p-6 rounded-2xl border border-brand-border flex flex-col justify-between space-y-4 relative z-10";
                 const statusDot = vaga.ativo
@@ -1228,6 +1204,9 @@
             tbody.innerHTML = "";
             const vagaFiltro = document.getElementById('filter-vaga').value;
             const dataFiltro = document.getElementById('filter-data').value;
+            
+            if (!window.candidatosData) return;
+            
             let filtrados = window.candidatosData.filter(c =>
                 (vagaFiltro === "todos" || c.vaga === vagaFiltro) && (!dataFiltro || c.data === dataFiltro)
             );
