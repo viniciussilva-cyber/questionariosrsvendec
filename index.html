@@ -694,7 +694,7 @@
             currentActiveScreen = screenId;
         }
 
-        window.addQuestionField = function(containerId, type = 'texto') {
+      window.addQuestionField = function(containerId, type = 'texto') {
             const container = document.getElementById(containerId);
             if (!container) return;
             const idx = questionFieldCounter++;
@@ -745,13 +745,24 @@
                     ${removeBtn}
                     <input type="hidden" class="q-type-select" value="imagem">
                     <input type="hidden" class="q-imagem-base64" value="">
-                    <label class="block text-[10px] text-brand-textSecondary font-bold uppercase tracking-widest">Texto de Apoio / Título da Imagem</label>
-                    <input type="text" required class="q-pergunta-input w-full px-3 py-2.5 bg-brand-darkBg border border-brand-border rounded-xl text-white text-xs focus:outline-none focus:ring-1 focus:ring-brand-pink" placeholder="Ex: Analise a tabela abaixo para responder às próximas questões:">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-[10px] text-brand-textSecondary font-bold uppercase tracking-widest mb-1">Comportamento do Bloco</label>
+                            <select class="q-imagem-comportamento w-full bg-brand-darkBg border border-brand-border rounded-xl p-2.5 text-xs text-white focus:outline-none">
+                                <option value="apenas_apoio">Apenas Enunciado / Imagem de Referência</option>
+                                <option value="requer_resposta">Pergunta com Imagem (Exige Resposta Escrita)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-[10px] text-brand-textSecondary font-bold uppercase tracking-widest mb-1">Título / Enunciado da Imagem</label>
+                            <input type="text" required class="q-pergunta-input w-full px-3 py-2.5 bg-brand-darkBg border border-brand-border rounded-xl text-white text-xs focus:outline-none focus:ring-1 focus:ring-brand-pink" placeholder="Ex: Nota Fiscal de Referência ou Analise a imagem para responder:">
+                        </div>
+                    </div>
                     <div class="img-drop-zone rounded-xl p-4 text-center cursor-pointer relative" id="drop-zone-${idx}">
                         <input type="file" accept="image/*" class="q-img-file absolute inset-0 opacity-0 cursor-pointer w-full h-full" onchange="window.handleImageUpload(this, '${idx}')">
                         <div class="q-img-placeholder text-brand-textSecondary space-y-1">
                             <i class="fa-solid fa-image text-2xl text-brand-pink/40"></i>
-                            <p class="text-xs font-bold text-brand-textSecondary">Clique ou arraste uma imagem de referência</p>
+                            <p class="text-xs font-bold text-brand-textSecondary">Clique ou arraste a imagem</p>
                             <p class="text-[10px] text-brand-textSecondary/50">PNG, JPG, WEBP — máx. 2MB</p>
                         </div>
                         <img class="q-img-preview hidden mx-auto" alt="preview">
@@ -761,17 +772,16 @@
                     ${removeBtn}
                     <input type="hidden" class="q-type-select" value="colunas">
                     <div>
-                        <label class="block text-[10px] text-brand-textSecondary font-bold uppercase tracking-widest mb-1">Enunciado da Pergunta em Colunas</label>
+                        <label class="block text-[10px] text-brand-textSecondary font-bold uppercase tracking-widest mb-1">Enunciado da Pergunta</label>
                         <input type="text" required class="q-pergunta-input w-full px-3 py-2.5 bg-brand-darkBg border border-brand-border rounded-xl text-white text-xs focus:outline-none" placeholder="Ex: Avalie seu nível de familiaridade com CRM:">
                     </div>
                     <div>
-                        <label class="block text-[10px] text-brand-textSecondary font-bold uppercase tracking-widest mb-1">Cabeçalhos das Colunas (um por linha)</label>
+                        <label class="block text-[10px] text-brand-textSecondary font-bold uppercase tracking-widest mb-1">Opções de Resposta (uma por linha)</label>
                         <textarea required class="q-colunas-input w-full px-3 py-2.5 bg-brand-darkBg border border-brand-border rounded-xl text-white text-xs resize-none focus:outline-none" rows="3" placeholder="Pouco Familiar&#10;Familiar&#10;Muito Familiar"></textarea>
                     </div>`;
             }
             container.appendChild(block);
         };
-
         window.handleImageUpload = function(input, idx) {
             const file = input.files[0];
             if (!file) return;
