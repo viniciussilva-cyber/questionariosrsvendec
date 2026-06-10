@@ -822,9 +822,12 @@
                         const minLimit = modo === 'multipla' ? (parseInt(item.querySelector('.q-min-selecoes').value) || 2) : 1;
                         const maxLimit = modo === 'multipla' ? (parseInt(item.querySelector('.q-max-selecoes').value) || 5) : 1;
                         questoes.push({ tipo, pergunta, opcoes, modo, minLimit, maxLimit });
-                    } else if (tipo === 'imagem') {
+} else if (tipo === 'imagem') {
                         const imagemBase64 = item.querySelector('.q-imagem-base64')?.value || '';
-                        questoes.push({ tipo, pergunta, imagemBase64 });
+                        const comportamento = item.querySelector('.q-imagem-comportamento').value;
+                        const requerResposta = (comportamento === 'requer_resposta');
+                        questoes.push({ tipo, pergunta, imagemBase64, requerResposta });
+                    }
                     } else if (tipo === 'colunas') {
                         const rawColunas = item.querySelector('.q-colunas-input').value;
                         const colunas = rawColunas.split('\n').map(c => c.trim()).filter(c => c.length > 0);
@@ -939,13 +942,23 @@
                     block.innerHTML = `
                         ${imgHtml}
                         <label class="block text-sm font-bold text-white mb-1">${q.pergunta} * <span class="text-xs font-normal text-gray-400">${instrucao}</span></label>
-                        <div class="space-y-2" data-min="${q.minLimit || 1}" data-max="${q.maxLimit || 1}" data-modo="${q.modo || 'unica'}">${opts}</div>`;
-                } else if (q.tipo === "imagem") {
-                    block.className = "space-y-3 bg-brand-darkBg/40 p-5 rounded-2xl border border-brand-border/40";
-                    block.innerHTML = `
-                        ${imgHtml}
-                        <label class="block text-sm font-bold text-white leading-relaxed">${q.pergunta} *</label>
-                        <textarea id="cand-ans-${idx}" required rows="3" class="w-full px-4 py-3 bg-brand-darkBg border border-brand-border rounded-xl text-white text-sm resize-none focus:outline-none focus:ring-1 focus:ring-brand-pink"></textarea>`;
+         } else if (q.tipo === "imagem") {
+                    if (q.requerResposta) {
+                        // COMPORTAMENTO A: É uma pergunta obrigatória baseada em uma imagem
+                        block.className = "space-y-3 bg-brand-cardBg p-5 rounded-2xl border border-brand-border/40";
+                        block.innerHTML = `
+                            ${imgHtml}
+                            <label class="block text-sm font-bold text-white leading-relaxed">${q.pergunta} *</label>
+                            <textarea id="cand-ans-${idx}" required rows="3" class="w-full px-4 py-3 bg-brand-darkBg border border-brand-border rounded-xl text-white text-sm resize-none focus:outline-none focus:ring-1 focus:ring-brand-pink" placeholder="Digite sua resposta aqui..."></textarea>`;
+                    } else {
+                        // COMPORTAMENTO B: É apenas um elemento informativo/nota fiscal de referência (Sem input)
+                        block.className = "space-y-2 bg-[#121216] p-5 rounded-2xl border border-brand-pink/20 pink-glow";
+                        block.innerHTML = `
+                            <div class="text-[10px] font-bold text-brand-pink tracking-widest uppercase mb-1"><i class="fa-solid fa-circle-info mr-1"></i> Elemento de Referência</div>
+                            <p class="text-xs text-slate-300 font-semibold mb-3 leading-relaxed">${q.pergunta}</p>
+                            ${imgHtml}`;
+                    }
+                }
                 } else if (q.tipo === "colunas") {
                     let colHtml = `<div class="overflow-x-auto"><table class="w-full text-xs border-collapse"><thead><tr>`;
                     q.colunas.forEach(c => { colHtml += `<th class="px-3 py-2 bg-brand-darkBg border border-brand-border/40 text-brand-textSecondary font-bold uppercase tracking-wider text-center">${c}</th>`; });
@@ -997,23 +1010,51 @@
 
             let respostasMapeadas = [];
             let valid = true;
+currentSelectedVagaForCandidate.questoes.forEach((q, idx) => {
+                if (!valid) return; // Se já encontrou um erro antes, para o processo
 
-            currentSelectedVagaForCandidate.questoes.forEach((q, idx) => {
-                if (!valid) return;
-                if (q.tipo === "texto" || q.tipo === "imagem") {
+                // 1. TRATAMENTO DO NOVO CAMPO FLEXÍVEL DE IMAGEM
+                if (q.tipo === "imagem") {
+                    if (q.requerResposta) {
+                        // Se o RH marcou que a imagem precisa de resposta, valida como pergunta aberta
+                        const el = document.getElementById(`cand-ans-${idx}`);
+                        if (!el || !el.value.trim()) {
+                            alert(`Por favor, responda a pergunta: "${q.pergunta}"`);
+                            valid = false; 
+                            return;
+                        }
+                        respostasMapeadas.push({ questao: q.pergunta, resposta: el.value.trim() });
+                    } else {
+                        // Se for apenas imagem de apoio/enunciado (Ex: Nota Fiscal), pula sem pedir resposta
+                        return;
+                    }
+                } 
+                
+                // 2. TRATAMENTO DE PERGUNTA DE TEXTO TRADICIONAL
+                else if (q.tipo === "texto") {
                     const el = document.getElementById(`cand-ans-${idx}`);
-                    respostasMapeadas.push({ questao: q.pergunta, resposta: el ? el.value : "" });
-                } else if (q.tipo === "multipla") {
+                    if (!el || !el.value.trim()) {
+                        alert(`Por favor, responda a pergunta: "${q.pergunta}"`);
+                        valid = false; 
+                        return;
+                    }
+                    respostasMapeadas.push({ questao: q.pergunta, resposta: el.value.trim() });
+                } 
+                
+                // 3. TRATAMENTO DE PERGUNTAS DE MÚLTIPLA ESCOLHA
+                else if (q.tipo === "multipla") {
                     const containerPergunta = document.querySelector(`input[name="cand-ans-${idx}"]`)?.closest('.space-y-2');
                     const modo = containerPergunta?.dataset.modo || 'unica';
                     let respostaFinal = "Não respondida";
+                    
                     if (modo === 'multipla') {
                         const marcados = Array.from(document.querySelectorAll(`input[name="cand-ans-${idx}"]:checked`)).map(el => el.value);
                         const min = parseInt(containerPergunta.dataset.min) || 2;
                         const max = parseInt(containerPergunta.dataset.max) || 5;
                         if (marcados.length < min || marcados.length > max) {
                             alert(`Por favor, selecione entre ${min} e ${max} opções na pergunta: "${q.pergunta}"`);
-                            valid = false; return;
+                            valid = false; 
+                            return;
                         }
                         respostaFinal = marcados.join(', ');
                     } else {
@@ -1021,21 +1062,25 @@
                         respostaFinal = r ? r.value : "Não respondida";
                         if (respostaFinal === "Não respondida") {
                             alert(`Por favor, responda a pergunta: "${q.pergunta}"`);
-                            valid = false; return;
+                            valid = false; 
+                            return;
                         }
                     }
                     respostasMapeadas.push({ questao: q.pergunta, resposta: respostaFinal });
-                } else if (q.tipo === "colunas") {
+                } 
+                
+                // 4. TRATAMENTO DE PERGUNTAS EM COLUNAS (AGORA VERTICALIZADAS)
+                else if (q.tipo === "colunas") {
                     const r = document.querySelector(`input[name="cand-ans-${idx}"]:checked`);
                     const respostaFinal = r ? r.value : "Não respondida";
                     if (respostaFinal === "Não respondida") {
                         alert(`Por favor, responda a pergunta: "${q.pergunta}"`);
-                        valid = false; return;
+                        valid = false; 
+                        return;
                     }
                     respostasMapeadas.push({ questao: q.pergunta, resposta: respostaFinal });
                 }
             });
-
             if (!valid) { isSubmitting = false; return; }
 
             exitCandidateSimulationQuietly();
